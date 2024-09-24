@@ -6,7 +6,7 @@
     - [Output Formats](#output-formats)
     - [Readability and conversion](#readability-and-conversion)
       - [Custom Readability](#custom-readability)
-        - [Table formatting](#table-formatting)
+      - [Table formatting](#table-formatting)
       - [Code block formatting](#code-block-formatting)
     - [Markup Formats](#markup-formats)
     - [Link Formats](#link-formats)
@@ -67,7 +67,7 @@ If `json=1` is specified, this key will be overridden.
 
 Marky uses a custom version of Arc90's Readability. It's a little more lax and picks up things like author blocks and occasionally share blocks, but is more likely to include _all_ the pertinent content on the page. Arc90 gets confused when the page markup splits the article content into multiple divs and picks just one. Marky attempts to prevent that. Enable Marky's Readability by including `readability=1` in the url.
 
-##### Table formatting
+#### Table formatting
 
 Tables are converted to Markdown and formatted nicely. Tables that contain content that's not valid in Markdown tables (per PHP Extra/MultiMarkdown spec) will be compressed (lists and line breaks replaced).
 
