@@ -15,7 +15,7 @@ class HTML2Markdown
     # end
 
     @links = []
-    @baseuri = (baseurl ? URI.parse(baseurl) : nil)
+    @baseuri = baseurl ? URI.parse(baseurl) : nil
     @section_level = 0
     @encoding = str.encoding
     @markdown = output_for(Nokogiri::HTML(str, baseurl).root).gsub(/\n+/, "\n")

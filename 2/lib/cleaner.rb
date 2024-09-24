@@ -143,28 +143,30 @@ class MarkdownCleaner
     #   "\n#{table}\n"
     # end
     tc = TableCleanup.new(input)
-    tc.max_cell_width = 20
-    tc.max_table_width = 80
+    tc.max_cell_width = 80
+    tc.max_table_width = 150
     input = tc.clean
 
     # remove empty links
     input.gsub!(/\[([^\]]+)\]\(\s*\)/, '\1')
     input.gsub!(/([^!]|\A)\[\s*\]\(.*?\)/, "")
 
-    # block element cleanup
+    # tag cleanup
     input.gsub!(%r{</?(div|section|aside|span|figure)[^>]*?>}m, "")
 
     # Whitespace cleanup
-    # Only matches list items at first level (for now)
+    # list cleanup only matches list items at first level (for now)
     input.gsub!(/^([*+-])[\n\s]*((  (\S.*?)[\n\s]+)+)$/) do
       m = Regexp.last_match
       content = m[2].gsub(/(^  \n)+/, "\n\n").gsub(/^  /, "    ").strip
       "#{m[1]} #{content}\n"
     end
+    # Fix list items where content is on the next line and list item is empty
     input.gsub!(/([\*\-\+] .*?)\n+(?=[\*\-\+] )/, "\\1\n")
     input.gsub!(/\n{2,}/m, "\n\n")
 
     # Clean excess empty lines in block quotes
+    # Retains one spacer > line within block quotes
     input.gsub!(/(^>\s*?\n)+/, ">\n")
 
     # Remove empty headers

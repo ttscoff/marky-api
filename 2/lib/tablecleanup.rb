@@ -100,8 +100,8 @@ class TableCleanup
       if width.zero?
         @string << "|"
       else
-        content = @alignment ? align(@alignment[idx], cell, width) : cell.ljust(width, " ")
-        @string << " #{content.gsub(/\\`/, "\\`")} |"
+        content = @alignment ? align(@alignment[idx], cell.gsub(/\\`/, "\\`"), width) : cell.ljust(width, " ")
+        @string << " #{content} |"
       end
       idx += 1
     end
