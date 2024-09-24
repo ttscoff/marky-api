@@ -11,7 +11,7 @@ Parameters are passed as a query string to the API.
 
 Parameter keys can be shortened to just the first letter (or letters required to be unique). Use 1 for true and 0 for false (also accepts 'true' and 'false').
 
-*The `url` paramter is required, all other parameters are optional (see default values).*
+*The `url` parameter is required, all other parameters are optional (see default values).*
 
 Example:
 
@@ -36,12 +36,27 @@ Example:
 The `output` key differs from the `format` key. While `format` determines to what markup the HTML is converted, the `output` key determines how the results will be delivered.
 
 | Value      | Result                                  |
-| `--------` | A-------------------------------------e |
+| :--------- | :-------------------------------------- |
+| `complete` | Complete HTML document                  |
 | `html`     | An HTML snippet                         |
 | `markdown` | Raw converted results based on `format` |
 | `url`      | URL encoded version of `format`         |
 
 If `json=1` is specified, this key will be overridden.
+
+#### Readability and conversion
+
+##### Custom Readability
+
+Marky uses a custom version of Arc90's Readability. It's a little more lax and picks up things like author blocks and occasionally share blocks, but is more likely to include _all_ the pertinent content on the page. Arc90 gets confused when the page markup splits the article content into multiple divs and picks just one. Marky attempts to prevent that. Enable Marky's Readability by including `readability=1` in the url.
+
+##### Table formatting
+
+Tables are converted to Markdown and formatted nicely. Tables that contain content that's not valid in Markdown tables (per PHP Extra/MultiMarkdown spec) will be compressed (lists and line breaks replaced).
+
+##### Code block formatting
+
+Code blocks are converted to backtick-fenced code. When possible, a specified language is applied after the opening fence.
 
 #### Markup Formats
 
