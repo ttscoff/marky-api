@@ -139,7 +139,12 @@ Accepted output formats:
 - xwiki
 - zimwiki
 
-JSON output, either through the `format` parameter or with `json=` in the URL, will output a blob containing `url` (the original URL), `markdown` (which is the output of whatever format is specified), `content` (the rendered HTML version of the output), and `title` (the extracted title of the document).
+JSON output, either through the `format` parameter or with `json=` in the URL,
+will output a blob containing `url` (the original URL), `markup` (which is the
+output of whatever format is specified), `html` (the rendered HTML version of
+the output), and `title` (the extracted title of the document). If a `link=X`
+parameter is provided, an additional `link` field will be included with the
+encoded link.
 
 ### Link Formats
 
@@ -153,11 +158,17 @@ If the `link` parameter is given, output will be url encoded and turned into a l
 | `nvultra`    | `x-nvultra://make` url ([nvUltra](https://nvultra.com))        |
 | `marked`     | `x-marked://preview` link ([Marked 2](https://marked2app.com)) |
 
-If `open=1` is included in the URL, the generated link will be opened automatically. This will have the effect of creating a new note in the application of choice, or previewing the result (in the case of `marked`). If the result is small, a redirect header will be sent. If it's larger than 8k, it uses a Javascript redirect, requiring a browser window.
+If `open=1` is included in the URL, the generated link will be opened
+automatically. This will have the effect of creating a new note in the
+application of choice, or previewing the result (in the case of `marked`). If
+the result is small, a redirect header will be sent. If it's larger than 8k, it
+uses a Javascript redirect, requiring a browser window.
 
 ### Styles
 
-[Marked](https://marked2app.com) styles can be added by name in the `style` parameter. Including a style automatically forces `complete` output as HTML with head and body tags. Marked styles include:
+[Marked](https://marked2app.com) styles can be added by name in the `style`
+parameter. Including a style automatically forces `complete` output as HTML with
+head and body tags. Marked styles include:
 
 - amblin
 - fountain

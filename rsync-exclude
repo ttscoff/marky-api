@@ -1,0 +1,7 @@
+.git
+scripts/cache/*
+scripts/clicklog.txt
+2/lib/pandoc
+2/.sass-cache
+2/.sass-cache/*
+2/logs/*

@@ -382,8 +382,8 @@ module Marky
     end
 
     def jsonify
-      output = { 'url' => @url, 'markdown' => @output, 'content' => Convert.new(@output).html(@format), 'title' => @title }
-      output['link'] = to_link if @output_format == :url
+      output = { 'title' => @title, 'url' => @url, 'markup' => @output, 'html' => Convert.new(@output).html(@format) }
+      output['link'] = to_link if @link_type
       output.to_json
     end
 
