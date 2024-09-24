@@ -1,10 +1,27 @@
 # Marky the Markdownifier API v2
 
-Endpoint: `https://heckyesmarkdown.com/api/2/`
+- [Marky the Markdownifier API v2](#marky-the-markdownifier-api-v2)
+  - [Endpoint](#endpoint)
+  - [Parameters](#parameters)
+    - [Output Formats](#output-formats)
+    - [Readability and conversion](#readability-and-conversion)
+      - [Custom Readability](#custom-readability)
+        - [Table formatting](#table-formatting)
+      - [Code block formatting](#code-block-formatting)
+    - [Markup Formats](#markup-formats)
+    - [Link Formats](#link-formats)
+    - [Styles](#styles)
+  - [Special handling](#special-handling)
+
+
+## Endpoint
+
+    https://heckyesmarkdown.com/api/2/?[query string]
+
 
 *(`heckyesmarkdown.com` and `fuckyeahmarkdown.com` are mirrors, you can use either endpoint.)*
 
-Parameters:
+## Parameters
 
 Parameters are passed as a query string to the API.
 
@@ -31,7 +48,7 @@ Example:
 | `import_css`  |   false    | Embed CSS from linked stylesheets               |
 | `complete`    |   false    | output complete HTML page with head/body tags   |
 
-#### Output Formats
+### Output Formats
 
 The `output` key differs from the `format` key. While `format` determines to what markup the HTML is converted, the `output` key determines how the results will be delivered.
 
@@ -44,9 +61,9 @@ The `output` key differs from the `format` key. While `format` determines to wha
 
 If `json=1` is specified, this key will be overridden.
 
-#### Readability and conversion
+### Readability and conversion
 
-##### Custom Readability
+#### Custom Readability
 
 Marky uses a custom version of Arc90's Readability. It's a little more lax and picks up things like author blocks and occasionally share blocks, but is more likely to include _all_ the pertinent content on the page. Arc90 gets confused when the page markup splits the article content into multiple divs and picks just one. Marky attempts to prevent that. Enable Marky's Readability by including `readability=1` in the url.
 
@@ -54,11 +71,11 @@ Marky uses a custom version of Arc90's Readability. It's a little more lax and p
 
 Tables are converted to Markdown and formatted nicely. Tables that contain content that's not valid in Markdown tables (per PHP Extra/MultiMarkdown spec) will be compressed (lists and line breaks replaced).
 
-##### Code block formatting
+#### Code block formatting
 
 Code blocks are converted to backtick-fenced code. When possible, a specified language is applied after the opening fence.
 
-#### Markup Formats
+### Markup Formats
 
 Pandoc is used for the initial conversion, which is then cleaned by Marky. Pandoc allows many output formats, so you're not limited to just Markdown. You can, for example, output `asciidoc` or a specific flavor of Markdown, such as `commonmark`, `markdown_mmd`, or `markdown_phpextra`. The default is `gfm` (GitHub Flavored Markdown).
 
@@ -124,7 +141,7 @@ Accepted output formats:
 
 JSON output, either through the `format` parameter or with `json=` in the URL, will output a blob containing `url` (the original URL), `markdown` (which is the output of whatever format is specified), `content` (the rendered HTML version of the output), and `title` (the extracted title of the document).
 
-#### Link Formats
+### Link Formats
 
 If the `link` parameter is given, output will be url encoded and turned into a link that will operate (on Mac) on specific apps.
 
@@ -138,7 +155,7 @@ If the `link` parameter is given, output will be url encoded and turned into a l
 
 If `open=1` is included in the URL, the generated link will be opened automatically. This will have the effect of creating a new note in the application of choice, or previewing the result (in the case of `marked`). If the result is small, a redirect header will be sent. If it's larger than 8k, it uses a Javascript redirect, requiring a browser window.
 
-#### Styles
+### Styles
 
 [Marked](https://marked2app.com) styles can be added by name in the `style` parameter. Including a style automatically forces `complete` output as HTML with head and body tags. Marked styles include:
 
@@ -161,7 +178,7 @@ If you specify a URL in the `style` parameter, the `<link re="stylesheet">` tags
 
 If the `import_css` option is true, then the linked stylesheets will be pulled in and their contents embedded, as well as any `<style>` tags in the target URL. This can be a slow process and often takes multiple seconds to complete.
 
-#### Special handling
+## Special handling
 
 Marky has special handling for some sites:
 
