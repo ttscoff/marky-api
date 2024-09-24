@@ -98,6 +98,7 @@ module Marky
     # @return [Boolean] true if successful, false otherwise
     def render
       res = start
+
       if res
         finish
         @log.info("Success: #{@url}")
@@ -192,8 +193,7 @@ module Marky
 
       # Clean up conversion output
       output = MarkdownCleaner.new(output).clean
-      puts output
-      exit
+
       if output.length.positive?
         @log.info("Processed URL: #{@url}")
       else
