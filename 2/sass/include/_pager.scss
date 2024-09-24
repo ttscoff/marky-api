@@ -1,0 +1,555 @@
+// @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+@import "compass/css3/flexbox";
+
+@font-face {
+  font-family: 'arrows';
+  src: url("../fonts/arrows/arrows.eot");
+  src: url("../fonts/arrows/arrows.eot?#iefix") format("embedded-opentype"), url("../fonts/arrows/arrows.woff") format("woff"), url("../fonts/arrows/arrows.ttf") format("truetype"), url("../fonts/arrows/arrows.svg#arrows") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body.mkbook {
+  // font-family: 'Lato', Calibri, Arial, sans-serif;
+  // color: #777;
+  // background: #f6f6f6;
+  #mksidebar,
+  #criticnav {
+    display: none !important;
+  }
+
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .bb-bookblock {
+    figure, img {
+      max-width: 100%;
+    }
+    width: 100%!important;
+    height: 100%!important;
+    max-width: 100%!important;
+    margin: 0 auto;
+    position: relative;
+    z-index: 100;
+    -webkit-perspective: 2000px;
+    -moz-perspective: 2000px;
+    perspective: 2000px;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .bb-page {
+    position: absolute;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transition-property: -webkit-transform;
+    -moz-transition-property: -moz-transform;
+    transition-property: transform;
+  }
+  .bb-vertical .bb-page {
+    width: 50%;
+    height: 100%;
+    left: 50%;
+    -webkit-transform-origin: left center;
+    -moz-transform-origin: left center;
+    transform-origin: left center;
+  }
+  .bb-horizontal .bb-page {
+    width: 100%;
+    height: 50%;
+    top: 50%;
+    -webkit-transform-origin: center top;
+    -moz-transform-origin: center top;
+    transform-origin: center top;
+  }
+  .bb-page > div,
+  .bb-outer,
+  .bb-content,
+  .bb-inner {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #fff;
+  }
+  .bb-outer {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .bb-vertical .bb-content {
+    width: 200%;
+  }
+  .bb-horizontal .bb-content {
+    height: 200%;
+  }
+  .bb-page > div {
+    width: 100%;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+  .bb-page > div:not(:only-child) {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .bb-vertical .bb-back {
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+  }
+  .bb-horizontal .bb-back {
+    -webkit-transform: rotateX(-180deg);
+    -moz-transform: rotateX(-180deg);
+    transform: rotateX(-180deg);
+  }
+  .bb-outer {
+    width: 100%;
+    overflow: hidden;
+    z-index: 999;
+  }
+  .bb-overlay,
+  .bb-flipoverlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+  .bb-flipoverlay {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  /* */
+  .bb-bookblock.bb-vertical > div.bb-page:first-child,
+  .bb-bookblock.bb-vertical > div.bb-page:first-child .bb-back {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+  }
+  .bb-bookblock.bb-horizontal > div.bb-page:first-child,
+  .bb-bookblock.bb-horizontal > div.bb-page:first-child .bb-back {
+    -webkit-transform: rotateX(180deg);
+    -moz-transform: rotateX(180deg);
+    transform: rotateX(180deg);
+  }
+  /* Content display */
+  .bb-vertical .bb-front .bb-content {
+    left: -100%;
+  }
+  .bb-horizontal .bb-front .bb-content {
+    top: -100%;
+  }
+  /* Flipping classes */
+  .bb-vertical .bb-flip-next,
+  .bb-vertical .bb-flip-initial {
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+  }
+  .bb-vertical .bb-flip-prev {
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+  }
+  .bb-horizontal .bb-flip-next,
+  .bb-horizontal .bb-flip-initial {
+    -webkit-transform: rotateX(180deg);
+    -moz-transform: rotateX(180deg);
+    transform: rotateX(180deg);
+  }
+  .bb-horizontal .bb-flip-prev {
+    -webkit-transform: rotateX(0deg);
+    -moz-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+  }
+  .bb-vertical .bb-flip-next-end {
+    -webkit-transform: rotateY(-15deg);
+    -moz-transform: rotateY(-15deg);
+    transform: rotateY(-15deg);
+  }
+  .bb-vertical .bb-flip-prev-end {
+    -webkit-transform: rotateY(-165deg);
+    -moz-transform: rotateY(-165deg);
+    transform: rotateY(-165deg);
+  }
+  .bb-horizontal .bb-flip-next-end {
+    -webkit-transform: rotateX(15deg);
+    -moz-transform: rotateX(15deg);
+    transform: rotateX(15deg);
+  }
+  .bb-horizontal .bb-flip-prev-end {
+    -webkit-transform: rotateX(165deg);
+    -moz-transform: rotateX(165deg);
+    transform: rotateX(165deg);
+  }
+  .bb-item {
+    width: 100%!important;
+    height: 100%!important;
+    max-width: 100%!important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    background: #fff;
+  }
+  /* No JS */
+  .no-js .bb-bookblock,
+  .no-js ul.bb-custom-grid li {
+    width: auto;
+    height: auto;
+  }
+  .no-js .bb-item {
+    display: block;
+    position: relative;
+  }
+
+  div.mkpager-side {
+    &.side-left {
+      box-shadow: 1px 0 6px rgba(0, 0, 0, 0.1);
+    }
+    &.side-right {
+      box-shadow: -1px 0 6px rgba(0, 0, 0, 0.1);
+    }
+    // &.book-chapter {
+    //   @include justify-content(flex-end);
+    // }
+    width: 50%;
+    float: left;
+    height: 100%;
+    overflow: hidden;
+    padding: 2em 3% 3em !important;
+    box-sizing: border-box;
+    /* Centering with flexbox */
+    @include display-flex;
+    @include flex-direction(column);
+    @include flex-wrap(nowrap);
+    // @include box-pack(justify);
+    @include justify-content(flex-start);
+    // @include box-align(center);
+    @include align-items(flex-start);
+    pre {
+      overflow: hidden;
+      width: 100%;
+    }
+  }
+  .mkpager-firstpage {
+    h1 {
+      font-size: 2.625em;
+      line-height: 1.3;
+      margin: 0;
+      font-weight: 300;
+      span {
+        display: block;
+        font-size: 60%;
+        opacity: 0.3;
+        padding: 0 0 0.6em 0.1em;
+      }
+    }
+    text-align: center;
+    padding-top: 15%;
+    width: 50%;
+    float: left;
+    height: 100%;
+  }
+  .mkpager-side p {
+    // padding: 8%;
+    // font-size: 1.2em;
+    // font-weight: 300;
+
+  }
+  #mkbook, .bb-bookblock {
+    @include transition(opacity .1s linear);
+    padding: 0!important;
+    margin: 0!important;
+    .pagenum {
+      font-weight: 300;
+      position: absolute;
+      bottom: 15px;
+      &.page-left {
+        left: 25px;
+      }
+      &.page-right {
+        right: 25px;
+      }
+    }
+    .chapter-title {
+      position: absolute;
+      bottom: 15px;
+      font-weight: 300;
+      font-style: italic;
+    }
+    pre {
+      width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      max-width: 100%;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+    // h3 {
+    //   font-size: 1.4em;
+    //   font-weight: 300;
+    //   margin: 0.4em 0 1em;
+    // }
+    > nav {
+      width: 100%;
+      height: 40px;
+      margin: 1em auto 0;
+      position: fixed;
+      bottom: 20px;
+      z-index: 1000;
+      text-align: center;
+      a {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        border-radius: 2px;
+        background: #1baede;
+        color: #fff;
+        font-size: 0;
+        margin: 2px;
+        &:hover {
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+  .bb-custom-icon:before {
+    font-family: 'arrows';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    font-size: 30px;
+    line-height: 40px;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+  }
+  .bb-custom-icon-first:before, .bb-custom-icon-last:before {
+    content: "\e002";
+  }
+  .bb-custom-icon-arrow-left:before, .bb-custom-icon-arrow-right:before {
+    content: "\e003";
+  }
+  .bb-custom-icon-arrow-left:before, .bb-custom-icon-first:before {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  /* No JS */
+  .no-js {
+    #mkbook, .bb-bookblock {
+      height: auto;
+    }
+    .bb-custom-content {
+      height: 470px;
+    }
+  }
+  @media screen and (max-width: 61.75em) {
+    .mkpager-side {
+      font-size: 70%;
+    }
+  }
+  @media screen and (max-width: 33em) {
+    .mkpager-side {
+      font-size: 60%;
+    }
+  }
+  #mkpagercontainer {
+    position: fixed;
+    bottom: -20px;
+    height: 40px;
+    background: rgba(15,15,15,0.25);
+    z-index: 1000;
+    right: 0;
+    left: 0;
+    margin: 0;
+    -webkit-user-select: none;
+    opacity: .25;
+    @include transition(all .15s linear);
+    &:hover {
+      opacity: 1;
+      bottom: 0;
+    }
+    &::before {
+      content: ' ';
+      width: 100%;
+      position: absolute;
+      height: 100px;
+      background: transparent;
+      bottom: 0;
+    }
+  }
+  #mkpagernav {
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    width: 600px;
+    margin: 0 auto;
+    .pg {
+      position: relative;
+      display: block;
+      float: left;
+      width: 10px;
+      height: 20px;
+      margin: 0;
+      padding: 70px 0 0;
+      top: -40px;
+      pointer-events: auto;
+      cursor: pointer;
+
+      &::before {
+        content: ' ';
+        background-color: white;
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        position: absolute;
+        top: 44px;
+        left: 25%;
+        @include transition(all .1s linear);
+      }
+
+      &:hover {
+        z-index: 101;
+        &::before {
+          background-color: #aaa;
+        }
+      }
+
+      &.active {
+        z-index: 100;
+        &::before {
+          background-color: #00a4f4!important;
+        }
+      }
+    }
+
+    .pgtip {
+      position: absolute;
+      top: 5px;
+      left: -20px;
+      border-radius: 5px;
+      min-width: 50px;
+      padding: 0 4px;
+      font-size: 12px;
+      line-height: 2;
+      font-family: helvetica;
+      font-weight: 600;
+      background: rgba(0,0,0,0.65);
+      color: #fafafa;
+      .divider {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        text-align: center;
+        color: #999;
+        font-size: 1.35em;
+        line-height: 1.35;
+        font-weight: 100;
+      }
+      .l, .r {
+        text-align: center;
+        width: 45%;
+        padding: 0;
+        margin: 0;
+      }
+      .l {
+        float: left;
+      }
+      .r {
+        float: right;
+      }
+    }
+  }
+  #pagerTOC {
+    padding-bottom: 50px;
+    list-style-type: none;
+
+    li {
+      &::before { display: none; }
+      display: block;
+      margin-left: 1em;
+      line-height: 1.5;
+      position: relative;
+      padding: 0 10px;
+      border-radius: 6px;
+      @include transition(background .1s linear);
+
+      a {
+        display: block;
+        position: relative;
+        border: none;
+
+        > span {
+          position: absolute;
+          font-weight: 400;
+          padding: 0 8px;
+          display: inline-block;
+          right: -10px;
+          top: 0;
+          border-radius: 2em;
+          @include transition(all .6s ease-out);
+        }
+
+      }
+
+      &:hover {
+        background: rgba(241, 241, 234, 0.82);
+
+        a > span {
+          background: rgba(184,184,162,0.4);
+          color: #666;
+        }
+      }
+    }
+
+    .level1 {
+      font-weight: 700;
+    }
+
+    .level2 {
+      margin-left: 3em;
+      font-weight: 300;
+      font-size: 1.05em;
+
+      &::before {
+        content: '\2013';
+        color: #bbb;
+        position: absolute;
+        left: -1em;
+      }
+    }
+  }
+
+  #tocJump {
+    position: fixed;
+    left: 0;
+    top: 10px;
+    z-index: 2000;
+    padding: 2px 15px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #111;
+    font-weight: 400;
+    border: solid 1px rgba(180,180,180,.5);
+    cursor: pointer;
+    opacity: 0.5;
+    @include transition(all .2s ease-in-out);
+    &:hover {
+      opacity: 1;
+      background: rgba(200,200,200,0.4);
+      color: #3593d9;
+    }
+  }
+}

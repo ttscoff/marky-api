@@ -1,0 +1,64 @@
+// General
+
+$color-os-highlight: #2f93d6;
+$color-error-light: rgb(255, 149, 149);
+$color-error-dark: rgb(200, 0, 0);
+
+// Autoscroll
+$color-progress-slow: #00baf9;
+$color-progress-medium: #b97540;
+$color-progress-fast: #ff3333;
+
+
+// Bookmarks
+$color-rainbow-base: #3680b2;
+$color-rainbow-1: rgba(adjust-hue($color-rainbow-base, 32%), .7);
+$color-rainbow-2: rgba(adjust-hue($color-rainbow-1, 32%), .7);
+$color-rainbow-3: rgba(adjust-hue($color-rainbow-2, 32%), .7);
+$color-rainbow-4: rgba(adjust-hue($color-rainbow-3, 32%), .7);
+$color-rainbow-5: rgba(adjust-hue($color-rainbow-4, 32%), .7);
+$color-rainbow-6: rgba(adjust-hue($color-rainbow-5, 32%), .7);
+$color-rainbow-7: rgba(adjust-hue($color-rainbow-6, 32%), .7);
+$color-rainbow-8: rgba(adjust-hue($color-rainbow-7, 32%), .7);
+$color-rainbow-9: rgba(adjust-hue($color-rainbow-8, 32%), .7);
+$color-rainbow-10: rgba(adjust-hue($color-rainbow-9, 32%), .7);
+
+// Search Bar
+$searchbase: #333;
+$color-search-bg: #fff;
+$color-search-bar-bg: rgba($color-search-bg, .95);
+$color-search-bar-border: lighten($searchbase, 65%);
+$color-search-button: lighten($searchbase, 10%);
+$color-search-button-border: lighten($searchbase, 50%);
+$color-search-button-bg-hover: lighten($searchbase, 65%);
+$color-search-find-count: lighten($searchbase, 30%);
+$color-search-bar-bg-inverted: rgba(0, 0, 0, .5);
+$color-search-button-inverted: lighten($searchbase, 50%);
+$color-search-button-bg-inverted-hover: $searchbase;
+$color-search-find-count-inverted: lighten($searchbase, 70%);
+
+$color-searchresult: rgb(255, 252, 141);
+$color-searchhighlight: rgb(248, 214, 44);
+
+// Keyword Highlighting
+$color-avoidword: rgba(216, 171, 130, .55);
+$color-mkhighlight: rgba(107, 206, 255, .3);
+$color-mkavoid: rgba(237, 114, 114, .55);
+$color-mkalt: rgba(225, 203, 237, .55);
+$color-mktemp: rgba(146, 255, 127, .65);
+$color-mkpassive: rgba(222, 196, 116, .65);
+$color-mkdoublewords: rgba(208, 112, 52, .55);
+
+// Include Popup
+$color-include-popup-bg: rgba(255, 255, 255, .9);
+$color-include-popup-border: rgb(96, 173, 208);
+$color-include-popup: #111;
+
+// Bottom banner
+
+
+// Misc Elements
+
+$color-almost-hidden: rgba(100, 100, 100, .2);
+$color-zoom-toggle: #eee;
+$color-progress-bar: rgb(110, 250, 123);

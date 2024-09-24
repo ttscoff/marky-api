@@ -1,0 +1,67 @@
+@import "compass";
+@import "include/font-awesome";
+
+#mkreplaced-toc {
+	li::before {
+		content: '';
+	}
+
+	list-style-position: inside;
+	padding: 0;
+	margin: 0 0 0 1rem;
+	list-style-type: none;
+
+	li {
+		font-size: 1rem;
+		line-height: 1.25;
+		font-weight: normal;
+
+		ul {
+			font-size: 1.3rem;
+			font-weight: 300;
+			padding: .5rem 0;
+			margin: 0 0 0 1rem;
+		}
+	}
+
+	li.missing {
+		list-style-type: none !important;
+	}
+
+	&.max-1, &.max1 {
+		ul {
+			display: none;
+		}
+	}
+
+	&.max-2, &.max2 {
+		ul ul {
+			display: none;
+		}
+	}
+
+	&.max-3, &.max3 {
+		ul ul ul {
+			display: none;
+		}
+	}
+
+	&.max-4, &.max4 {
+		ul ul ul ul {
+			display: none;
+		}
+	}
+
+	&.max-5, &.max5 {
+		ul ul ul ul ul {
+			display: none;
+		}
+	}
+}
+
+.mk-rtl {
+	direction: rtl;
+	text-align: right;
+}
+
+@import "include/print";

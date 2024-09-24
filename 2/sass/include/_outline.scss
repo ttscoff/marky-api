@@ -1,0 +1,661 @@
+/* Outline styles */
+.mkoutlinestyle {
+  #wrapper {
+    .footnotes {
+      margin-left: 0!important;
+      ol {
+        margin-left: 0!important;
+
+        li {
+          list-style-type: decimal !important;
+          font-size: 15px;
+        }
+        li::before {
+          display:none;
+        }
+      }
+    }
+
+    #generated-toc-clone ul {
+      margin-left: 0!important;
+    }
+
+    h2, h3, h4, h5, h6, ul, ol, li, p {
+      font-size: 1.1rem;
+    }
+
+    ol, ul, li {
+      list-style-type: none;
+      list-style-position: outside;
+      // margin: 0 0 0 2rem;
+      padding-left: 0;
+      line-height: 1.65;
+    }
+
+    // li ul, li ol {
+    //   margin-left: 2rem;
+    // }
+
+    // li li ul, li li ol {
+    //   margin-left: 3rem;
+    // }
+
+    // li li li ul, li li li ol {
+    //   margin-left: 4rem;
+    // }
+
+    li {
+      position: relative;
+
+      > p {
+        margin: 0 0 .25rem 0;
+        padding: 0;
+        line-height: 1.65;
+        margin-top: 0;
+
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  &.mkoutlinelevels-1 #wrapper {
+    li {
+      margin-left: 1rem;
+
+      &::before {
+        font-weight: 600;
+        line-height: 1.6;
+        position: absolute;
+      }
+    }
+
+    ul,
+    ol {
+      margin-left: 1rem;
+      counter-reset: item;
+
+      > li {
+        counter-increment: item;
+
+        &::before {
+          content: counter(item) '. ';
+          left: -1.5rem;
+        }
+
+        > ul,
+        > ol {
+          margin-left: 1rem;
+          counter-reset: subitem;
+
+          > li {
+            counter-increment: subitem;
+
+            &::before {
+              content: counter(item) '.' counter(subitem) ' ';
+              left: -2rem;
+            }
+
+            > ul,
+            > ol {
+              margin-left: 2rem;
+              counter-reset: subitem2;
+
+              > li {
+                counter-increment: subitem2;
+
+                &::before {
+                  content: counter(item) '.' counter(subitem) '.' counter(subitem2) ' ';
+                  left: -3rem;
+                }
+
+                > ul,
+                > ol {
+                  margin-left: 3rem;
+                  counter-reset: subitem3;
+
+                  > li {
+                    counter-increment: subitem3;
+
+                    &::before {
+                      content: counter(item) '.'  counter(subitem) '.' counter(subitem2) '.' counter(subitem3) ' ';
+                      left: -4rem;
+                    }
+
+                    > ul,
+                    > ol {
+                      margin-left: 4rem;
+                      counter-reset: subitem4;
+
+                      > li {
+                        counter-increment: subitem4;
+
+                        &::before {
+                          content: counter(item) '.'  counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) ' ';
+                          left: -5rem;
+                        }
+
+                        > ul,
+                        > ol {
+                          margin-left: 5rem;
+                          counter-reset: subitem5;
+
+                          > li {
+                            counter-increment: subitem5;
+
+                            &::before {
+                              content: counter(item) '.'  counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) ' ';
+                              left: -6rem;
+                            }
+
+                            > ul,
+                            > ol {
+                              margin-left: 6rem;
+                              counter-reset: subitem6;
+
+                              > li {
+                                counter-increment: subitem6;
+
+                                &::before {
+                                  content: counter(item) '.'  counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) '.' counter(subitem6) ' ';
+                                  left: -7rem;
+                                }
+
+                                > ul,
+                                > ol {
+                                  margin-left: 7rem;
+                                  counter-reset: subitem7;
+
+                                  > li {
+                                    counter-increment: subitem7;
+
+                                    &::before {
+                                      content: counter(item) '.'  counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) '.' counter(subitem6) '.' counter(subitem7)  ' ';
+                                      left: -8rem;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    ul ul ul ul ul li::before {
+      top: 0;
+    }
+  }
+
+  &.mkoutlinelevels-2 #wrapper {
+    h2,
+    h3,
+    h4,
+    li,
+    p,
+    div {
+      font-weight: 400;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    p {
+      margin-left: 1rem;
+    }
+
+    h2,
+    h2 ~ div,
+    h2 ~ p,
+    section {
+      margin-left: 1rem;
+    }
+
+    section {
+      section {
+        margin-left: 0;
+      }
+    }
+
+    li,
+    h2 {
+      &::before {
+        font-weight: 600;
+        left: -2rem;
+        position: absolute;
+      }
+    }
+
+    h1 { counter-reset: section; }
+
+    h2 {
+      counter-increment: section;
+
+      &::before {
+        content: counter(section) '. ';
+      }
+    }
+
+    li {
+      margin-left: 2rem;
+
+      section & {
+        margin-left: 4rem;
+      }
+    }
+
+    li {
+      li {
+        margin-left: 2rem;
+
+        li {
+          margin-left: 3rem;
+
+          li {
+            margin-left: 4rem;
+          }
+        }
+      }
+    }
+
+
+    ul,
+    ol {
+      counter-reset: item;
+
+      > li {
+        counter-increment: item;
+
+        &::before {
+          content: counter(section) '.' counter(item) ' ';
+          left: -3rem;
+        }
+
+        > ul,
+        > ol {
+          counter-reset: subitem;
+
+          > li {
+            counter-increment: subitem;
+
+            &::before {
+              content: counter(section) '.'  counter(item) '.' counter(subitem) ' ';
+              left: -4rem;
+            }
+
+            > ul,
+            > ol {
+              counter-reset: subitem2;
+
+              > li {
+                counter-increment:subitem2;
+
+                &::before {
+                  content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) ' ';
+                  left: -6rem;
+                }
+
+                > ul,
+                > ol {
+                  counter-reset: subitem3;
+
+                  > li {
+                    counter-increment: subitem3;
+
+                    &::before {
+                      content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) ' ';
+                      left: -8rem;
+                    }
+
+                    > ul,
+                    > ol {
+                      counter-reset: subitem4;
+
+                      > li {
+                        counter-increment: subitem4;
+
+                        &::before {
+                          content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) ' ';
+                          left: -8rem;
+                        }
+
+                        > ul,
+                        > ol {
+                          counter-reset: subitem5;
+
+                          > li {
+                            counter-increment: subitem5;
+
+                            &::before {
+                              content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) ' ';
+                              left: -8rem;
+                            }
+
+                            > ul,
+                            > ol {
+                              counter-reset: subitem6;
+
+                              > li {
+                                counter-increment: subitem6;
+
+                                &::before {
+                                  content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) '.' counter(subitem6) ' ';
+                                  left: -8rem;
+                                }
+
+                                > ul,
+                                > ol {
+                                  counter-reset: subitem7;
+
+                                  > li {
+                                    counter-increment: subitem7;
+
+                                    &::before {
+                                      content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) '.' counter(subitem6) '.' counter(subitem7) ' ';
+                                      left: -8rem;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ul ul ul ul ul li::before {
+      top: 0;
+    }
+  }
+
+  &.mkoutlinelevels-3 #wrapper {
+    h2,
+    h3,
+    h4,
+    li,
+    p,
+    div {
+      font-weight: 400;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    h2,
+    h2 ~ div,
+    h2 ~ p {
+      margin-left: 1.5rem;
+    }
+
+    h3,
+    h3 ~ div,
+    h3 ~ p,
+    h4,
+    h4 ~ div,
+    h4 ~ p {
+      margin-left: 3.5rem;
+    }
+
+    h5,
+    h6 {
+      font-weight: 600;
+      margin-left: 2rem;
+    }
+
+    li,
+    h2,
+    h3,
+    h4 {
+      text-align: left;
+
+      &::before {
+        font-weight: 600;
+        left: -2rem;
+        position: absolute;
+      }
+    }
+
+    h2 {
+      &::before {
+        left: -1.5rem;
+      }
+    }
+
+    h1 { counter-reset: section; }
+
+    h2 {
+      counter-increment: section;
+      counter-reset: item;
+    }
+
+    h3 {
+      counter-increment: item;
+      counter-reset: subitem;
+    }
+
+    h4 {
+      counter-increment: subitem;
+    }
+
+    h2::before {
+      content: counter(section) '. ';
+    }
+
+    h3::before {
+      content: counter(section) '.' counter(item) ' ';
+    }
+
+    h4::before {
+      content: counter(section) '.' counter(item) '.' counter(subitem) ' ';
+    }
+
+    ol, ul {
+      margin-left: 6.5rem;
+    }
+
+    // section ol, section ul {
+    //   margin-left: 4rem;
+    // }
+
+    li ul, li ol {
+      margin-left: 4rem;
+    }
+    li li ul, li li ol {
+      margin-left: 5.5rem;
+    }
+    li li li ul, li li li ol {
+      margin-left: 4rem;
+    }
+
+    ul,
+    ol {
+      counter-reset: subitem;
+
+      li {
+        counter-increment: subitem;
+      }
+
+      > li {
+        &::before {
+          content: counter(section) '.'  counter(item) '.' counter(subitem) ' ';
+          left: -3rem;
+        }
+
+        > ul,
+        > ol {
+          counter-reset: subitem2;
+          margin-left: 4rem;
+
+          > li {
+            counter-increment: subitem2;
+
+            &::before {
+              content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) ' ';
+              left: -4rem;
+            }
+
+            > ul
+            > ol {
+              counter-reset: subitem3;
+
+              > li {
+                counter-increment: subitem3;
+
+                &::before {
+                  content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) ' ';
+                  left: -7rem;
+                }
+
+                > ul,
+                > ol {
+                  counter-reset: subitem4;
+
+                  > li {
+                    counter-increment: subitem4;
+
+                    &::before {
+                      content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) ' ';
+                      left: -7rem;
+                    }
+
+                    > ul,
+                    > ol {
+                      counter-reset: subitem5;
+
+                      > li {
+                        counter-increment: subitem5;
+
+                        &::before {
+                          content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) ' ';
+                          left: -7rem;
+                        }
+
+                        > ul,
+                        > ol {
+                          counter-reset: subitem6;
+
+                          > li {
+                            counter-increment: subitem6;
+
+                            &::before {
+                              content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) '.' counter(subitem6) ' ';
+                              left: -7rem;
+                            }
+
+                            > ul,
+                            > ol {
+                              counter-reset: subitem7;
+
+                              > li {
+                                counter-increment: subitem7;
+
+                                &::before {
+                                  content: counter(section) '.'  counter(item) '.' counter(subitem) '.' counter(subitem2) '.' counter(subitem3) '.' counter(subitem4) '.' counter(subitem5) '.' counter(subitem6) '.' counter(subitem7) ' ';
+                                  left: -7rem;
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ul ul ul ul ul li::before {
+      top: 0;
+    }
+    h4::before {
+      left: -4rem;
+      content: counter(section) '.'  counter(item) '.' counter(subitem) ' ';
+    }
+  }
+
+  &.mkoutlinestyle-apa #wrapper {
+    li::before { display:none !important;}
+
+    // li { margin-left: 0; }
+    // ol, ul {  }
+    ol, ul {
+      margin-left: 1rem;
+
+      > li {
+        list-style: upper-roman;
+
+        > ol,
+        > ul {
+          > li {
+            margin-left: .5rem;
+            list-style: upper-alpha;
+
+            > ol,
+            > ul {
+              > li {
+                list-style: decimal;
+
+                > ol,
+                > ul {
+                  > li {
+                    list-style: lower-roman;
+
+                    > ol,
+                    > ul {
+                      > li {
+                        list-style: lower-alpha;
+
+
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.mkoutlinelevels-1,
+  &.mkoutlinelevels-2,
+  &.mkoutlinelevels-3 {
+    #wrapper {
+      li, li p {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 1.1rem;
+      }
+      #wrapper section ol,
+      #wrapper section p {
+        margin-left: 4rem!important;
+      }
+    }
+  }
+
+  &.scrollToEdit #firstdiff {
+    left: -6rem;
+    top: -6px;
+  }
+}

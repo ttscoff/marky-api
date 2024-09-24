@@ -1,0 +1,538 @@
+/*
+This document has been created with Marked.app <https://marked2app.com>
+Content is property of the document author
+Please leave this notice in place, along with any additional credits below.
+---------------------------------------------------------------
+Title: Upstanding Citizen
+Author: Brett Terpstra
+Description: A modern layout with bold headlines
+Non-standard fonts used: [League Gothic, Fjord, Inconsolata]
+Note: Loads non-standard fonts from Google Fonts
+---
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Fjord+One&family=Inconsolata:wght@200..900&family=League+Gothic&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+body {
+	-webkit-font-smoothing: subpixel-antialiased;
+	font: normal 0.8764em / 1.5em Arial, Verdana, sans-serif;
+	margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "League Gothic", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: normal;
+}
+
+h1 {
+	color: #000;
+	font-size: 4.2857em;
+	line-height: 1em;
+	margin: .6563em 0;
+}
+
+h2 {
+	color: #111;
+	font-size: 2.7143em;
+	line-height: 1.2em;
+	margin: .875em 0;
+}
+
+h1, h2, h3 {
+	text-align: center;
+	padding: .3em 0;
+}
+
+h2, h3 {
+	border-top: solid 1px #ddd;
+	border-bottom: solid 1px #ddd;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+	color: #003057;
+}
+
+h2 {
+	&:before {
+		content: "\2015  ";
+		font-weight: normal;
+		color: #aaa;
+	}
+	&:after {
+		content: "  \2015";
+		font-weight: normal;
+		color: #aaa;
+	}
+}
+
+h3 {
+	color: #111;
+	font-size: 2.5em;
+	line-height: 1.2em;
+	margin: .9em 0;
+}
+
+h4 {
+	color: #111;
+	font-size: 2.25em;
+	line-height: 1.2em;
+	margin: .3em 0;
+}
+
+h5 {
+	color: #111;
+	font-size: 2em;
+	line-height: 1.2em;
+	margin: .3em 0;
+}
+
+h6 {
+	font-size: 1.5em;
+	line-height: 1.2em;
+	margin: .3em 0;
+}
+
+body, p, div {
+	color: #222;
+	font-family: Merriweather, "Georgia", serif;
+	font-weight: 300;
+	word-wrap: break-word;
+}
+
+abbr,acronym {
+	border-bottom: 1px dotted #aaa;
+}
+
+a {
+	-webkit-transition: color .2s ease-in-out;
+	-moz-transition: color .2s ease-in-out;
+	-o-transition: color .2s ease-in-out;
+	-ms-transition: color .2s ease-in-out;
+	transition: color .2s ease-in-out;
+	color: #004e8c;
+	text-decoration: none;
+	&:hover {
+		color: #3593d9;
+	}
+}
+
+/*h2 em
+ {
+
+color: #111;
+
+padding-left: 10px;
+
+text-shadow: 0 1px 0 #FFF
+}
+
+*/
+
+body {
+  font-size: 20px;
+  line-height: 29px;
+  margin: 0 auto;
+}
+h1 {
+  font-size: 61px;
+  line-height: 87px;
+  margin-top: 58px;
+  margin-bottom: 29px;
+}
+h2 {
+  font-size: 42px;
+  line-height: 58px;
+  margin-top: 58px;
+  margin-bottom: 29px;
+}
+h3 {
+  font-size: 29px;
+  line-height: 29px;
+  margin-top: 29px;
+  margin-bottom: 29px;
+}
+h4 {
+  font-size: 29px;
+  line-height: 29px;
+  margin-top: 29px;
+  margin-bottom: 29px;
+}
+p, ul, ol, pre, table, blockquote {
+  margin-top: 29px;
+  margin-bottom: 29px;
+}
+
+/* Sanitation */
+hr {
+  border: 1px solid;
+  margin: -1px 0;
+}
+ul ul, ol ol, ul ol, ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+b, strong, em, small, code {
+  line-height: 1;
+}
+
+b, strong {
+	font-weight: 700;
+}
+
+.footnote {
+	color: #0d6ea1;
+	font-size: .8em;
+	vertical-align: super;
+}
+
+#wrapper img {
+	max-width: 100%;
+	height: auto;
+}
+
+dd {
+	margin-bottom: 1em;
+}
+
+li > p:first-of-type {
+	margin: 0;
+}
+
+ul, ol {
+	margin-left: 1rem;
+}
+
+ul {
+	ul, ol {
+		margin-bottom: .4em;
+	}
+	ul {
+		list-style: disc;
+		ul {
+			list-style: square;
+			ul {
+				list-style: circle;
+			}
+		}
+	}
+}
+
+table {
+	caption, col, colgroup, table, tbody, td, tfoot, th, thead, tr {
+		border-spacing: 0;
+		font-family: "League Gothic", Helvetica, Arial, sans-serif;
+		font-weight: 400;
+		font-size: 24px;
+	}
+	caption {
+		display: table-caption;
+		font-weight: 400;
+		font-size: 18px;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-family: "League Gothic";
+		word-spacing: .2em;
+		background: rgba(0, 0, 0, 0.75);
+		color: #EEE;
+		padding: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		margin: 4px 0;
+		-webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.35);
+		-moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.35);
+		box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.35);
+	}
+	col {
+		display: table-column;
+	}
+	colgroup {
+		display: table-column-group;
+	}
+	tbody {
+		display: table-row-group;
+	}
+	tfoot {
+		display: table-footer-group;
+	}
+	margin-bottom: 2em;
+	padding: 0;
+	font-size: 14px;
+	border-collapse: collapse;
+	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
+	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
+	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
+	width: 70%;
+	margin: 0 auto 2em auto;
+	th, td {
+		padding: 10px 10px 9px;
+		line-height: 18px;
+		text-align: left;
+	}
+	th {
+		padding-top: 9px;
+		font-family: "League Gothic";
+		font-size: 18px;
+		font-weight: normal !important;
+		text-transform: uppercase;
+		vertical-align: middle;
+	}
+	td {
+		vertical-align: top;
+		border-top: 1px solid #ddd;
+		font-family: Merriweather,georgia,serif;
+		font-weight: 300;
+		font-size: 14px !important;
+	}
+	tbody th {
+		border-top: 1px solid #ddd;
+		vertical-align: top;
+	}
+	border: 1px solid #ddd;
+	border-collapse: separate;
+	*border-collapse: collapse;
+	/* IE7, collapse table to remove spacing */
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	th + th, td + td, th + td {
+		border-left: 1px solid #ddd;
+	}
+	thead tr:first-child th:first-child, tbody tr:first-child td:first-child {
+		-webkit-border-radius: 4px 0 0 0;
+		-moz-border-radius: 4px 0 0 0;
+		border-radius: 4px 0 0 0;
+	}
+	thead tr:first-child th:last-child {
+		-webkit-border-radius: 0 4px 0 0;
+		-moz-border-radius: 0 4px 0 0;
+		border-radius: 0 4px 0 0;
+	}
+	tr:nth-child(odd), th:nth-child(odd), td:nth-child(odd) {
+		background: rgba(255, 255, 255, 0.06);
+	}
+	tr:nth-child(even), td:nth-child(even) {
+		background: rgba(0, 0, 0, 0.06);
+	}
+	tbody tr {
+		&:first-child td:last-child {
+			-webkit-border-radius: 0 4px 0 0;
+			-moz-border-radius: 0 4px 0 0;
+			border-radius: 0 4px 0 0;
+		}
+		&:last-child td {
+			&:first-child {
+				-webkit-border-radius: 0 0 0 4px;
+				-moz-border-radius: 0 0 0 4px;
+				border-radius: 0 0 0 4px;
+			}
+			&:last-child {
+				-webkit-border-radius: 0 0 4px 0;
+				-moz-border-radius: 0 0 4px 0;
+				border-radius: 0 0 4px 0;
+			}
+		}
+		&:nth-child(odd) {
+			background-color: rgba(0, 0, 0, 0.03);
+		}
+	}
+}
+
+figure {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	margin: 1em 0 2em;
+}
+
+figcaption {
+	font-style: italic;
+	text-align: center;
+	color: #444;
+}
+
+ul {
+	list-style: circle;
+}
+
+.poetry pre {
+	display: block;
+	font-family: Georgia, Garamond, serif !important;
+	font-size: 110% !important;
+	font-style: italic;
+	line-height: 1.6em;
+	margin-left: 1em;
+	code {
+		font-family: Georgia, Garamond, serif !important;
+		word-break: break-all;
+		word-break: break-word;
+		/* Non standard for webkit */
+		-webkit-hyphens: auto;
+		-moz-hyphens: auto;
+		hyphens: auto;
+		white-space: pre-wrap;
+	}
+}
+
+blockquote p {
+	font-size: 110%;
+	font-style: italic;
+	line-height: 1.6em;
+}
+
+sup, sub, a.footnote {
+	font-size: 1.4ex;
+	height: 0;
+	line-height: 1;
+	position: relative;
+	vertical-align: super;
+}
+
+sub {
+	vertical-align: sub;
+	top: -1px;
+}
+
+
+dt, th {
+	font-weight: 400;
+}
+
+dt {
+	font-weight: 700;
+}
+
+@media print {
+	// body {
+	// 	overflow: auto;
+	// }
+	img, table, figure {
+		page-break-inside: avoid;
+	}
+	#wrapper {
+		background: #fff;
+		color: #303030;
+		font-size: 85%;
+		padding: 10px;
+		position: relative;
+		text-indent: 0;
+	}
+}
+
+pre, code, tt {
+	color: #8b8074;
+	font-family: Inconsolata, Menlo, Monaco, monospace;
+	/*font-size: 14px;*/
+	text-align: left;
+	margin: 2em 0;
+	font-weight: normal;
+}
+
+// p code, li code {
+	// font-size: 22px;
+// }
+
+tt {
+	display: block;
+	margin: 1.5em 0;
+	line-height: 1.5;
+}
+
+span.amp {
+	font-family: Baskerville, Palatino, "Book Antiqua", serif;
+	font-style: italic;
+}
+
+code {
+	background: transparent;
+	border: 1px solid #ddd;
+	padding: 2px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	color: #222;
+}
+
+pre code {
+	border: none;
+}
+
+@media screen {
+	::selection {
+		background-color: rgba(101, 207, 255, 0.3);
+	}
+	h1::selection {
+		background-color: rgba(45, 156, 208, 0.3);
+	}
+	h2::selection {
+		background-color: rgba(90, 182, 224, 0.3);
+	}
+	h3::selection, h4::selection, h5::selection, h6::selection {
+		background-color: rgba(133, 201, 232, 0.3);
+	}
+	code {
+		&::selection {
+			background-color: #333;
+			color: #eee;
+		}
+		span::selection {
+			background-color: #333 !important;
+			color: #eee !important;
+		}
+	}
+	a::selection {
+		background-color: rgba(255, 230, 102, 0.5);
+	}
+	td::selection, th::selection, caption::selection {
+		background-color: rgba(180, 237, 95, 0.5);
+	}
+	.inverted {
+		#wrapper {
+			background: rgba(37, 42, 42, 1);
+		}
+		background: rgba(37, 42, 42, 1);
+		hr {
+			border-color: rgba(51, 63, 64, 1) !important;
+		}
+		p, td, li, h1, h2, h3, h4, h5, h6, th, .math, caption, dd, dt {
+			color: #eee !important;
+		}
+		h2, h3 {
+			border-color: rgba(200, 200, 200, 0.3);
+		}
+		code {
+			padding: 2px;
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+			color: #eee;
+		}
+		pre {
+			background: #f5f5f5;
+			padding: 7px;
+		}
+		pre code {
+			color: #111;
+		}
+		table {
+			tr:nth-child(odd), th:nth-child(odd), td:nth-child(odd) {
+				background: none;
+			}
+		}
+		a {
+			color: rgba(148, 219, 255, 1);
+		}
+	}
+	#wrapper {
+		padding: 20px;
+	}
+}
+
+// LeanPub-specific
+.mkstyle--upstandingcitizen #wrapper {
+  aside.blurb {
+    &::before {
+      top: .75em;
+    }
+  }
+}
