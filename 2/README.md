@@ -19,16 +19,19 @@
     https://heckyesmarkdown.com/api/2/?[query string]
 
 
-*(`heckyesmarkdown.com` and `fuckyeahmarkdown.com` are mirrors, you can use either endpoint.)*
+*(`heckyesmarkdown.com` and `fuckyeahmarkdown.com` are mirrors,
+you can use either endpoint.)*
 
 ## Parameters
 
 Parameters are passed as a query string to the API.
 
 
-Parameter keys can be shortened to just the first letter (or letters required to be unique). Use 1 for true and 0 for false (also accepts 'true' and 'false').
+Parameter keys can be shortened to just the first letter (or letters required to
+be unique). Use 1 for true and 0 for false (also accepts 'true' and 'false').
 
-*The `url` parameter is required, all other parameters are optional (see default values).*
+*The `url` parameter is required, all other parameters are optional (see default
+values).*
 
 Example:
 
