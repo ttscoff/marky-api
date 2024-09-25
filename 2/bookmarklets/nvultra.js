@@ -97,7 +97,9 @@ const reload = () => {
 };
 
 ajax({
-  url: `https://fuckyeahmarkdown.com/api/2/?u=${window.location.href}&link=nvultra&json=1`,
+  url: `https://fuckyeahmarkdown.com/api/2/?u=${encodeURIComponent(
+    window.location.href
+  )}&link=nvultra&json=1`,
   method: "get",
 }).then((data) => {
   const content = data["markup"];

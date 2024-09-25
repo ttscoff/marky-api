@@ -65,7 +65,7 @@ module Marky
     # Initialize the class
     def initialize
       @log = Logger.new(File.join('logs', Time.now.strftime('%Y-%m-%d.log')))
-      @log.level = Logger::INFO
+      @log.level = Logger::DEBUG
       @log.datetime_format = '%Y-%m-%d %H:%M:%S'
       @log.formatter = proc do |severity, datetime, progname, msg|
         "#{datetime} [#{severity}] #{msg}\n#{progname}\n"
@@ -78,6 +78,7 @@ module Marky
       @url = @params[:url]
       @readability = @params.key?(:readability) && @params[:readability]
       @json_output = @params.key?(:json) && @params[:json]
+      @log.debug("@params: #{@params}")
       @output_format = @params.key?(:output) ? @params[:output].normalize_output_format : :markdown
 
       @link_type = nil
@@ -141,6 +142,7 @@ module Marky
       return false unless output
 
       if @url =~ /stack(overflow|exchange)\.com/
+        @log.info("StackExchange Page")
         output, @title = StackOverflow.process(output)
       elsif @url =~ %r{gist\.github\.com/[^/]+/[a-z0-9]+(#\S+)?$}
         @log.info("GitHub Gist")
@@ -210,9 +212,9 @@ module Marky
       fmt = VALID_FORMATS.include?(@format.to_s) ? @format : :gfm
 
       output = Convert.new(output).format(fmt, extensions: extensions)
-
       # Clean up conversion output
       output = MarkdownCleaner.new(output).clean
+      @log.info(output)
 
       if output.length.positive?
         @log.info("Processed URL: #{@url}")

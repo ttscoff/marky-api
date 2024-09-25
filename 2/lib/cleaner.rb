@@ -142,6 +142,7 @@ class MarkdownCleaner
     #   table = `echo #{Shellwords.escape(match)}|lib/clean_tables.pl`
     #   "\n#{table}\n"
     # end
+
     tc = TableCleanup.new(input)
     tc.max_cell_width = 80
     tc.max_table_width = 150

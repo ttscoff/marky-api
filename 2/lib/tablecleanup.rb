@@ -39,6 +39,8 @@ class TableCleanup
   ## @return [String] the formatted table
   ##
   def build_table(table)
+    return '' if table.first.nil?
+
     @widths = [0] * table.first.size
 
     table.each do |row|
