@@ -38,12 +38,12 @@ module Marky
         vote_count = answer.css('.js-vote-count').first.content.to_i
         res << '<hr>'
 
-        res << '<p><b>Accepted answer:</b></p>' if answer['class'] =~ /accepted-answer/
+        res << '<h3>Accepted answer:</h3>' if answer['class'] =~ /accepted-answer/
 
-        res << answer.css('.post-text, .js-post-body').inner_html
         author = answer.css('.post-signature .user-info .user-details>a').first
         href = author.attributes['href'].value
-        res << %(<p>Answer by <a href="#{href}">#{author.content}</a> <em>[Vote count: #{vote_count}]</em></p>)
+        res << %(<h5>Answer by <a href="#{href}">#{author.content}</a> <em>[Vote count: #{vote_count}]</em></h5>)
+        res << answer.css('.post-text, .js-post-body').inner_html
         answer.css('.comment-body').each do |comment|
           res << "<blockquote>#{comment.inner_html}</blockquote>"
         end
