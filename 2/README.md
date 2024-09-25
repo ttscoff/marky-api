@@ -12,7 +12,7 @@
     - [Link Formats](#link-formats)
     - [Styles](#styles)
   - [Special handling](#special-handling)
-
+  - [Bookmarklets](#bookmarklets)
 
 ## Endpoint
 
@@ -227,4 +227,4 @@ More to come as needs arise.
 
 ## Bookmarklets
 
-- <a href="javascript:(function(){var t=document.createElement("script");t.setAttribute("src","//fuckyeahmarkdown.com/bookmarklets/nvultra.js."+Math.floor(Math.random() * 1000000)+".js"),document.body.appendChild(t)})();" class="bookmarklet">Add to nvUltra</a>
+- <a href='javascript:(function(){var t=document.createElement("script");t.setAttribute("src","//fuckyeahmarkdown.com/bookmarklets/nvultra.js."+Math.floor(Math.random() * 1000000)+".js"),document.body.appendChild(t)})();' class="bookmarklet">Add to nvUltra</a>
