@@ -40,6 +40,7 @@ const css = `
     height: 100%;
     max-height: 70vh;
     overflow: scroll;
+    text-align: left!important;
   }
 
   #markycontent pre {
@@ -47,7 +48,8 @@ const css = `
     padding: 20px;
     word-break: break-all;
     text-wrap: wrap;
-    max-height: 90%;
+    max-height: 83%;
+    overflow: scroll;
   }
 
   #markycontent .notelink {
