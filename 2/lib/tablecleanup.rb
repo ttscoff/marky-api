@@ -146,7 +146,7 @@ class TableCleanup
   ##
   def clean
     table_rx = /^(?ix)(?<table>
-    (?<header>\|?(?:.*?\|)+.*?)\s*\n
+    (?<header>\|(?:.*?\|)+.*?)\s*\n
     ((?<align>\|?(?:[:-]+\|)+[:-]*)\s*\n)?
     (?<rows>(?:\|?(?:.*?\|)+.*?(?:\n|\Z))+))/
 

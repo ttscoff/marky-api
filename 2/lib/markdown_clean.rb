@@ -249,6 +249,9 @@ end
 module Marky
   class MarkdownCleanup
     def initialize(content)
+      puts content
+      puts "made it"
+      Process.exit 0
       @content = content
     end
 

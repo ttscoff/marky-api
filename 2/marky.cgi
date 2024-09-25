@@ -11,6 +11,7 @@ require 'time'
 require 'uri'
 
 require_relative 'lib/string'
+require_relative 'lib/symbol'
 require_relative 'lib/htmlentities/htmlentities'
 require_relative 'lib/readability/lib/readability'
 require_relative 'lib/convert'
@@ -66,8 +67,8 @@ module Marky
       @log = Logger.new(File.join('logs', Time.now.strftime('%Y-%m-%d.log')))
       @log.level = Logger::INFO
       @log.datetime_format = '%Y-%m-%d %H:%M:%S'
-      @log.formatter = proc do |severity, datetime, _progname, msg|
-        "#{datetime} [#{severity}] #{msg}\n"
+      @log.formatter = proc do |severity, datetime, progname, msg|
+        "#{datetime} [#{severity}] #{msg}\n#{progname}\n"
       end
 
       @cgi = CGI.new
@@ -111,6 +112,7 @@ module Marky
       true
     rescue StandardError => e
       @log.error(e.message)
+      @log.error(e.backtrace)
       puts e.backtrace
       puts e.message
 
@@ -128,6 +130,7 @@ module Marky
     # @return [Boolean] true if successful, false otherwise
     def start
       puts @cgi.header unless @json_output || @link_type
+
       curl = Curl.new(@url)
       curled = curl.fetch
 
@@ -139,8 +142,15 @@ module Marky
 
       if @url =~ /stack(overflow|exchange)\.com/
         output, @title = StackOverflow.process(output)
-      elsif @url =~ %r{github\.com/\S+/\S+$}
+      elsif @url =~ %r{gist\.github\.com/[^/]+/[a-z0-9]+(#\S+)?$}
+        @log.info("GitHub Gist")
+        output, title = GitHub.processGist(output)
+      elsif @url =~ %r{github\.com/[^/]+?/[^/]+?+$}
+        @log.info("GitHub Repo")
         output, @title = GitHub.process(output)
+      elsif @url =~ %r{github\.com/.*?/\w+\.\w+$}
+        @log.info("GitHub file")
+        output, @title = GitHub.processFile(output)
       elsif @readability
         output = Readability::Document.new(output, {
                                              remove_empty_nodes: true,
@@ -171,6 +181,16 @@ module Marky
       extensions = []
 
       if @format == :gfm
+        extensions << '+alerts'
+        extensions << '+autolink_bare_uris'
+        extensions << '+emoji'
+        extensions << '+gfm_auto_identifiers'
+        extensions << '+pipe_tables'
+        extensions << '+raw_html'
+        extensions << '+strikeout'
+        extensions << '+task_lists'
+        extensions << '+tex_math_dollars'
+        extensions << '+tex_math_gfm'
         extensions << '+yaml_metadata_block'
         extensions << '+definition_lists'
         extensions << '+footnotes'
@@ -201,9 +221,12 @@ module Marky
         return false
       end
 
-      @output = add_title(output.straighten_quotes)
+      @output = @format.markdown? ? add_title(output.straighten_quotes) : output.straighten_quotes
 
       true
+    rescue StandardError => e
+      @log.error("Error processing URL: #{@url}, #{e}")
+      false
     end
 
     # Add source link and title to Markdown output
@@ -316,7 +339,7 @@ module Marky
       end
 
       # If output is to a link, generate the link and optionally open (with :open)
-      if @link_type
+      unless @link_type.nil?
         link = to_link.strip
         if @params[:open].to_s =~ /^1|t/ && @link_type != :url
           if link.length < 8000
@@ -363,7 +386,7 @@ module Marky
 
     def to_link
       out_url = ERB::Util.url_encode(@output)
-      title = ERB::Util.url_encode(@title.gsub(%r{/}, ':').strip)
+      title = @title.nil? ? 'Unknown' : ERB::Util.url_encode(@title.gsub(%r{/}, ':').strip)
 
       case @link_type
       when :url

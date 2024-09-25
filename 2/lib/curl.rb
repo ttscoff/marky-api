@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'tty/which'
-require 'net/http'
+require 'net/https'
 
 class Curl
   def initialize(url)
@@ -208,14 +208,22 @@ class Curl
     url ||= @url
     raise StandardError, 'Missing URL' if url.nil? || !url
 
-    uri = URI(url)
-    req = Net::HTTP::Get.new(uri, { "User-Agent" => agent })
-    headers.each { |k, v| req[k] = v } unless headers.nil?
-    req['Accept-Encoding'] = 'gzip' if compressed
+    uri = URI.parse(url)
 
-    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
-      http.request(req)
-    end
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+    http.ca_file = '/etc/ssl/certs/ca-certificates.crt'
+
+    req = Net::HTTP::Get.new(uri, { 'User-Agent' => agent })
+    req['Accept-Encoding'] = 'gzip' if compressed
+    req['Access-Control-Allow-Origin'] = '*'
+    req['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    req['Access-Control-Request-Method'] = '*'
+    req['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    headers.each { |k, v| req[k] = v } unless headers.nil?
+
+    res = http.request(req)
 
     { code: res.code, source: reencode(res.body) }
   end

@@ -19,8 +19,8 @@
     https://heckyesmarkdown.com/api/2/?[query string]
 
 
-*(`heckyesmarkdown.com` and `fuckyeahmarkdown.com` are mirrors,
-you can use either endpoint.)*
+*(`heckyesmarkdown.com` and `fuckyeahmarkdown.com` are mirrors, you can use
+either endpoint.)*
 
 ## Parameters
 
@@ -53,7 +53,9 @@ Example:
 
 ### Output Formats
 
-The `output` key differs from the `format` key. While `format` determines to what markup the HTML is converted, the `output` key determines how the results will be delivered.
+The `output` key differs from the `format` key. While `format` determines to
+what markup the HTML is converted, the `output` key determines how the results
+will be delivered.
 
 | Value      | Result                                  |
 | :--------- | :-------------------------------------- |
@@ -68,19 +70,31 @@ If `json=1` is specified, this key will be overridden.
 
 #### Custom Readability
 
-Marky uses a custom version of Arc90's Readability. It's a little more lax and picks up things like author blocks and occasionally share blocks, but is more likely to include _all_ the pertinent content on the page. Arc90 gets confused when the page markup splits the article content into multiple divs and picks just one. Marky attempts to prevent that. Enable Marky's Readability by including `readability=1` in the url.
+Marky uses a custom version of Arc90's Readability. It's a little more lax and
+picks up things like author blocks and occasionally share blocks, but is more
+likely to include _all_ the pertinent content on the page. Arc90 gets confused
+when the page markup splits the article content into multiple divs and picks
+just one. Marky attempts to prevent that. Enable Marky's Readability by
+including `readability=1` in the url.
 
 #### Table formatting
 
-Tables are converted to Markdown and formatted nicely. Tables that contain content that's not valid in Markdown tables (per PHP Extra/MultiMarkdown spec) will be compressed (lists and line breaks replaced).
+Tables are converted to Markdown and formatted nicely. Tables that contain
+content that's not valid in Markdown tables (per PHP Extra/MultiMarkdown spec)
+will be compressed (lists and line breaks replaced).
 
 #### Code block formatting
 
-Code blocks are converted to backtick-fenced code. When possible, a specified language is applied after the opening fence.
+Code blocks are converted to backtick-fenced code. When possible, a specified
+language is applied after the opening fence.
 
 ### Markup Formats
 
-Pandoc is used for the initial conversion, which is then cleaned by Marky. Pandoc allows many output formats, so you're not limited to just Markdown. You can, for example, output `asciidoc` or a specific flavor of Markdown, such as `commonmark`, `markdown_mmd`, or `markdown_phpextra`. The default is `gfm` (GitHub Flavored Markdown).
+Pandoc is used for the initial conversion, which is then cleaned by Marky.
+Pandoc allows many output formats, so you're not limited to just Markdown. You
+can, for example, output `asciidoc` or a specific flavor of Markdown, such as
+`commonmark`, `markdown_mmd`, or `markdown_phpextra`. The default is `gfm`
+(GitHub Flavored Markdown).
 
 Accepted output formats:
 
@@ -151,7 +165,8 @@ encoded link.
 
 ### Link Formats
 
-If the `link` parameter is given, output will be url encoded and turned into a link that will operate (on Mac) on specific apps.
+If the `link` parameter is given, output will be url encoded and turned into a
+link that will operate (on Mac) on specific apps.
 
 | Value        | Result                                                         |
 | ------------ | -------------------------------------------------------------- |
@@ -188,17 +203,28 @@ Example:
 
     curl 'https://heckyesmarkdown.com/api/2/?u=https://brettterpstra.com&read=1&style=swiss
 
-If you specify a URL in the `style` parameter, the `<link re="stylesheet">` tags from the specified URL will be added to the HTML output of the result. This can have odd effects as most sites style tags and classes that won't exist in the clean output from Marky, but sometimes offers decent styling.
+If you specify a URL in the `style` parameter, the `<link re="stylesheet">` tags
+from the specified URL will be added to the HTML output of the result. This can
+have odd effects as most sites style tags and classes that won't exist in the
+clean output from Marky, but sometimes offers decent styling.
 
-If the `import_css` option is true, then the linked stylesheets will be pulled in and their contents embedded, as well as any `<style>` tags in the target URL. This can be a slow process and often takes multiple seconds to complete.
+If the `import_css` option is true, then the linked stylesheets will be pulled
+in and their contents embedded, as well as any `<style>` tags in the target URL.
+This can be a slow process and often takes multiple seconds to complete.
 
 ## Special handling
 
 Marky has special handling for some sites:
 
-| Site                        | Functionality                                                    |
-| --------------------------- | ---------------------------------------------------------------- |
-| StackOverflow/StackExchange | Questions, comments, and answers, "accepted" answers highlighted |
-| GitHub                      | Outputs just the README contents for the repo                    |
+| Site                   | Functionality                                 |
+| ---------------------- | --------------------------------------------- |
+| StackOverflow/Exchange | Qs, comments, and As, "accepted" highlighted  |
+| GitHub Repo            | Outputs just the README contents for the repo |
+| GitHub Gist            | Formats code block with title                 |
+| GitHub File            | Formats file code with title                  |
 
 More to come as needs arise.
+
+## Bookmarklets
+
+- <a href="javascript:(function(){var t=document.createElement("script");t.setAttribute("src","//fuckyeahmarkdown.com/bookmarklets/nvultra.js."+Math.floor(Math.random() * 1000000)+".js"),document.body.appendChild(t)})();" class="bookmarklet">Add to nvUltra</a>
