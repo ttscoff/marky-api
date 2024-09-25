@@ -97,7 +97,7 @@ const reload = () => {
 };
 
 ajax({
-  url: `https://fuckyeahmarkdown.com/api/2/?u=${window.location.href}&link=nvultra&json=1`,
+  url: `https://fuckyeahmarkdown.com/api/2/?u=${window.location.href}&link=obsidian&json=1`,
   method: "get",
 }).then((data) => {
   const content = data["markup"];
@@ -105,7 +105,7 @@ ajax({
 
   let md = document.createElement("div");
   md.id = "markycontent";
-  md.innerHTML = `<button onclick="reload()">X</button><pre><code>${content}</code></pre><p class="notelink"><a href="${link}">Add to nvUltra</a></p>`;
+  md.innerHTML = `<button onclick="reload()">X</button><pre><code>${content}</code></pre><p class="notelink"><a href="${link}">Add to Obsidian</a></p>`;
 
   document.body.appendChild(md);
   addStyle(css);

@@ -24,23 +24,41 @@ module Marky
 
       doc.css('div.question').each do |question|
         output << question.css('.post-text, .js-post-body').inner_html
-        output << "<p>Asked by #{question.css('td.post-signature.owner .user-info .user-details>a')}</p>"
+        owner = question.css('.post-signature.owner .user-info .user-details>a').first
+        ref = owner.attributes['href'].value
+        output << %(<p>Asked by <a href="#{ref}">#{owner.content}</a></p>)
         question.css('.comment-body').each do |comment|
           output << "<blockquote>#{comment.inner_html}</blockquote>"
         end
       end
-
+      accepted_answer = nil
+      answers = []
       doc.css('div.answer').each do |answer|
-        output << '<hr>'
+        res = []
+        vote_count = answer.css('.js-vote-count').first.content.to_i
+        res << '<hr>'
 
-        output << '<p><b>Accepted answer:</b></p>' if answer['class'] =~ /accepted-answer/
+        res << '<p><b>Accepted answer:</b></p>' if answer['class'] =~ /accepted-answer/
 
-        output << answer.css('.post-text, .js-post-body').inner_html
-        output << "<p>Answer by #{answer.css('.post-signature .user-info .user-details>a')}</p>"
+        res << answer.css('.post-text, .js-post-body').inner_html
+        author = answer.css('.post-signature .user-info .user-details>a').first
+        href = author.attributes['href'].value
+        res << %(<p>Answer by <a href="#{href}">#{author.content}</a> <em>[Vote count: #{vote_count}]</em></p>)
         answer.css('.comment-body').each do |comment|
-          output << "<blockquote>#{comment.inner_html}</blockquote>"
+          res << "<blockquote>#{comment.inner_html}</blockquote>"
+        end
+
+        if answer['class'] =~ /accepted-answer/
+          accepted_answer = res.join("\n")
+        else
+          answers << { count: vote_count, content: res.join("\n") }
         end
       end
+
+      output << accepted_answer if accepted_answer
+
+      answers.sort_by { |e| e[:count] }.reverse.each { |answer| output << answer[:content] }
+
       output << '</div>'
       [output.join("\n"), title]
     end
