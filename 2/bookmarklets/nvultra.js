@@ -52,6 +52,14 @@ const css = `
     overflow: scroll;
   }
 
+  #markycontent pre code {
+    color: #333;
+    font-size: 12px;
+    background: #fff;
+    font-weight: 300;
+    font-family: menlo, courier;
+  }
+
   #markycontent .notelink {
     display: block;
     text-align: center;

@@ -227,5 +227,5 @@ More to come as needs arise.
 
 ## Bookmarklets
 
-- Add to nvUltra: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3B%0At.setAttribute(%22src%22%2C%22https%3A%2F%2Ffuckyeahmarkdown.com%2Fapi%2F2%2Fbookmarklets%2Fnvultra.js%22)%3B%0Adocument.body.appendChild(t)%3B%7D)()%3B`
-- Add to Obsidian: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3B%0At.setAttribute(%22src%22%2C%22https%3A%2F%2Ffuckyeahmarkdown.com%2Fapi%2F2%2Fbookmarklets%2Fobsidian.js%22)%3B%0Adocument.body.appendChild(t)%3B%7D)()%3B`
+- Add to nvUltra: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fnvultra.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B`
+- Add to Obsidian: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fobsidian.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B`
