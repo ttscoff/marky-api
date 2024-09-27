@@ -200,7 +200,7 @@ module Marky
       end
 
       parameters = {
-        reference_links: "false",
+        reference_links: @params[:inline] ? "false" : "true",
         reference_location: "block",
         toc: true,
       }
@@ -238,10 +238,21 @@ module Marky
       fmt = VALID_FORMATS.include?(@format.to_s) ? @format : :gfm
 
       output = Convert.new(output).format(fmt, extensions: extensions, options: parameters)
-      output = `echo #{Shellwords.escape(output)} | #{File.join(File.dirname(__FILE__), "/lib/flip_links.py")} --ref` unless @params[:inline]
-
       # Clean up conversion output
       output = MarkdownCleaner.new(output).clean
+
+      unless @params[:inline]
+        links = output.to_enum(:scan, /^  \[(?!\d+\])(?<title>.*?)\]: (?=\S)/).map { Regexp.last_match }
+
+        counter = output.scan(/^ *\[(\d+)\]: (?=\S)/).max_by { |m| m[1].to_i }&.first.to_i + 1 || 1
+
+        links.each do |link|
+          output.sub!(/^( *)\[#{Regexp.escape(link["title"])}\]: (?=\S)/, "\\1[#{counter}]: ")
+          output.gsub!(/\[#{Regexp.escape(link["title"])}\](?=[^\[(:])/, "[#{link["title"]}][#{counter}]")
+          counter += 1
+        end
+        Marky.log.debug("Flipped #{counter} links")
+      end
 
       if output.length.positive?
         Marky.log.info("Processed URL: #{@url}")
