@@ -68,6 +68,9 @@ class MarkdownCleaner
     # # Fix line breaks
     input.gsub!(/<br[^>]*>/, "  \n")
 
+    # Fix links containing spaces
+    input.gsub!(/\[ *(.*?) *\]([\[(])/, '[\1]\2')
+
     # image cleanup
     input.gsub!(/<img(.*?)src="([^"]+)"([^>]*)>/m) do
       m = Regexp.last_match
@@ -171,7 +174,7 @@ class MarkdownCleaner
     input.gsub!(/(^>\s*?\n)+/, ">\n")
 
     # Remove empty headers
-    input.gsub!(/^#+ *\n/, '')
+    input.gsub!(/^#+ *\n/, "")
 
     # Clean multiple newlines
     input.gsub!(/(^\s*\n){3,}/, "\n\n")

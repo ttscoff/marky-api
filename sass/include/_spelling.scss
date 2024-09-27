@@ -1,0 +1,445 @@
+$color-spell-error: #c64056;
+$color-grammar-error: #89c944;
+$color-error-hover: rgb(236, 223, 118);
+$color-spell-item: transparentize($color-spell-error, .7);
+$color-grammar-item: transparentize($color-grammar-error, .7);
+$color-mark-hover: transparentize($color-error-hover, .2);
+$color-spell-panel-bg: rgba(255, 253, 247, .95);
+
+.mkspmarker, .mkspellpanel {
+  &, .mkprinting & {
+    display: none;
+  }
+}
+
+.mkprinting {
+  .mkspelltype-spelling, .mkspelltype-grammar {
+    mark.mkcolor-spell-error, mark.mkcolor-grammar-error {
+      border-bottom: none;
+      background: none!important;
+    }
+  }
+}
+
+@media only screen {
+  @-webkit-keyframes spellBeat {
+    0% {
+      -webkit-transform: scale(1.1);
+    }
+
+    20% {
+      -webkit-transform: scale(2);
+      opacity: 1;
+    }
+
+    100% {
+      -webkit-transform: scale(2);
+      opacity: 1;
+    }
+  }
+
+  .showOverflow {
+    overflow: visible !important;
+  }
+
+  mark::selection {
+    color: inherit!important;
+  }
+
+  mark.mkcolor-grammar-error, mark.mkcolor-spell-error {
+    background: none!important;
+    border-bottom: none;
+  }
+
+  .showSpellingGrammar {
+
+    &.mkspelltype-spelling .error-spelling:hover,
+    &.mkspelltype-grammar .error-grammar:hover {
+      cursor: help;
+    }
+
+    &.mkspelltype-spelling {
+      .mkspellhaserrors {
+        mark.mkcolor-spell-error {
+          border-bottom: dotted 2px $color-spell-error;
+          color: inherit;
+        }
+
+        &.error-spelling .mkspmarker.error-spelling {
+          display: block;
+        }
+      }
+    }
+
+    &.mkspelltype-grammar {
+      .mkspellhaserrors {
+        mark.mkcolor-grammar-error {
+          border-bottom: dotted 2px $color-grammar-error;
+          color: inherit;
+        }
+
+        &.error-grammar .mkspmarker.error-grammar {
+          display: block;
+        }
+      }
+    }
+
+    .mkspellhaserrors {
+      position: relative;
+
+      .modern & {
+        position: inherit;
+      }
+
+      &.posRelative {
+        position: relative!important;
+      }
+
+      mark.mkcolor-spell-error, mark.mkcolor-grammar-error {
+        background: none;
+        border-bottom: none;
+      }
+
+      .mkspmarker {
+        display: none;
+        position: absolute!important;
+        top: .5em!important;
+        width: 10px!important;
+        height: 10px!important;
+        border-radius: 15px!important;
+        border: solid 2px #ddd!important;
+        opacity: 0.35;
+        @include transition(all 0.1s linear);
+
+        &:hover {
+          cursor: help;
+        }
+
+        // &.current.highlight {
+        //   transform: scale(2)!important;
+        //   opacity: 0.8 !important;
+        // }
+        &.current {
+          -webkit-animation-name: spellBeat;
+          -webkit-animation-duration: 0.2s;
+          -webkit-animation-delay: 200ms;
+          -webkit-animation-iteration-count: 2;
+          -webkit-animation-timing-function: ease-out;
+          -webkit-animation-direction: alternate;
+          -webkit-animation-fill-mode: forwards;
+        }
+      }
+
+      &.posRelative:hover {
+        cursor:w-resize;
+      }
+
+      &:hover {
+
+        .mkspmarker {
+          opacity: 0.7;
+          -webkit-transform: scale(1.5);
+          &.current {
+            -webkit-transform: scale(1);
+          }
+        }
+
+        &.error-grammar .mkspmarker.error-spelling {
+          margin-left: 6px;
+        }
+
+        &.error-spelling .mkspmarker.error-grammar {
+          margin-left: -12px;
+          margin-top: 0;
+        }
+      }
+
+      .mkhorizontal &:hover {
+        .mkspmarker, &.error-spelling .mkspmarker.error-grammar {
+          opacity: 0.7;
+          -webkit-transform: none!important;
+          margin-left: 0!important;
+          margin-top: 0!important;
+        }
+      }
+
+      .mkspmarker.error-spelling {
+        background: $color-spell-error;
+        border-color: lighten($color-spell-error, 20);
+      }
+
+      .mkspmarker.error-grammar {
+        background: $color-grammar-error;
+        border-color: lighten($color-grammar-error, 20);
+      }
+
+      &.error-spelling .mkspmarker.error-grammar {
+        margin-left: -8px;
+        margin-top: -4px;
+        border-width: 1px!important;
+      }
+
+      &.error-grammar .mkspmarker.error-spelling {
+        border-width: 1px!important;
+      }
+    }
+  }
+
+  .mkspelltype-spelling {
+    .mkspellpanel.mkspshowing.spelling {
+      display: block;
+    }
+  }
+
+  .mkspelltype-grammar {
+    .mkspellpanel.mkspshowing.grammar {
+      display: block;
+    }
+  }
+
+  .mkspellpanel {
+    * {
+      text-align: left!important;
+      font-style: normal!important;
+    }
+    position: absolute;
+    z-index: 100;
+    background: $color-spell-panel-bg!important;
+    border: solid 1px transparentize($color-os-highlight, 0.6)!important;
+    @include border-radius(4px);
+    max-width: 80vw!important;
+    width: 900px;
+    min-height: 100px;
+    left: -1100px;
+    opacity: 0;
+    margin-top: 10px;
+    font-size: 15px!important;
+    font-weight: 500;
+    padding: 10px 0 0!important;
+    font-family: $font-popup!important;
+    line-height: 1.45!important;
+    cursor:w-resize;
+    @include transition(all .2s ease-out);
+    box-shadow: none;
+
+    strong {
+      font-weight: 700!important;
+    }
+
+    &.mkspshowing {
+      left: 0;
+      opacity: 1;
+      -webkit-animation-name: bubbleIn;
+      -webkit-animation-duration: .1s;
+      -webkit-animation-delay: 0;
+      -webkit-animation-iteration-count: 2;
+      -webkit-animation-timing-function: ease-out;
+      -webkit-animation-direction: alternate;
+      -webkit-animation-fill-mode: forwards;
+    }
+
+    &.mksphidden {
+      -webkit-animation-name: bubbleOut;
+      -webkit-animation-duration: .1s;
+      -webkit-animation-delay: 0;
+      -webkit-animation-iteration-count: 1;
+      -webkit-animation-timing-function: ease-in;
+    }
+
+    a {
+      @include link-colors($color-os-highlight, lighten($color-os-highlight, 10), lighten($color-os-highlight, 40));
+      @include transition(color .1s ease-in-out);
+    }
+
+    p {
+      color: #444!important;
+      font-size: 15px !important;
+      font-family: $font-popup !important;
+      line-height: 1.5 !important;
+      position: relative !important;
+      padding: 1em 1.2em .5em 2em !important;
+      margin: 0 !important;
+      background: transparentize(lighten(desaturate($color-os-highlight, 30), 40), .6);
+      max-width: 100%;
+      min-width: 30%;
+      clear: both;
+      overflow: auto;
+
+      @media only screen and (min-width: 680px) {
+        max-width: 35%;
+        position: absolute!important;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+      &::before {
+        font-family: 'helvetica neue', 'big caslon', arial, 'times new roman', serif;
+        content: '\201C';
+        color: rgba(0, 0, 0, .3);
+        font-size: 4em;
+        line-height: 1;
+        position: absolute;
+        top: .03em;
+        left: .04em;
+        z-index: -1;
+      }
+
+      mark {
+        background: none!important;
+        border-bottom: dotted 2px rgba(0, 0, 0, .25)!important;
+        font-weight: 700;
+        position: relative;
+        cursor: inherit;
+
+        &.grammar {
+          border-bottom-color: rgba(49, 200, 56, 1)!important;
+        }
+
+        &.spelling {
+          border-bottom-color: rgba(200, 49, 49, 1)!important;
+        }
+
+        &.mksphover {
+          background: transparentize($color-mark-hover, .3)!important;
+          cursor: inherit;
+        }
+      }
+    }
+
+    .mkspelllist, .mkgrammarlist {
+      position: relative;
+
+      @media only screen and (min-width: 680px) {
+        max-width: 50%;
+      }
+      padding-left: 2em !important;
+      padding-top: 0 !important;
+      margin: 1.5em 0 2em!important;
+      display: none;
+
+      &::before {
+        display: block;
+        position: absolute;
+        top: -1.5em;
+        left: .5em;
+        font-size: 1em;
+        color: #666;
+        border-bottom: solid 1px $color-almost-hidden;
+      }
+
+      li {
+        cursor: inherit;
+        position: relative!important;
+        font-size: 100%!important;
+        line-height: 1.5!important;
+        list-style-type: none!important;
+        color: #111!important;
+
+        &::before {
+          display: block;
+          content: ' '!important;
+          position: absolute;
+          z-index: -1;
+          width: 10px;
+          height: 10px;
+          top: .5em;
+          left: -1.4em;
+          border-radius: 20px;
+          border-style: solid;
+          border-width: 1px;
+          @include transition(all .1s linear);
+        }
+
+        &.mksphover::before {
+          box-sizing: border-box;
+          height: 100%!important;
+          width: 100%!important;
+          padding: 0 .3em!important;
+          top: -.1em!important;
+          left: -.3em!important;
+          border-radius: 4px!important;
+        }
+
+        span {
+          color: rgba(105, 105, 105, 1);
+          padding-left: 5px;
+
+          &::before {
+            content: '(';
+            display: inline-block;
+            margin-left: 7px;
+          }
+
+          &::after {
+            content: ')';
+          }
+        }
+
+        .inmarkdown {
+          color: #99ad78;
+        }
+      }
+    }
+
+    .mkspelllist {
+      &:not(:empty) {
+        display: block;
+      }
+      &::before {
+        content: 'Spelling:';
+      }
+
+      li::before {
+        background: $color-spell-item!important;
+        border-color: darken($color-spell-item, 30)!important;
+        border-style: solid!important;
+        border-width: 1px;
+      }
+
+      li.mksphover::before {
+        background: transparentize($color-spell-item, .25)!important;
+        border-style: dotted;
+      }
+    }
+
+    .mkgrammarlist {
+      display: none;
+
+      .mkspelltype-grammar &:not(:empty) {
+        display: block;
+      }
+
+      &::before {
+        content: 'Grammar:';
+      }
+
+      li::before {
+        background: $color-grammar-item!important;
+        border-color: darken($color-grammar-item, 30)!important;
+        border-style: solid!important;
+        border-width: 1px;
+      }
+
+      li.mksphover::before {
+        background: transparentize($color-grammar-item, .25)!important;
+        border-style: dotted;
+      }
+    }
+  }
+
+  #mkspellreport .mkspellpanel {
+    left: auto!important;
+    opacity: 1!important;
+    position: relative!important;
+    width: auto!important;
+    border: none!important;
+    padding: 0!important;
+  }
+}
+
+mark.mkcolor-grammar-error, mark.mkcolor-spell-error {
+  color: inherit;
+  background: none!important;
+  border-bottom: none;
+}

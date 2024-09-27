@@ -17,7 +17,7 @@ module Marky
       self =~ /^#/ ? true : false
     end
 
-    def resolve_path(base = '/')
+    def resolve_path(base = "/")
       File.expand_path(self, base)
     end
 
@@ -49,8 +49,8 @@ module Marky
 
     def extract_title
       doc = Nokogiri::HTML(self)
-      title = doc.at_css('title').text
-      title = title.gsub(/\s+/, ' ').strip
+      title = doc.at_css("title").text
+      title = title.gsub(/\s+/, " ").strip
       HTMLEntities.new.decode(title)
     end
 
@@ -58,16 +58,24 @@ module Marky
       Convert.new(self).html(fmt)
     end
 
+    def remove_empty_links
+      gsub(/\[([^\]]+)\]\(\s*\)/, "\1").gsub(/(?<!!)\[\s*\]\[[^\]]+\]/, "").gsub(/(?<!!)\[\s*\]\([^\)]+\)/, "")
+    end
+
+    def sanitize
+      HTMLEntities.new.decode(self).straighten_quotes.remove_empty_links
+    end
+
     def straighten_quotes
       codes = ["\xe2\x80\x98", "\xe2\x80\x99", "\xe2\x80\x9c", "\xe2\x80\x9d", "\xe2\x80\x93", "\xe2\x80\x94",
                "\xe2\x80\xa6"]
-      ascii = ["'", "'", '"', '"', '-', '--', '...']
+      ascii = ["'", "'", '"', '"', "-", "--", "..."]
 
       gsub(/“|”/, '"').gsub(/‘|’/, "'")
-                      .gsub(/&#8220;|&#8221;/, '"').gsub(/&#8216;|&#8217;/, "'")
-                      .gsub(/&ldquo;|&rdquo;/, '"').gsub(/&lsquo;|&rsquo;/, "'")
-                      .gsub(/&quot;/, '"').gsub(/&apos;/, "'")
-                      .gsub(/(#{codes.join('|')})/).with_index { |_m, i| ascii[i] }
+        .gsub(/&#8220;|&#8221;/, '"').gsub(/&#8216;|&#8217;/, "'")
+        .gsub(/&ldquo;|&rdquo;/, '"').gsub(/&lsquo;|&rsquo;/, "'")
+        .gsub(/&quot;/, '"').gsub(/&apos;/, "'")
+        .gsub(/(#{codes.join("|")})/).with_index { |_m, i| ascii[i] }
     end
 
     def absolute_urls(base_url)
@@ -75,7 +83,9 @@ module Marky
       host = uri.host
       scheme = uri.scheme
       path = uri.path =~ %r{/$} ? uri.path.resolve_path : File.dirname(uri.path)
+      path = "/" if path == "."
       base = URI("#{scheme}://#{host}#{path}")
+
       out = []
 
       gsub!(/url\(['"]?(.*?)['"]?\)/) do

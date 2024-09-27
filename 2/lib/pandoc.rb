@@ -264,11 +264,11 @@ class PandocRuby
 
   # Wrapper to run pandoc in a consistent, DRY way
   def execute_pandoc
-    if !input_files.nil?
-      execute("#{@pandoc_path} #{input_files}#{option_string}")
-    else
-      execute("#{@pandoc_path}#{option_string}")
-    end
+   if !input_files.nil?
+     execute("#{@pandoc_path} #{input_files}#{option_string}")
+   else
+     execute("#{@pandoc_path}#{option_string}")
+   end
   end
 
   # Run the command and returns the output.
@@ -285,8 +285,8 @@ class PandocRuby
   # opts passed in. Recursively calls itself in order to handle hash options.
   def prepare_options(opts = [])
     opts.inject('') do |string, (option, value)|
-      string + if value
-                 create_option(option, value)
+      string + if value&.to_s
+                 create_option(option, value.to_s)
                elsif option.respond_to?(:each_pair)
                  prepare_options(option)
                else

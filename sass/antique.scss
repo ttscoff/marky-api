@@ -1,0 +1,423 @@
+/*
+This document has been created with Marked.app <https://marked2app.com>
+Content is property of the document author
+Please leave this notice in place, along with any additional credits below.
+---------------------------------------------------------------
+Title: Antique
+Author: Brett Terpstra
+Description: An "antiqued" theme with off-white background and serif typography.
+  Deprecated in Marked 2.5.11
+---
+*/
+
+$colorlink: rgba(0, 133, 122, 1);
+$colorlinkhover: rgba(53, 184, 173, 1);
+$colorheadline: #514d3f;
+$colorheadlinedark: rgba(19, 18, 15, 1);
+$colorheadlineborder: rgba(131, 126, 112, 1);
+$colorbgmain: #f0edeb;
+$colorfgmain: #45462f;
+$colorinvertedfg: rgba(240, 237, 227, 1);
+$colorinvertedbg: rgba(57, 54, 47, 1);
+$colorlighter: rgba(242, 237, 232, 1);
+$colordarker: rgba(167, 160, 153, 1);
+$fontmain: Palatino, Georgia, "Times New Roman", serif;
+$fontheadline: "Hoefler Text", Georgia, serif;
+$fontpoetry: Georgia, Garamond, serif !important;
+
+@mixin trans($kind: all, $duration: 0.1s, $animation: ease-in-out) {
+	-webkit-transition: #{$kind} #{$duration} #{$animation};
+	-moz-transition: #{$kind} #{$duration} #{$animation};
+	-o-transition: #{$kind} #{$duration} #{$animation};
+	-ms-transition: #{$kind} #{$duration} #{$animation};
+	transition: #{$kind} #{$duration} #{$animation};
+}
+
+#wrapper {
+	/* --------------------------------------------------------------
+	Text elements
+	--------------------------------------------------------------*/
+	font-family: $fontmain;
+	font-weight: normal;
+	line-height: 1.5em;
+	margin: 0;
+	font-size: 16px;
+	p {
+		margin: 1.3125em 0;
+		line-height: 1.6125em;
+	}
+	ul {
+		list-style: square;
+	}
+	ol {
+		list-style: decimal;
+	}
+	ul,ol {
+		padding-left: 2em;
+		list-style-position: outside;
+		li {
+			line-height: 1.525em;
+
+			p {
+				margin-left: 0;
+			}
+		}
+		ul, ol {
+			margin-bottom: .4em;
+			padding-left: 30px;
+		}
+		ul {
+			list-style: circle;
+		}
+	}
+	strong {
+		font-weight: bold;
+	}
+	em {
+		font-style: italic;
+	}
+	h1 {
+		margin: 0.6563em 0;
+		font-size: 2.8em;
+		line-height: 1.6563em;
+	}
+	h2 {
+		margin: 0.875em 0;
+		font-size: 1.7143em;
+		line-height: 0.875em;
+	}
+	h3 {
+		margin: 1em 0;
+		font-size: 1.5em;
+		line-height: 1em;
+	}
+	h4 {
+		margin: 1.1667em 0;
+		font-size: 1.2857em;
+		line-height: 1.1667em;
+	}
+	h5 {
+		margin: 1.3125em 0;
+		font-size: 1.1429em;
+		line-height: 1.3125em;
+	}
+	h6 {
+		margin: 1.5em 0;
+		font-size: 1em;
+		line-height: 1.5em;
+	}
+	h1,h2,h3,h4,h5,h6 {
+		font-weight: bold;
+		a {
+			color: $colorheadline;
+			border-bottom: dotted 1px $colordarker;
+			&:hover {
+				color: $colorheadlinedark;
+			}
+		}
+	}
+	h1,h2 {
+		padding-bottom: .4em;
+		padding-top: .25em;
+		font-family: $fontheadline;
+		line-height: 1.5em;
+		color: $colorheadline;
+	}
+	h1 {
+		text-align: center;
+		&:before {
+			content: "\0360";
+			position: relative;
+			left: -30px;
+			top: .4em;
+			color: $colorheadlineborder;
+		}
+		&:after {
+			content: "\0360";
+			position: relative;
+			right: -30px;
+			top: .4em;
+			color: $colorheadlineborder;
+		}
+	}
+	h2 {
+		box-shadow: 0 -1px 0 white, 0 -2px 0 $colorheadlineborder;
+		margin-top: 1em;
+		padding-bottom: 0;
+	}
+	&,p,td,div {
+		color: $colorfgmain;
+		word-wrap: break-word;
+		-webkit-font-smoothing: antialiased;
+	}
+	a {
+		color: $colorlink;
+		text-decoration: none;
+		@include trans(color);
+		&:hover {
+			color: $colorlinkhover;
+		}
+	}
+	abbr,acronym {
+		border-bottom: 1px dotted #aaa;
+	}
+	strong {
+		font-weight: 600;
+		color: #605b4b;
+	}
+	.footnote {
+		font-size: .8em;
+		vertical-align: super;
+		color: rgb(13, 110, 161);
+	}
+	img {
+		max-width: 100%;
+		height: auto;
+		border: solid 2px rgba(56, 40, 18, 0.25);
+	}
+	// dl {
+	// 	font-size: 1rem;
+	// }
+	dt {
+		font-weight: bold;
+	}
+	dd {
+		margin-bottom: 1em;
+		text-indent: 1em;
+	}
+	blockquote {
+		margin: 14px 40px;
+	}
+	code {
+		font-family: courier, monospace;
+		border: solid 1px $colordarker;
+		font-size: .95em;
+	}
+	pre {
+		padding: 4px;
+	}
+	pre code {
+		font-size: 1em;
+		margin: 0;
+		padding: 4px;
+		border: none;
+	}
+	hr {
+		border-color: $colorlighter;
+		height: 0;
+		background-color: $colordarker;
+	}
+}
+
+@media print {
+	body {
+		background: #fff;
+		color: #000;
+	}
+	img, table, figure {
+	  page-break-inside: avoid;
+	}
+	#wrapper {
+		background: #fff;
+		position: relative;
+		color: #000;
+		text-indent: 0px;
+		padding: 1in;
+	}
+}
+
+@media screen {
+	body {
+		height: 100%;
+		background: $colorbgmain;
+	}
+	#wrapper {
+		color: #514d3f;
+		box-sizing: border-box;
+		::selection {
+			background: rgba(157, 193, 200, 0.5);
+		}
+		h1,h2,h3,h4,h5,h6 {
+			&::selection {
+				background-color: rgba(133, 201, 232, 0.3);
+			}
+		}
+		code::selection {
+			background-color: rgba(0, 0, 0, 0.7);
+			color: #eee;
+		}
+		code span::selection {
+			background-color: rgba(0, 0, 0, 0.7) !important;
+			color: #eee !important;
+		}
+		a::selection {
+			background-color: rgba(255, 230, 102, 0.2);
+		}
+		td,th,caption {
+			&::selection {
+				background-color: rgba(180, 237, 95, 0.5);
+			}
+		}
+	}
+	.inverted {
+		background: $colorinvertedbg;
+		#wrapper {
+			background: $colorinvertedbg;
+			a::selection {
+				background-color: rgba(255, 230, 102, 0.6);
+			}
+			p,td,li,h1,h2,h3,h4,h5,h6,th,hr,strong,em,.math,dd,dt {
+				color: $colorinvertedfg;
+				border-color: rgba(66, 61, 47, 1);
+				background: rgba(57, 54, 47, 1);
+			}
+			pre {
+				color: #111;
+				background: #ccc;
+			}
+			hr {
+				border-color: rgba(52, 52, 52, 0.3);
+			}
+			a {
+				color: #fff;
+				text-decoration: underline;
+				border-bottom: none;
+			}
+			.popup {
+				li,ul,strong {
+					background: none;
+				}
+			}
+		}
+	}
+}
+
+/* --------------------------------------------------------------
+Table and figure styling
+--------------------------------------------------------------*/
+#wrapper {
+	li > p:first-of-type {
+		margin: 0;
+	}
+	li p {
+		margin: .5em 0;
+	}
+	caption,col,colgroup,table,tbody,td,tfoot,th,thead,tr {
+		border-spacing: 0;
+	}
+	caption {
+		display: table-caption;
+		font-weight: bold;
+	}
+	col {
+		display: table-column;
+	}
+	colgroup {
+		display: table-column-group;
+	}
+	tbody {
+		display: table-row-group;
+	}
+	tfoot {
+		display: table-footer-group;
+	}
+	thead {
+		display: table-header-group;
+	}
+	td,th {
+		display: table-cell;
+	}
+	th {
+		font-weight: bold;
+	}
+	tr {
+		display: table-row;
+	}
+	table {
+		display: table;
+		table-layout: fixed;
+		border-collapse: collapse;
+		empty-cells: hide;
+		margin: 0 0 24px 0;
+		padding: 0;
+		border: 0;
+		margin-top: -1px;
+		margin-bottom: 23px;
+		border: 1px solid rgba(124, 119, 112, 0.5);
+		th,td {
+			font-size: 1.1em;
+			line-height: 1.3;
+			padding: .5em 1em 0;
+		}
+		tbody {
+			background-color: rgba(124, 119, 112, 0.05);
+		}
+		thead,tfoot {
+			background-color: rgba(124, 119, 112, 0.15);
+		}
+		tr:nth-child(odd) {
+			background-color: rgba(227, 217, 205, 0.06);
+		}
+		tr:nth-child(even),
+		td:nth-child(even) {
+			background-color: rgba(124, 119, 112, 0.06);
+		}
+		thead,
+		tfoot {
+			border: 1px solid rgba(124, 119, 112, 0.5);
+			border-bottom: 1px solid rgba(124, 119, 112, 0.2);
+		}
+		thead tr th:last-child {
+			border-right: 1px solid rgba(124, 119, 112, 0.5);
+		}
+	}
+	figure {
+		position: relative;
+		display: inline-block;
+		overflow: hidden;
+		margin-bottom: 2em;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+	figcaption {
+		text-align: center;
+	}
+	sup,sub,a.footnote {
+		font-size: 1.4ex;
+		height: 0;
+		line-height: 1;
+		vertical-align: super;
+		position: relative;
+	}
+	sub {
+		vertical-align: sub;
+		top: -1px;
+	}
+}
+
+/* --------------------------------------------------------------
+Poetry styles override code block styling
+--------------------------------------------------------------*/
+#wrapper {
+	.poetry {
+		pre {
+			font-family: $fontpoetry;
+			font-style: italic;
+			font-size: 110% !important;
+			line-height: 1.6em;
+			display: block;
+			margin-left: 1em;
+			code {
+				font-family: $fontpoetry;
+				word-break: break-all;
+				word-break: break-word;
+				/* Non standard for webkit */
+				-webkit-hyphens: auto;
+				-moz-hyphens: auto;
+				hyphens: auto;
+				white-space: pre-wrap;
+			}
+		}
+	}
+}

@@ -1,0 +1,173 @@
+// .criticmarkup {
+//   mark.crit {
+//     color: #999;
+//     text-decoration: none;
+//   }
+
+//   del.crit {
+//     color: rgba(183, 47, 47, 0.4);
+//     text-decoration: line-through;
+//   }
+
+//   ins.crit {
+//     color: inherit;
+//     text-decoration: none;
+//     background: rgba(0,200,0,.1);
+
+//     &.criticbreak {
+//       display: block;
+//       line-height: 2px;
+//       padding: 0 !important;
+//       margin: 0 !important;
+
+//       span {
+//         line-height: 1.5em;
+//       }
+//     }
+//   }
+
+//   .criticcomment {
+//     color: #999;
+//   }
+
+//   .criticcomment.inline {
+//     display: none;
+//   }
+// }
+
+.critic {
+
+  &.inverted {
+  	.criticmarkup {
+  	  mark.crit {
+    	color: #000;
+  	  }
+  	  ins.crit {
+  	  	color: #74f87f;
+  	  }
+  	  del.crit {
+  	  	color: #c43935;
+  	  }
+  	}
+  	&.mkshowcomments .criticmarkup .criticcomment {
+  		background: rgba(255, 224, 71, 1);
+  		opacity: 1;
+  		color: black;
+  	}
+  }
+  .criticoriginal {
+    del.crit {
+      text-decoration: none;
+    }
+
+    ins.crit, span.criticpopover, ins.criticbreak, .criticcomment {
+      display: none;
+    }
+  }
+
+  .criticedited {
+    ins.crit {
+      text-decoration: none;
+    }
+
+    del.crit, span.criticpopover, ins.criticbreak, .criticcomment {
+      display: none;
+    }
+  }
+
+  .criticoriginal mark.crit, .criticedited mark.crit {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  &.mkshowcomments .criticmarkup .criticcomment {
+    display: inline-block;
+    background: rgba(255, 224, 71, 1);
+    color: black;
+
+    &.inline {
+      display: inline-block;
+      font-size: .65em !important;
+      position: relative;
+      font-weight: 700 !important;
+      background: rgba(255,224,71,0.9);
+      opacity: 1;
+      line-height: 1;
+      color: rgba(0,0,0,0.6);
+      border-radius: 3px;
+      padding: 2px 1px 0;
+      vertical-align: super;
+      top: -.1em;
+
+      &:before {
+        content: attr(data-comment);
+        display: none;
+        font-weight: normal;
+        font-family: $font-code;
+        font-size: 14px;
+      }
+
+      &:hover::before {
+        width: 250px;
+        white-space: pre-wrap;
+        white-space: pre-line;
+        display: block;
+        position: absolute;
+        background: rgba(255,224,71,1);
+        color: #000;
+        padding: 8px;
+        line-height: 1.4;
+        top: 20px;
+        left: 20px;
+      }
+
+      &:hover {
+        z-index: 10;
+        position: relative;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .criticmarkup {
+    mark.crit, del.crit, ins.crit {
+      @include border-radius(3px);
+    }
+
+    mark.crit {
+      background-color: #fffd38;
+      text-decoration: none;
+      color: #000;
+    }
+
+    del.crit {
+      color: rgba(183,47,47,0.5);
+      text-decoration: strikeout;
+      //background-color: rgba(183, 47, 47, 0.4);
+      //text-decoration: none;
+    }
+
+    ins.crit {
+      //background-color: rgba(152, 200, 86, 0.4);
+      //text-decoration: none;
+      background-color: rgba(153, 255, 102, 0.2);
+      color: rgba(56, 64, 37, 1);
+      text-decoration: none;
+
+      &.criticbreak {
+        display: block;
+        line-height: 2px;
+        padding: 0 !important;
+        margin: 0 !important;
+
+        span {
+          line-height: 1.5em;
+        }
+      }
+    }
+
+    .criticcomment, .criticcomment.inline {
+      display: none;
+    }
+  }
+}

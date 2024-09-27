@@ -1,26 +1,26 @@
 #!/usr/bin/env ruby
 
-require 'cgi'
-require 'erb'
-require 'json'
-require 'logger'
-require 'nokogiri'
-require 'rubygems'
-require 'shellwords'
-require 'time'
-require 'uri'
+require "cgi"
+require "erb"
+require "json"
+require "logger"
+require "nokogiri"
+require "rubygems"
+require "shellwords"
+require "time"
+require "uri"
 
-require_relative 'lib/string'
-require_relative 'lib/symbol'
-require_relative 'lib/htmlentities/htmlentities'
-require_relative 'lib/readability/lib/readability'
-require_relative 'lib/convert'
-require_relative 'lib/cleaner'
-require_relative 'lib/html2markdown'
-require_relative 'lib/stackoverflow'
-require_relative 'lib/github'
-require_relative 'lib/curl'
-require_relative 'lib/yui_compressor'
+require_relative "lib/string"
+require_relative "lib/symbol"
+require_relative "lib/htmlentities/htmlentities"
+require_relative "lib/readability/lib/readability"
+require_relative "lib/convert"
+require_relative "lib/cleaner"
+require_relative "lib/html2markdown"
+require_relative "lib/stackoverflow"
+require_relative "lib/github"
+require_relative "lib/curl"
+require_relative "lib/yui_compressor"
 
 def class_exists?(class_name)
   klass = Module.const_get(class_name)
@@ -29,14 +29,25 @@ rescue NameError
   false
 end
 
-if class_exists? 'Encoding'
-  Encoding.default_external = Encoding::UTF_8 if Encoding.respond_to?('default_external')
-  Encoding.default_internal = Encoding::UTF_8 if Encoding.respond_to?('default_internal')
+if class_exists? "Encoding"
+  Encoding.default_external = Encoding::UTF_8 if Encoding.respond_to?("default_external")
+  Encoding.default_internal = Encoding::UTF_8 if Encoding.respond_to?("default_internal")
+end
+
+# main module
+module Marky
+  class << self
+    # Global logger
+    # @return [Logger]
+    def log
+      @log ||= Logger.new(File.join("logs", Time.now.strftime("%Y-%m-%d.log")))
+    end
+  end
 end
 
 # Main class
 module Marky
-  class Marky
+  class MarkyCGI
     # Markdown formats supported by the API (Pandoc options)
     VALID_FORMATS = %w[json asciidoc asciidoctor beamer biblatex bibtex chunkedhtml commonmark commonmark_x context csljson
                        docbook docbook4 docbook5 dokuwiki fb2 gfm haddock html html5 html4 icml ipynb jats_archiving jats_articleauthoring
@@ -57,19 +68,20 @@ module Marky
     # style = css style to use if outputting as HTML. Can be a Marked style name or a url to lift styles from (forces :complete output) (default: none)
     # import_css = import CSS from linked stylesheets if &style is a url (default: false)
     # complete = output complete HTML page (default: false)
-    VALID_PARAMS = %w[url format output readability json link open style complete import_css].freeze
+    # inline = use inline links
+    VALID_PARAMS = %w[url format output readability json link open style complete import_css inline showframe closewindow debug].freeze
 
     # Valid link types
     VALID_LINKS = %w[url obsidian nvultra nvalt nv marked].freeze
 
     # Initialize the class
     def initialize
-      @log = Logger.new(File.join('logs', Time.now.strftime('%Y-%m-%d.log')))
-      @log.level = Logger::DEBUG
-      @log.datetime_format = '%Y-%m-%d %H:%M:%S'
-      @log.formatter = proc do |severity, datetime, progname, msg|
+      Marky.log.level = Logger::INFO
+      Marky.log.datetime_format = "%Y-%m-%d %H:%M:%S"
+      Marky.log.formatter = proc do |severity, datetime, progname, msg|
         "#{datetime} [#{severity}] #{msg}\n#{progname}\n"
       end
+      Marky.log.info("Marky started at #{Time.now}")
 
       @cgi = CGI.new
       sort_params
@@ -78,7 +90,7 @@ module Marky
       @url = @params[:url]
       @readability = @params.key?(:readability) && @params[:readability]
       @json_output = @params.key?(:json) && @params[:json]
-      @log.debug("@params: #{@params}")
+      Marky.log.debug("@params: #{@params}")
       @output_format = @params.key?(:output) ? @params[:output].normalize_output_format : :markdown
 
       @link_type = nil
@@ -93,6 +105,11 @@ module Marky
       end
 
       @complete = (@params[:complete] && @params[:complete] =~ /^1|t/) || @params.key?(:style) || @output_format == :complete ? true : false
+
+      if @params[:debug]
+        Marky.log.level = Logger::DEBUG
+        Marky.log.debug("Debugging enabled: #{@url}")
+      end
     end
 
     # Render the output
@@ -103,23 +120,23 @@ module Marky
 
       if res
         finish
-        @log.info("Success: #{@url}")
+        Marky.log.info("Success: #{@url}")
       else
-        @log.error("Failed: #{@url}")
-        puts 'Error fetching URL'
+        Marky.log.error("Failed: #{@url}")
+        puts "Error fetching URL"
         return false
       end
 
       true
     rescue StandardError => e
-      @log.error(e.message)
-      @log.error(e.backtrace)
+      Marky.log.error(e.message)
+      Marky.log.error(e.backtrace)
       puts e.backtrace
       puts e.message
 
       false
     ensure
-      @log.close
+      Marky.log.close
     end
 
     private
@@ -138,27 +155,30 @@ module Marky
       return false unless curled
 
       output = curled[:body]
+      @url = curled[:url]
 
       return false unless output
 
       if @url =~ /stack(overflow|exchange)\.com/
-        @log.info("StackExchange Page")
+        Marky.log.info("StackExchange Page")
         output, @title = StackOverflow.process(output)
       elsif @url =~ %r{gist\.github\.com/[^/]+/[a-z0-9]+(#\S+)?$}
-        @log.info("GitHub Gist")
+        Marky.log.info("GitHub Gist")
         output, title = GitHub.processGist(output)
       elsif @url =~ %r{github\.com/[^/]+?/[^/]+?+$}
-        @log.info("GitHub Repo")
+        Marky.log.info("GitHub Repo")
         output, @title = GitHub.process(output)
       elsif @url =~ %r{github\.com/.*?/\w+\.\w+$}
-        @log.info("GitHub file")
+        Marky.log.info("GitHub file")
         output, @title = GitHub.processFile(output)
       elsif @readability
+        Marky.log.info("No special urls, running Readability")
         output = Readability::Document.new(output, {
-                                             remove_empty_nodes: true,
-                                             remove_unlikely_candidates: false,
-                                             clean_conditionally: true
-                                           }).content
+          debug: @params[:debug],
+          remove_empty_nodes: true,
+          remove_unlikely_candidates: false,
+          clean_conditionally: true,
+        }).content
       end
 
       @title ||= curled[:head]&.extract_title&.straighten_quotes
@@ -166,7 +186,7 @@ module Marky
       # Random cleanup
       output.gsub!(%r{<div[^>]*><pre[^>]*>[ \n]*(?!<code)(.*?)</pre>[ \n]*</div>}m) do
         m = Regexp.last_match
-        "<pre><code>#{CGI.escapeHTML(m[1].gsub(%r{</?span.*?>}, ''))}</code></pre>"
+        "<pre><code>#{CGI.escapeHTML(m[1].gsub(%r{</?span.*?>}, ""))}</code></pre>"
       end
 
       output.gsub!(/Â/, "\n")
@@ -176,58 +196,65 @@ module Marky
       if abs
         output = abs
       else
-        @log.error("Error generating absolute urls: #{@url}, #{error}")
+        Marky.log.error("Error generating absolute urls: #{@url}, #{error}")
       end
+
+      parameters = {
+        reference_links: "false",
+        reference_location: "block",
+        toc: true,
+      }
 
       # Convert HTML to Markdown
       extensions = []
 
       if @format == :gfm
-        extensions << '+alerts'
-        extensions << '+autolink_bare_uris'
-        extensions << '+emoji'
-        extensions << '+gfm_auto_identifiers'
-        extensions << '+pipe_tables'
-        extensions << '+raw_html'
-        extensions << '+strikeout'
-        extensions << '+task_lists'
-        extensions << '+tex_math_dollars'
-        extensions << '+tex_math_gfm'
-        extensions << '+yaml_metadata_block'
-        extensions << '+definition_lists'
-        extensions << '+footnotes'
+        extensions << "+alerts"
+        extensions << "+autolink_bare_uris"
+        extensions << "+emoji"
+        extensions << "+gfm_auto_identifiers"
+        extensions << "+pipe_tables"
+        extensions << "+raw_html"
+        extensions << "+strikeout"
+        extensions << "+task_lists"
+        extensions << "+tex_math_dollars"
+        extensions << "+tex_math_gfm"
+        extensions << "+yaml_metadata_block"
+        extensions << "+definition_lists"
+        extensions << "+footnotes"
       elsif @format == :markdown_mmd || @format == :markdown
-        extensions << '+definition_lists'
-        extensions << '+footnotes'
-        extensions << '+table_captions'
-        extensions << '+markdown_in_html_blocks'
-        extensions << '+mmd_title_block'
-        extensions << '+mmd_link_attributes'
-        extensions << '+mmd_header_identifiers'
-        extensions << '+superscript'
-        extensions << '+subscript'
-        extensions << '+backtick_code_blocks'
+        extensions << "+definition_lists"
+        extensions << "+footnotes"
+        extensions << "+table_captions"
+        extensions << "+markdown_in_html_blocks"
+        extensions << "+mmd_title_block"
+        extensions << "+mmd_link_attributes"
+        extensions << "+mmd_header_identifiers"
+        extensions << "+superscript"
+        extensions << "+subscript"
+        extensions << "+backtick_code_blocks"
       end
 
       fmt = VALID_FORMATS.include?(@format.to_s) ? @format : :gfm
 
-      output = Convert.new(output).format(fmt, extensions: extensions)
+      output = Convert.new(output).format(fmt, extensions: extensions, options: parameters)
+      output = `echo #{Shellwords.escape(output)} | #{File.join(File.dirname(__FILE__), "/lib/flip_links.py")} --ref` unless @params[:inline]
+
       # Clean up conversion output
       output = MarkdownCleaner.new(output).clean
-      @log.info(output)
 
       if output.length.positive?
-        @log.info("Processed URL: #{@url}")
+        Marky.log.info("Processed URL: #{@url}")
       else
-        @log.error("Error processing URL: #{@url}")
+        Marky.log.error("Error processing URL: #{@url}")
         return false
       end
 
-      @output = @format.markdown? ? add_title(output.straighten_quotes) : output.straighten_quotes
+      @output = @format.markdown? ? add_title(output.sanitize) : output.sanitize
 
       true
     rescue StandardError => e
-      @log.error("Error processing URL: #{@url}, #{e}")
+      Marky.log.error("Error processing URL: #{@url}, #{e}")
       false
     end
 
@@ -236,7 +263,7 @@ module Marky
       return output unless @params[:readability]
 
       if output =~ /^# (.*)$/
-        output.sub!(/^# (.*)$/, '')
+        output.sub!(/^# (.*)$/, "")
         title = Regexp.last_match[1]
       else
         title = @title
@@ -259,11 +286,11 @@ module Marky
         puts style if @params.key?(:style)
         puts '<meta charset="utf-8">'
         puts "<title>#{@title}</title>"
-        puts '</head><body>'
+        puts "</head><body><script>0</script>"
         puts '<div id="wrapper">' if @params.key?(:style)
         out
-        puts '</div>' if @params.key?(:style)
-        puts '</body></html>'
+        puts "</div>" if @params.key?(:style)
+        puts "</body></html>"
       else
         out
       end
@@ -274,7 +301,7 @@ module Marky
       return "" unless @params.key?(:style)
 
       css_style = @params[:style]
-      return '' unless css_style
+      return "" unless css_style
 
       Dir.glob(File.join(File.expand_path("styles"), "*.css")).each do |f|
         if File.basename(f) =~ /#{css_style}/i
@@ -296,10 +323,10 @@ module Marky
           links = []
           stylesheets.each do |s|
             links << if @params[:import_css]
-                       import_css(s)
-                     else
-                       %(<link rel="stylesheet" type="text/css" href="#{s}">)
-                     end
+              import_css(s)
+            else
+              %(<link rel="stylesheet" type="text/css" href="#{s}">)
+            end
           end
           inline_styles = curl.inline_styles
 
@@ -307,13 +334,13 @@ module Marky
 
           links.join("\n")
         else
-          ''
+          ""
         end
       else
-        ''
+        ""
       end
     rescue StandardError => e
-      @log.error("Error processing style: #{e.message}")
+      Marky.log.error("Error processing style: #{e.message}")
     end
 
     def import_css(url)
@@ -323,7 +350,7 @@ module Marky
         css.absolute_urls!(url)
         "<style>#{css}</style>"
       else
-        @log.error("Error importing CSS: #{url}")
+        Marky.log.error("Error importing CSS: #{url}")
         %(<link rel="stylesheet" type="text/css" href="#{s}">)
       end
     end
@@ -336,7 +363,7 @@ module Marky
     def out
       # If outputting to JSON, generate and output JSON with mime type
       if @json_output
-        @cgi.out('application/json') { jsonify }
+        @cgi.out("application/json") { jsonify }
         return
       end
 
@@ -344,16 +371,16 @@ module Marky
       unless @link_type.nil?
         link = to_link.strip
         if @params[:open].to_s =~ /^1|t/ && @link_type != :url
-          if link.length < 8000
+          if link.length < 8000 && !@params[:closewindow]
             # puts @cgi.header('status' => 'REDIRECT', 'location' => link)
-            buf = ' ' * 4096
-            @cgi.out('status' => 'REDIRECT', 'connection' => 'close', 'location' => link) { buf }
+            buf = " " * 4096
+            @cgi.out("status" => "REDIRECT", "connection" => "close", "location" => link) { buf }
             sleep 10
           else
-            @cgi.out('text/html') { redirect(link) }
+            @cgi.out("text/html") { redirect(link) }
           end
         else
-          @cgi.out('text/plain') { link }
+          @cgi.out("text/plain") { link }
         end
 
         return
@@ -381,14 +408,22 @@ module Marky
           <meta http-equiv="refresh" content="0;url=#{url}" />
           <title></title>
         </head>
-        <body></body>
+        <body>#{close_script}</body>
         </html>
       ENDHTML
     end
 
+    def close_script
+      return "" unless @params[:closewindow]
+
+      <<~ENDSCRIPT
+        <script>window.close();</script>
+      ENDSCRIPT
+    end
+
     def to_link
       out_url = ERB::Util.url_encode(@output)
-      title = @title.nil? ? 'Unknown' : ERB::Util.url_encode(@title.gsub(%r{/}, ':').strip)
+      title = @title.nil? ? "Unknown" : ERB::Util.url_encode(@title.gsub(%r{/}, ":").strip)
 
       case @link_type
       when :url
@@ -407,8 +442,8 @@ module Marky
     end
 
     def jsonify
-      output = { 'title' => @title, 'url' => @url, 'markup' => @output, 'html' => Convert.new(@output).html(@format) }
-      output['link'] = to_link if @link_type
+      output = { "title" => @title, "url" => @url, "markup" => @output, "html" => Convert.new(@output).html(@format) }
+      output["link"] = to_link if @link_type
       output.to_json
     end
 
@@ -437,18 +472,18 @@ module Marky
 
         next unless key
 
-        value = if v.first == '1' || v.first == 'true'
-                  true
-                elsif v.first == '0' || v.first == 'false'
-                  false
-                else
-                  v.first
-                end
+        value = if v.first == "1" || v.first == "true"
+            true
+          elsif v.first == "0" || v.first == "false"
+            false
+          else
+            CGI.unescape(v.first)
+          end
         @params[key] = value
       end
     end
   end
 end
 
-marky = Marky::Marky.new
+marky = Marky::MarkyCGI.new
 marky.render

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'tty/which'
-require 'net/https'
+require_relative "tty/which"
+require "net/https"
 
 class Curl
   def initialize(url)
-    @curl = TTY::Which.which('curl')
+    @curl = TTY::Which.which("curl")
     @url = url
   end
 
@@ -18,7 +18,7 @@ class Curl
   def stylesheets
     return [] if @result.nil? || @result[:links].nil?
 
-    @result[:links].select { |link| link[:rel] == 'stylesheet' }.absolute_hrefs(@url)
+    @result[:links].select { |link| link[:rel] == "stylesheet" }.absolute_hrefs(@url)
   end
 
   def inline_styles
@@ -30,6 +30,7 @@ class Curl
   def content
     @result[:source]
   end
+
   alias to_s content
   alias html content
 
@@ -67,10 +68,10 @@ class Curl
   def meta_tags(head)
     meta = {}
     title = head.match(%r{(?<=<title>)(.*?)(?=</title>)})
-    meta['title'] = title.nil? ? nil : title[1]
+    meta["title"] = title.nil? ? nil : title[1]
     refresh = head.match(/http-equiv=(['"])refresh\1(.*?)>/)
     url = refresh.nil? ? nil : refresh[2].match(/url=(.*?)['"]/)
-    meta['refresh_url'] = url
+    meta["refresh_url"] = url
     meta_tags = head.scan(/<meta.*?>/)
     meta_tags.each do |tag|
       meta_name = tag.match(/(?:name|property|http-equiv)=(["'])(.*?)\1/)
@@ -112,14 +113,12 @@ class Curl
         next if @ignore_fragment_links && link_href =~ /^#/
 
         next unless same_origin?(link_href)
-
       else
         next if link_href =~ /^#/ && (@ignore_fragment_links || @external_links_only)
 
         next if link_href !~ %r{^(\w+:)?//} && (@ignore_local_links || @external_links_only)
 
         next if same_origin?(link_href) && @external_links_only
-
       end
 
       link_title = tag.match(/title=(['"])(.*?)\1/)
@@ -146,14 +145,29 @@ class Curl
   ##
   def fetch_html(url = nil, headers: nil, headers_only: false, compressed: false)
     url ||= @url
-    raise StandardError, 'Missing URL' if url.nil? || !url
+    raise StandardError, "Missing URL" if url.nil? || !url
+
+    redirects = 0
+
+    begin
+      break if redirects > 2
+
+      redirects += 1
+      response = Net::HTTP.get_response(URI.parse(url))
+
+      break if response["location"].nil?
+
+      Marky.log.debug "Following redirect to #{response["location"]}"
+
+      url = response["location"]
+    end while response.is_a?(Net::HTTPRedirection)
 
     agents = [
-      'Marky/1.0 (en-US; rv:1.0.1) bot',
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.1',
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.',
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.3',
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.'
+      "Marky/1.0 (en-US; rv:1.0.1) bot",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.1",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.3",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.",
     ]
     agent = 0
     res = nil
@@ -180,7 +194,7 @@ class Curl
 
     @source.strip!
 
-    head = @source.match(%r{(?:<head[^>]+>)(.*?)(?=</head>)}mi)
+    head = @source.match(%r{(?:<head[^>]*>)(.*?)(?=</head>)}mi)
 
     if head.nil?
       { url: url, code: res[:code], meta: nil, links: nil, head: nil, body: @source.strip,
@@ -195,6 +209,13 @@ class Curl
     end
   end
 
+  (Net::HTTP::SSL_IVNAMES << :@ssl_options).uniq!
+  (Net::HTTP::SSL_ATTRIBUTES << :options).uniq!
+
+  Net::HTTP.class_eval do
+    attr_accessor :ssl_options
+  end
+
   ##
   ## Get contents of web page using net/http/
   ##
@@ -206,21 +227,29 @@ class Curl
   ## @return     [Hash] response code, contents of the page
   def ruby_html(url = nil, headers: nil, compressed: false, agent: nil)
     url ||= @url
-    raise StandardError, 'Missing URL' if url.nil? || !url
+
+    raise StandardError, "Missing URL" if url.nil? || !url
 
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    http.ca_file = '/etc/ssl/certs/ca-certificates.crt'
 
-    req = Net::HTTP::Get.new(uri, { 'User-Agent' => agent })
-    req['Accept-Encoding'] = 'gzip' if compressed
-    req['Access-Control-Allow-Origin'] = '*'
-    req['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-    req['Access-Control-Request-Method'] = '*'
-    req['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    options_mask = OpenSSL::SSL::OP_NO_SSLv2 + OpenSSL::SSL::OP_NO_SSLv3 +
+                   OpenSSL::SSL::OP_NO_COMPRESSION
+
+    if uri.scheme == "https"
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      http.ssl_options = options_mask
+      http.ca_file = "/etc/ssl/certs/ca-certificates.crt"
+    end
+
+    req = Net::HTTP::Get.new(uri, { "User-Agent" => agent })
+    req["Accept-Encoding"] = "gzip" if compressed
+    req["Access-Control-Allow-Origin"] = "*"
+    req["Access-Control-Allow-Methods"] = "POST, PUT, DELETE, GET, OPTIONS"
+    req["Access-Control-Request-Method"] = "*"
+    req["Access-Control-Allow-Headers"] = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     headers.each { |k, v| req[k] = v } unless headers.nil?
 
     res = http.request(req)
@@ -241,13 +270,13 @@ class Curl
   ##
   def curl_html(url = nil, headers: nil, headers_only: false, compressed: false, agent: nil)
     url ||= @url
-    raise StandardError, 'Missing URL' if url.nil? || !url
+    raise StandardError, "Missing URL" if url.nil? || !url
 
-    flags = 'SsL'
-    flags += headers_only ? 'I' : 'i'
+    flags = "SsL"
+    flags += headers_only ? "I" : "i"
 
-    headers = headers.nil? ? '' : headers.map { |h, v| %(-H "#{h}: #{v}") }.join(' ')
-    compress = @compressed ? '--compressed' : ''
+    headers = headers.nil? ? "" : headers.map { |h, v| %(-H "#{h}: #{v}") }.join(" ")
+    compress = @compressed ? "--compressed" : ""
     # source = `#{@curl} -#{flags} #{compress} #{headers} '#{url}' 2>/dev/null`
     source = nil
     cmd = %(#{@curl} -#{flags} #{compress} -A "#{agent}" #{headers} "#{url}" 2>/dev/null)
@@ -255,7 +284,7 @@ class Curl
 
     return false unless $?.success?
 
-    headers = { 'location' => url }
+    headers = { "location" => url }
     lines = source.split(/\r\n/)
     code = lines[0].match(/(\d\d\d)/)[1]
     lines.shift
@@ -302,7 +331,7 @@ class Curl
 
       # look for a charset in a meta tag in the first 1024 bytes
       unless encoding
-        data = body[0..1023].gsub(/<!--.*?(-->|\Z)/m, '')
+        data = body[0..1023].gsub(/<!--.*?(-->|\Z)/m, "")
         data.scan(/<meta.*?>/im).each do |meta|
           encoding ||= meta[/charset=["']?([^>]*?)($|["'\s>])/im, 1]
         end

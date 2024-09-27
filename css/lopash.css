@@ -1,0 +1,437 @@
+@import url(http://fonts.googleapis.com/css?family=Varela|Quattrocento:400,700&subset=latin,latin-ext);
+/*
+This document has been created with Marked.app <http://marked2app.com>, Copyright 2013 Brett Terpstra
+Content is property of the document author
+Please leave this notice in place, along with any additional credits below.
+---------------------------------------------------------------
+Title:  Lopash
+Author:  Erik Sagen
+Description:  Clean, bouyant fonts and highly readable text
+*/
+/* Normalize bits */
+html {
+  font-family: sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%; }
+
+#preblock {
+  /******************** General Typography ********************/
+  /* Theme-specific styles */ }
+  #preblock a:focus {
+    outline: thin dotted; }
+  #preblock a:active, #preblock a:hover {
+    outline: 0; }
+  #preblock abbr[title] {
+    border-bottom: 1px dotted; }
+  #preblock b,
+  #preblock strong {
+    font-weight: bold; }
+  #preblock dfn {
+    font-style: italic; }
+  #preblock code,
+  #preblock kbd,
+  #preblock pre,
+  #preblock samp {
+    font-family: monospace, serif;
+    font-size: 1em; }
+  #preblock pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word; }
+  #preblock q {
+    quotes: "\201C" "\201D" "\2018" "\2019"; }
+  #preblock sub,
+  #preblock sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline; }
+  #preblock sup {
+    top: -0.5em; }
+  #preblock sub {
+    bottom: -0.25em; }
+  #preblock figure {
+    margin: 0; }
+  #preblock table {
+    border-collapse: collapse;
+    border-spacing: 0; }
+  #preblock img {
+    max-width: 100%;
+    height: auto; }
+  #preblock body {
+    font-size: 75%;
+    line-height: 1.5;
+    /*12/18*/
+    margin: 0; }
+  #preblock h1, #preblock h2 {
+    line-height: 36px;
+    margin-bottom: 18px; }
+  #preblock h1, #preblock h2, #preblock h3, #preblock h4 {
+    margin-top: 1.5em; }
+  #preblock h3, #preblock h4, #preblock h5, #preblock h6 {
+    line-height: 1em; }
+  #preblock h1 {
+    font-size: 36px;
+    top: 5px; }
+  #preblock h2 {
+    font-size: 28px;
+    top: 8px; }
+  #preblock h3 {
+    font-size: 22px;
+    top: 1px; }
+  #preblock h4 {
+    font-size: 18px;
+    top: 2px; }
+  #preblock h5 {
+    font-size: 15px;
+    top: 4px; }
+  #preblock h6 {
+    font-size: 13px;
+    top: 5px; }
+  #preblock h1:first-child,
+  #preblock h2:first-child,
+  #preblock h3:first-child,
+  #preblock h4:first-child {
+    margin-top: 0; }
+  #preblock dt {
+    font-weight: 600; }
+  #preblock dd {
+    font-style: italic; }
+  #preblock p, #preblock pre, #preblock address {
+    line-height: 23px; }
+  #preblock small {
+    font-size: 80%; }
+  #preblock ul, #preblock ol, #preblock dl, #preblock dialog {
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: 18px;
+    margin-bottom: 18px; }
+  #preblock li ul, #preblock li ol, #preblock ul ul, #preblock ol ol {
+    top: 0;
+    margin-top: 0;
+    margin-bottom: 0; }
+  #preblock li h1, #preblock li h2, #preblock li h3,
+  #preblock li h4, #preblock li h5, #preblock li h6,
+  #preblock li p {
+    top: 0; }
+  #preblock form, #preblock legend, #preblock label {
+    font-size: 13px;
+    line-height: 18px; }
+  #preblock table {
+    font-size: 13px; }
+  #preblock caption {
+    font-size: 13px;
+    line-height: 18px; }
+  #preblock hr {
+    height: 4px;
+    margin: 18px 0 14px 0; }
+  #preblock body {
+    background: #faf8f5;
+    color: rgba(0, 0, 0, 0.9);
+    font-family: Varela, sans-serif;
+    padding: 0;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+    font-size: 15px; }
+  #preblock #wrapper {
+    padding: 20px;
+    max-width: 100%; }
+  #preblock h1, #preblock h2, #preblock h3, #preblock h4, #preblock h5, #preblock h6 {
+    font-family: Quattrocento, serif; }
+  #preblock blockquote {
+    border: 1px dotted #ccc;
+    border-right: none;
+    border-left: none;
+    color: rgba(0, 0, 0, 0.7);
+    font-family: Quattrocento, serif;
+    line-height: 25px;
+    margin-top: 25px; }
+  #preblock blockquote p {
+    margin: 20px 0 25px;
+    padding: 0 15px;
+    line-height: 25px; }
+  #preblock ul, #preblock ol {
+    color: rgba(0, 0, 0, 0.7); }
+  #preblock ol {
+    list-style-type: decimal; }
+  #preblock a {
+    color: #07c;
+    text-decoration: none; }
+  #preblock a:visited {
+    color: #4A6B82; }
+  #preblock a:hover {
+    text-decoration: underline; }
+  #preblock hr {
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)); }
+  #preblock table {
+    border-collapse: collapse;
+    border-top: solid 3px #000;
+    margin-top: 18px;
+    width: 100%; }
+    #preblock table th, #preblock table td {
+      line-height: 15px;
+      padding: 10px 18px 8px 0; }
+    #preblock table thead th, #preblock table thead td {
+      font-family: Quattrocento, serif;
+      padding-top: 7px; }
+    #preblock table tfoot th, #preblock table tfoot td {
+      padding-bottom: 8px; }
+    #preblock table th:first-child, #preblock table td:first-child {
+      padding-left: 0; }
+    #preblock table th:last-child, #preblock table td:last-child {
+      padding-right: 0; }
+    #preblock table tbody tr:nth-child(odd) th,
+    #preblock table tbody tr:nth-child(odd) td {
+      background: rgba(0, 0, 0, 0.035); }
+    #preblock table caption {
+      color: rgba(0, 0, 0, 0.7);
+      top: 5px;
+      margin-bottom: 18px; }
+  #preblock .inverted {
+    background: #222;
+    color: rgba(255, 255, 255, 0.7); }
+    #preblock .inverted a {
+      color: #4eaff5; }
+    #preblock .inverted h1, #preblock .inverted h2, #preblock .inverted h3, #preblock .inverted h4, #preblock .inverted h5, #preblock .inverted h6 {
+      color: rgba(255, 255, 255, 0.9); }
+    #preblock .inverted ul, #preblock .inverted ol, #preblock .inverted blockquote, #preblock .inverted caption {
+      color: rgba(255, 255, 255, 0.5); }
+    #preblock .inverted table {
+      border-top-color: rgba(255, 255, 255, 0.2); }
+    #preblock .inverted tbody tr:nth-child(odd) td {
+      background: rgba(0, 0, 0, 0.1); }
+
+@media print {
+  body {
+    background: white;
+    font-size: 12px !important;
+    line-height: 1.25 !important; }
+
+  img, pre, table, figure, p {
+    page-break-inside: avoid; }
+
+  #wrapper {
+    padding: 10px;
+    position: relative;
+    text-indent: 0;
+    background: transparent; } }
+header {
+  min-width: 550px;
+  position: fixed;
+  background: #ccc;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 70px;
+  padding: 0 20px;
+  z-index: 2;
+  border-bottom: solid 1px #aaa;
+  -moz-box-shadow: 0px 2px 8px rgba(34, 34, 34, 0.35);
+  -webkit-box-shadow: 0px 2px 8px rgba(34, 34, 34, 0.35);
+  box-shadow: 0px 2px 8px rgba(34, 34, 34, 0.35);
+  -webkit-user-select: none; }
+
+header form {
+  position: absolute;
+  bottom: -44px;
+  height: 27px;
+  padding-top: 4px;
+  font-size: 12px;
+  width: 360px;
+  left: 50%;
+  margin-left: -150px;
+  background: #eee;
+  -moz-border-radius-bottomleft: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  border-radius-bottomleft: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  border-radius-bottomright: 8px;
+  -moz-box-shadow: 0px 4px 8px rgba(34, 34, 34, 0.15);
+  -webkit-box-shadow: 0px 4px 4px rgba(34, 34, 34, 0.35);
+  box-shadow: 0px 4px 4px rgba(34, 34, 34, 0.45);
+  text-align: center;
+  border-top: solid 1px #666; }
+
+h1 {
+  display: block;
+  float: left;
+  font-size: 18px;
+  line-height: 50px;
+  width: 90% !important; }
+
+#back a, .my_clip_button {
+  display: block;
+  color: #666;
+  text-decoration: none;
+  padding: 5px 15px;
+  background-color: #bbb;
+  -webkit-box-shadow: 1px 1px 1px #777 inset;
+  -moz-box-shadow: 1px 1px 3px #333 inset;
+  box-shadow: 1px 1px 3px #333 inset;
+  text-shadow: -1px 1px 2px #eee;
+  float: left;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 14px;
+  -webkit-transition: color 0.8s ease-in-out;
+  -moz-transition: color 0.8s ease-in-out;
+  -o-transition: color 0.8s ease-in-out;
+  transition: color 0.8s ease-in-out,box-shadow 0.8s ease-in-out;
+  -webkit-transition: background-color 0.2s ease-in-out,-webkit-box-shadow 0.2s ease-in-out;
+  -moz-transition: background-color 0.2s ease-in-out,-moz-box-shadow 0.2s ease-in-out;
+  -o-transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out; }
+
+p#back a {
+  padding: 0 15px;
+  height: 25px;
+  line-height: 25px;
+  margin-top: 12px; }
+
+#back a:hover {
+  color: #333;
+  background-color: #999; }
+
+#backtotop {
+  position: absolute;
+  width: 120px;
+  left: 50%;
+  top: 10px;
+  margin-left: -60px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  background-color: #999;
+  box-shadow: inset 1px 3px 2px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: inset 1px 3px 2px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: inset 1px 3px 2px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  text-indent: 0px;
+  color: #ddd;
+  text-shadow: #2B2A28 -0px -1px 1px;
+  text-decoration: none;
+  line-height: 1.6em;
+  font-weight: bold;
+  -webkit-transition: background-color 0.2s ease-in-out;
+  -moz-transition: background-color 0.2s ease-in-out;
+  -o-transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out; }
+
+#backtotop:hover {
+  background-color: rgba(11, 75, 111, 0.85); }
+
+footer {
+  min-width: 500px;
+  position: fixed;
+  background: #ccc;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  z-index: 2;
+  border-top: #333 1px;
+  border-top: solid 1px #aaa;
+  -moz-box-shadow: 0px -2px 28px rgba(34, 34, 34, 0.35);
+  -webkit-box-shadow: 0px -2px 28px rgba(34, 34, 34, 0.35);
+  box-shadow: 0px -2px 28px rgba(34, 34, 34, 0.35);
+  height: 50px;
+  -webkit-user-select: none;
+  /*-webkit-box-shadow: 0px -32px 18px #fff;*/ }
+
+#d_clip_container {
+  position: relative;
+  float: right; }
+
+.my_clip_button {
+  width: 150px;
+  text-align: center;
+  background-color: #e3e6d6;
+  padding: 5px;
+  cursor: default;
+  font-size: 9pt;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  border-radius: 15px;
+  position: relative;
+  top: 10px;
+  float: right; }
+
+.my_clip_button.hover, .my_clip_button:hover {
+  background-color: #d8e4a8;
+  cursor: pointer;
+  -moz-box-shadow: 0px 0px 2px rgba(34, 34, 34, 0.25) inset;
+  -webkit-box-shadow: 0px 0px 2px rgba(34, 34, 34, 0.25) inset;
+  box-shadow: 0px 0px 2px rgba(34, 34, 34, 0.25) inset; }
+
+#previewbutton {
+  margin-right: 15px; }
+
+.my_clip_button.active {
+  background-color: #c3d383; }
+
+label {
+  display: inline-block;
+  padding: 2px 8px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #DEDEDE;
+  box-shadow: inset 1px 2px 1px #A8A8A8;
+  -webkit-box-shadow: inset 1px 2px 1px #A8A8A8;
+  -moz-box-shadow: inset 1px 2px 1px #A8A8A8;
+  text-align: center;
+  text-indent: 0px;
+  color: #2F2F2F;
+  text-shadow: #FFFFFF -0px 1px 1px;
+  -webkit-transition: background-color 0.5s ease-in-out;
+  -moz-transition: background-color 0.5s ease-in-out;
+  -o-transition: background-color 0.5s ease-in-out;
+  transition: background-color 0.5s ease-in-out; }
+
+label:hover {
+  background-color: #eee; }
+
+@-webkit-keyframes glow {
+  0% {
+    background-color: rgba(173, 187, 116, 0.64); }
+
+  100% {
+    background-color: #adbb74; } }
+
+input[type=submit] {
+  font-weight: bold;
+  display: inline-block;
+  border: none;
+  padding: 4px 18px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #adbb74;
+  box-shadow: 1px 2px 1px #A8A8A8;
+  -webkit-box-shadow: inset 1px 1px 2px #A8A8A8;
+  -moz-box-shadow: inset 1px 2px 1px #A8A8A8;
+  text-align: center;
+  text-indent: 0px;
+  color: #333;
+  text-shadow: #FFFFFF -0px 1px 1px;
+  -webkit-transition: background-color 0.5s ease-in-out;
+  -moz-transition: background-color 0.5s ease-in-out;
+  -o-transition: background-color 0.5s ease-in-out;
+  transition: background-color 0.5s ease-in-out;
+  -webkit-animation-name: glow;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-duration: 1.2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-in-out; }
+
+input:hover {
+  background-color: #b9cf6c;
+  cursor: pointer; }
+
+#stwrapper {
+  float: left;
+  margin-top: 10px; }

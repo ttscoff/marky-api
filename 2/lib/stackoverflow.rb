@@ -25,8 +25,10 @@ module Marky
       doc.css('div.question').each do |question|
         output << question.css('.post-text, .js-post-body').inner_html
         owner = question.css('.post-signature.owner .user-info .user-details>a').first
-        ref = owner.attributes['href'].value
-        output << %(<p>Asked by <a href="#{ref}">#{owner.content}</a></p>)
+        if owner
+          ref = owner.attributes['href'].value
+          output << %(<p>Asked by <a href="#{ref}">#{owner.content}</a></p>)
+        end
         question.css('.comment-body').each do |comment|
           output << "<blockquote>#{comment.inner_html}</blockquote>"
         end

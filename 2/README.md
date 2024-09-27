@@ -1,18 +1,20 @@
-# Marky the Markdownifier API v2
+<script>0</script>
 
-- [Marky the Markdownifier API v2](#marky-the-markdownifier-api-v2)
-  - [Endpoint](#endpoint)
-  - [Parameters](#parameters)
-    - [Output Formats](#output-formats)
-    - [Readability and conversion](#readability-and-conversion)
-      - [Custom Readability](#custom-readability)
-      - [Table formatting](#table-formatting)
-      - [Code block formatting](#code-block-formatting)
-    - [Markup Formats](#markup-formats)
-    - [Link Formats](#link-formats)
-    - [Styles](#styles)
-  - [Special handling](#special-handling)
-  - [Bookmarklets](#bookmarklets)
+## API v2
+
+- [API v2](#api-v2)
+- [Endpoint](#endpoint)
+- [Parameters](#parameters)
+  - [Output Formats](#output-formats)
+  - [Readability and conversion](#readability-and-conversion)
+    - [Custom Readability](#custom-readability)
+    - [Table formatting](#table-formatting)
+    - [Code block formatting](#code-block-formatting)
+  - [Markup Formats](#markup-formats)
+  - [Link Formats](#link-formats)
+  - [Styles](#styles)
+- [Special handling](#special-handling)
+- [Bookmarklets](#bookmarklets)
 
 ## Endpoint
 
@@ -41,15 +43,17 @@ Example:
 | Parameter     |  Default   | Description                                     |
 | :------------ | :--------: | :---------------------------------------------- |
 | `url`         | *required* | Target url to markdownify                       |
+| `complete`    |   false    | Output complete HTML page with head/body tags   |
 | `format`      |   'gfm'    | See [Valid formats](#markup-formats).           |
-| `output`      | 'markdown' | [Output format](#output-formats)                |
-| `readability` |   false    | Use Readability to remove cruft                 |
+| `inline`      |    true    | Use inline link format                          |
+| `import_css`  |   false    | Embed CSS from linked stylesheets               |
 | `json`        |   false    | Output JSON { output, html, url, title }        |
 | `link`        |   false    | App-specific url. [Link Formats](#link-formats) |
-| `open`        |   false    | open link automatically.                        |
+| `open`        |   false    | Open link automatically.                        |
+| `output`      | 'markdown' | [Output format](#output-formats)                |
+| `readability` |   false    | Use Readability to remove cruft                 |
+| `showframe`   |   false    | Output the Marky results page                   |
 | `style`       |    none    | [CSS style](#styles) (HTML output)              |
-| `import_css`  |   false    | Embed CSS from linked stylesheets               |
-| `complete`    |   false    | output complete HTML page with head/body tags   |
 
 ### Output Formats
 
@@ -226,6 +230,6 @@ Marky has special handling for some sites:
 More to come as needs arise.
 
 ## Bookmarklets
-
+- Open current page in Marky: `javascript:(function()%7Bwindow.location%3D'https%3A%2F%2Ffuckyeahmarkdown.com%2Fapi%2F2%2F%3Fu%3D'%2BencodeURIComponent(window.location.href)%2B'%26format%3Dgfm%26output%3Dcomplete'%3B%7D)()%3B`
 - Add to nvUltra: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fnvultra.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B`
 - Add to Obsidian: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fobsidian.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B`
