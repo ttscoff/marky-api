@@ -1,6 +1,6 @@
-require 'open3'
-require 'tempfile'
-require 'timeout'
+require "open3"
+require "tempfile"
+require "timeout"
 
 class PandocRuby
   # Use the pandoc command with a custom executable path.
@@ -10,119 +10,119 @@ class PandocRuby
   # The available readers and their corresponding names. The keys are used to
   # generate methods and specify options to Pandoc.
   READERS = {
-    'biblatex' => 'BibLaTeX bibliography',
-    'bibtex' => 'BibTeX bibliography',
-    'commonmark' => 'CommonMark Markdown',
-    'commonmark_x' => 'CommonMark Markdown with extensions',
-    'creole' => 'Creole 1.0',
-    'csljson' => 'CSL JSON bibliography',
-    'csv' => 'CSV table',
-    'docbook' => 'DocBook',
-    'docx' => 'Word docx',
-    'dokuwiki' => 'DokuWiki markup',
-    'endnotexml' => 'EndNote XML bibliography',
-    'epub' => 'EPUB',
-    'fb2' => 'FictionBook2 e-book',
-    'gfm' => 'GitHub-Flavored Markdown',
-    'haddock' => 'Haddock markup',
-    'html' => 'HTML',
-    'ipynb' => 'Jupyter notebook',
-    'jats' => 'JATS XML',
-    'jira' => 'Jira wiki markup',
-    'json' => 'JSON version of native AST',
-    'latex' => 'LaTex',
-    'man' => 'roff man',
-    'markdown' => "Pandoc's Markdown",
-    'markdown_mmd' => 'MultiMarkdown',
-    'markdown_phpextra' => 'PHP Markdown Extra',
-    'markdown_strict' => 'original unextended Markdown',
-    'mediawiki' => 'MediaWiki markup',
-    'muse' => 'Muse',
-    'native' => 'native Haskell',
-    'odt' => 'ODT',
-    'opml' => 'OPML',
-    'org' => 'Emacs Org mode',
-    'ris' => 'RIS bibliography',
-    'rst' => 'reStructuredText',
-    'rtf' => 'Rich Text Format',
-    't2t' => 'txt2tags',
-    'textile' => 'Textile',
-    'tikiwiki' => 'TikiWiki markup',
-    'tsv' => 'TSV table',
-    'twiki' => 'TWiki markup',
-    'vimwiki' => 'Vimwiki'
+    "biblatex" => "BibLaTeX bibliography",
+    "bibtex" => "BibTeX bibliography",
+    "commonmark" => "CommonMark Markdown",
+    "commonmark_x" => "CommonMark Markdown with extensions",
+    "creole" => "Creole 1.0",
+    "csljson" => "CSL JSON bibliography",
+    "csv" => "CSV table",
+    "docbook" => "DocBook",
+    "docx" => "Word docx",
+    "dokuwiki" => "DokuWiki markup",
+    "endnotexml" => "EndNote XML bibliography",
+    "epub" => "EPUB",
+    "fb2" => "FictionBook2 e-book",
+    "gfm" => "GitHub-Flavored Markdown",
+    "haddock" => "Haddock markup",
+    "html" => "HTML",
+    "ipynb" => "Jupyter notebook",
+    "jats" => "JATS XML",
+    "jira" => "Jira wiki markup",
+    "json" => "JSON version of native AST",
+    "latex" => "LaTex",
+    "man" => "roff man",
+    "markdown" => "Pandoc's Markdown",
+    "markdown_mmd" => "MultiMarkdown",
+    "markdown_phpextra" => "PHP Markdown Extra",
+    "markdown_strict" => "original unextended Markdown",
+    "mediawiki" => "MediaWiki markup",
+    "muse" => "Muse",
+    "native" => "native Haskell",
+    "odt" => "ODT",
+    "opml" => "OPML",
+    "org" => "Emacs Org mode",
+    "ris" => "RIS bibliography",
+    "rst" => "reStructuredText",
+    "rtf" => "Rich Text Format",
+    "t2t" => "txt2tags",
+    "textile" => "Textile",
+    "tikiwiki" => "TikiWiki markup",
+    "tsv" => "TSV table",
+    "twiki" => "TWiki markup",
+    "vimwiki" => "Vimwiki",
   }.freeze
 
   # The available string writers and their corresponding names. The keys are
   # used to generate methods and specify options to Pandoc.
   STRING_WRITERS = {
-    'asciidoc' => 'AsciiDoc',
-    'asciidoctor' => 'AsciiDoctor',
-    'beamer' => 'LaTeX beamer slide show',
-    'biblatex' => 'BibLaTeX bibliography',
-    'bibtex' => 'BibTeX bibliography',
-    'chunkedhtml' => 'zip archive of multiple linked HTML files',
-    'commonmark' => 'CommonMark Markdown',
-    'commonmark_x' => 'CommonMark Markdown with extensions',
-    'context' => 'ConTeXt',
-    'csljson' => 'CSL JSON bibliography',
-    'docbook' => 'DocBook 4',
-    'docbook4' => 'DocBook 4',
-    'docbook5' => 'DocBook 5',
-    'dokuwiki' => 'DokuWiki markup',
-    'fb2' => 'FictionBook2 e-book',
-    'gfm' => 'GitHub-Flavored Markdown',
-    'haddock' => 'Haddock markup',
-    'html' => 'HTML, i.e.  HTML5/XHTML polyglot markup',
-    'html5' => 'HTML, i.e.  HTML5/XHTML polyglot markup',
-    'html4' => 'XHTML 1.0 Transitional',
-    'icml' => 'InDesign ICML',
-    'ipynb' => 'Jupyter notebook',
-    'jats_archiving' => 'JATS XML, Archiving and Interchange Tag Set',
-    'jats_articleauthoring' => 'JATS XML, Article Authoring Tag Set',
-    'jats_publishing' => 'JATS XML, Journal Publishing Tag Set',
-    'jats' => 'alias for jats_archiving',
-    'jira' => 'Jira wiki markup',
-    'json' => 'JSON version of native AST',
-    'latex' => 'LaTex',
-    'man' => 'roff man',
-    'markdown' => "Pandoc's Markdown",
-    'markdown_mmd' => 'MultiMarkdown',
-    'markdown_phpextra' => 'PHP Markdown Extra',
-    'markdown_strict' => 'original unextended Markdown',
-    'markua' => 'Markua',
-    'mediawiki' => 'MediaWiki markup',
-    'ms' => 'roff ms',
-    'muse' => 'Muse',
-    'native' => 'native Haskell',
-    'opml' => 'OPML',
-    'opendocument' => 'OpenDocument',
-    'org' => 'Emacs Org mode',
-    'pdf' => 'PDF',
-    'plain' => 'plain text',
-    'pptx' => 'PowerPoint slide show',
-    'rst' => 'reStructuredText',
-    'rtf' => 'Rich Text Format',
-    'texinfo' => 'GNU Texinfo',
-    'textile' => 'Textile',
-    'slideous' => 'Slideous HTML and JavaScript slide show',
-    'slidy' => 'Slidy HTML and JavaScript slide show',
-    'dzslides' => 'DZSlides HTML5 + JavaScript slide show',
-    'revealjs' => 'reveal.js HTML5 + JavaScript slide show',
-    's5' => 'S5 HTML and JavaScript slide show',
-    'tei' => 'TEI Simple',
-    'xwiki' => 'XWiki markup',
-    'zimwiki' => 'ZimWiki markup'
+    "asciidoc" => "AsciiDoc",
+    "asciidoctor" => "AsciiDoctor",
+    "beamer" => "LaTeX beamer slide show",
+    "biblatex" => "BibLaTeX bibliography",
+    "bibtex" => "BibTeX bibliography",
+    "chunkedhtml" => "zip archive of multiple linked HTML files",
+    "commonmark" => "CommonMark Markdown",
+    "commonmark_x" => "CommonMark Markdown with extensions",
+    "context" => "ConTeXt",
+    "csljson" => "CSL JSON bibliography",
+    "docbook" => "DocBook 4",
+    "docbook4" => "DocBook 4",
+    "docbook5" => "DocBook 5",
+    "dokuwiki" => "DokuWiki markup",
+    "fb2" => "FictionBook2 e-book",
+    "gfm" => "GitHub-Flavored Markdown",
+    "haddock" => "Haddock markup",
+    "html" => "HTML, i.e.  HTML5/XHTML polyglot markup",
+    "html5" => "HTML, i.e.  HTML5/XHTML polyglot markup",
+    "html4" => "XHTML 1.0 Transitional",
+    "icml" => "InDesign ICML",
+    "ipynb" => "Jupyter notebook",
+    "jats_archiving" => "JATS XML, Archiving and Interchange Tag Set",
+    "jats_articleauthoring" => "JATS XML, Article Authoring Tag Set",
+    "jats_publishing" => "JATS XML, Journal Publishing Tag Set",
+    "jats" => "alias for jats_archiving",
+    "jira" => "Jira wiki markup",
+    "json" => "JSON version of native AST",
+    "latex" => "LaTex",
+    "man" => "roff man",
+    "markdown" => "Pandoc's Markdown",
+    "markdown_mmd" => "MultiMarkdown",
+    "markdown_phpextra" => "PHP Markdown Extra",
+    "markdown_strict" => "original unextended Markdown",
+    "markua" => "Markua",
+    "mediawiki" => "MediaWiki markup",
+    "ms" => "roff ms",
+    "muse" => "Muse",
+    "native" => "native Haskell",
+    "opml" => "OPML",
+    "opendocument" => "OpenDocument",
+    "org" => "Emacs Org mode",
+    "pdf" => "PDF",
+    "plain" => "plain text",
+    "pptx" => "PowerPoint slide show",
+    "rst" => "reStructuredText",
+    "rtf" => "Rich Text Format",
+    "texinfo" => "GNU Texinfo",
+    "textile" => "Textile",
+    "slideous" => "Slideous HTML and JavaScript slide show",
+    "slidy" => "Slidy HTML and JavaScript slide show",
+    "dzslides" => "DZSlides HTML5 + JavaScript slide show",
+    "revealjs" => "reveal.js HTML5 + JavaScript slide show",
+    "s5" => "S5 HTML and JavaScript slide show",
+    "tei" => "TEI Simple",
+    "xwiki" => "XWiki markup",
+    "zimwiki" => "ZimWiki markup",
   }.freeze
 
   # The available binary writers and their corresponding names. The keys are
   # used to generate methods and specify options to Pandoc.
   BINARY_WRITERS = {
-    'odt' => 'OpenOffice text document',
-    'docx' => 'Word docx',
-    'epub' => 'EPUB v3',
-    'epub2' => 'EPUB v2',
-    'epub3' => 'EPUB v3'
+    "odt" => "OpenOffice text document",
+    "docx" => "Word docx",
+    "epub" => "EPUB v3",
+    "epub2" => "EPUB v2",
+    "epub3" => "EPUB v3",
   }.freeze
 
   # All of the available Writers.
@@ -147,11 +147,11 @@ class PandocRuby
   end
 
   def option_string
-    @option_string ||= ''
+    @option_string ||= ""
   end
 
   def writer
-    @writer ||= 'html'
+    @writer ||= "html"
   end
 
   # Create a new PandocRuby converter object. The first argument contains the
@@ -164,13 +164,13 @@ class PandocRuby
   #   new(["/path/to/file.md"], :option1 => :value, :option2)
   #   new(["/to/file1.html", "/to/file2.html"], :option1 => :value)
   def initialize(*args)
-    @pandoc_path = 'pandoc'
+    @pandoc_path = "pandoc"
 
     case args[0]
     when String
       self.input_string = args.shift
     when Array
-      self.input_files = args.shift.map { |f| "'#{f}'" }.join(' ')
+      self.input_files = args.shift.map { |f| "'#{f}'" }.join(" ")
     end
 
     self.options = args
@@ -241,7 +241,7 @@ class PandocRuby
   # and written to, then read back into the program as a string, then the
   # temp file is closed and unlinked.
   def convert_binary
-    tmp_file = Tempfile.new('pandoc-conversion')
+    tmp_file = Tempfile.new("pandoc-conversion")
 
     begin
       self.options += [{ output: tmp_file.path }]
@@ -264,11 +264,11 @@ class PandocRuby
 
   # Wrapper to run pandoc in a consistent, DRY way
   def execute_pandoc
-   if !input_files.nil?
-     execute("#{@pandoc_path} #{input_files}#{option_string}")
-   else
-     execute("#{@pandoc_path}#{option_string}")
-   end
+    if !input_files.nil?
+      execute("#{@pandoc_path} #{input_files}#{option_string}")
+    else
+      execute("#{@pandoc_path}#{option_string}")
+    end
   end
 
   # Run the command and returns the output.
@@ -284,14 +284,14 @@ class PandocRuby
   # Builds the option string to be passed to pandoc by iterating over the
   # opts passed in. Recursively calls itself in order to handle hash options.
   def prepare_options(opts = [])
-    opts.inject('') do |string, (option, value)|
+    opts.inject("") do |string, (option, value)|
       string + if value&.to_s
-                 create_option(option, value.to_s)
-               elsif option.respond_to?(:each_pair)
-                 prepare_options(option)
-               else
-                 create_option(option)
-               end
+        create_option(option, value.to_s)
+      elsif option.respond_to?(:each_pair)
+        prepare_options(option)
+      else
+        create_option(option)
+      end
     end
   end
 
@@ -299,11 +299,11 @@ class PandocRuby
   # used by the library, and returns string with the option formatted as a
   # command line options. If the option has an argument, it is also included.
   def create_option(flag, argument = nil)
-    return '' unless flag
+    return "" unless flag
 
     flag = flag.to_s
     set_pandoc_ruby_options(flag, argument)
-    return '' if flag == 'timeout' # pandoc doesn't accept timeouts yet
+    return "" if flag == "timeout" # pandoc doesn't accept timeouts yet
 
     if argument.nil?
       format_flag(flag)
@@ -320,7 +320,7 @@ class PandocRuby
     elsif flag =~ /^-|\+/
       " #{flag}"
     else
-      " --#{flag.to_s.tr('_', '-')}"
+      " --#{flag.to_s.tr("_", "-")}"
     end
   end
 
@@ -328,10 +328,10 @@ class PandocRuby
   # used by PandocRuby.
   def set_pandoc_ruby_options(flag, argument = nil)
     case flag
-    when 't', 'to'
+    when "t", "to"
       self.writer = argument.to_s
       self.binary_output = true if BINARY_WRITERS.key?(writer)
-    when 'timeout'
+    when "timeout"
       @timeout = argument
     end
   end

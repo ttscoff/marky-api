@@ -69,7 +69,7 @@ module Marky
     # import_css = import CSS from linked stylesheets if &style is a url (default: false)
     # complete = output complete HTML page (default: false)
     # inline = use inline links
-    VALID_PARAMS = %w[url format output readability json link open style complete import_css inline showframe closewindow debug].freeze
+    VALID_PARAMS = %w[url format output readability json link open style complete import_css inline showframe closewindow debug html title].freeze
 
     # Valid link types
     VALID_LINKS = %w[url obsidian nvultra nvalt nv marked].freeze
@@ -86,7 +86,7 @@ module Marky
       @cgi = CGI.new
       sort_params
 
-      @format = @params[:format]&.normalize_format || :gfm
+      @format = @params[:format]&.normalize_format || :markdown_mmd
       @url = @params[:url]
       @readability = @params.key?(:readability) && @params[:readability]
       @json_output = @params.key?(:json) && @params[:json]
@@ -147,41 +147,49 @@ module Marky
     #
     # @return [Boolean] true if successful, false otherwise
     def start
-      puts @cgi.header unless @json_output || @link_type
+      puts @cgi.header unless @json_output || @link_type || @output_format == :markdown
 
-      curl = Curl.new(@url)
-      curled = curl.fetch
+      if @params[:html]
+        output = @params[:html]
+        @title = @params[:title]
+        @url = @params[:url]
+      else
+        curl = Curl.new(@url)
+        curled = curl.fetch
 
-      return false unless curled
+        return false unless curled
 
-      output = curled[:body]
-      @url = curled[:url]
+        @keywords = curled[:meta]["keywords"]&.split(/[, ]/).map(&:downcase).sort.uniq.delete_if(&:empty?) || []
 
-      return false unless output
+        output = curled[:body]
+        @url = curled[:url]
 
-      if @url =~ /stack(overflow|exchange)\.com/
-        Marky.log.info("StackExchange Page")
-        output, @title = StackOverflow.process(output)
-      elsif @url =~ %r{gist\.github\.com/[^/]+/[a-z0-9]+(#\S+)?$}
-        Marky.log.info("GitHub Gist")
-        output, title = GitHub.processGist(output)
-      elsif @url =~ %r{github\.com/[^/]+?/[^/]+?+$}
-        Marky.log.info("GitHub Repo")
-        output, @title = GitHub.process(output)
-      elsif @url =~ %r{github\.com/.*?/\w+\.\w+$}
-        Marky.log.info("GitHub file")
-        output, @title = GitHub.processFile(output)
-      elsif @readability
-        Marky.log.info("No special urls, running Readability")
-        output = Readability::Document.new(output, {
-          debug: @params[:debug],
-          remove_empty_nodes: true,
-          remove_unlikely_candidates: false,
-          clean_conditionally: true,
-        }).content
+        return false unless output
+
+        if @url =~ /stack(overflow|exchange)\.com/
+          Marky.log.info("StackExchange Page")
+          output, @title = StackOverflow.process(output)
+        elsif @url =~ %r{gist\.github\.com/[^/]+/[a-z0-9]+(#\S+)?$}
+          Marky.log.info("GitHub Gist")
+          output, @title = GitHub.processGist(output)
+        elsif @url =~ %r{github\.com/[^/]+?/[^/]+?+$}
+          Marky.log.info("GitHub Repo")
+          output, @title = GitHub.process(output)
+        elsif @url =~ %r{github\.com/.*?/\w+\.\w+$}
+          Marky.log.info("GitHub file")
+          output, @title = GitHub.processFile(output)
+        elsif @readability
+          Marky.log.info("No special urls, running Readability")
+          output = Readability::Document.new(output, {
+            debug: @params[:debug],
+            remove_empty_nodes: true,
+            remove_unlikely_candidates: false,
+            clean_conditionally: true,
+          }).content
+        end
+
+        @title ||= curled[:head]&.extract_title&.straighten_quotes
       end
-
-      @title ||= curled[:head]&.extract_title&.straighten_quotes
 
       # Random cleanup
       output.gsub!(%r{<div[^>]*><pre[^>]*>[ \n]*(?!<code)(.*?)</pre>[ \n]*</div>}m) do
@@ -191,7 +199,7 @@ module Marky
 
       output.gsub!(/Â/, "\n")
 
-      abs, error = output.absolute_urls(@url)
+      abs, error = output.absolute_urls(@url) if @url
 
       if abs
         output = abs
@@ -235,12 +243,13 @@ module Marky
         extensions << "+backtick_code_blocks"
       end
 
-      fmt = VALID_FORMATS.include?(@format.to_s) ? @format : :gfm
+      fmt = VALID_FORMATS.include?(@format.to_s) ? @format : :markdown_mmd
 
       output = Convert.new(output).format(fmt, extensions: extensions, options: parameters)
       # Clean up conversion output
       output = MarkdownCleaner.new(output).clean
 
+      # Flip reference links to inline links
       unless @params[:inline]
         links = output.to_enum(:scan, /^  \[(?!\d+\])(?<title>.*?)\]: (?=\S)/).map { Regexp.last_match }
 
@@ -265,7 +274,7 @@ module Marky
 
       true
     rescue StandardError => e
-      Marky.log.error("Error processing URL: #{@url}, #{e}")
+      Marky.log.error("Error processing URL: #{@url}, #{e} #{e.backtrace}")
       false
     end
 
@@ -273,18 +282,42 @@ module Marky
     def add_title(output)
       return output unless @params[:readability]
 
-      if output =~ /^# (.*)$/
-        output.sub!(/^# (.*)$/, "")
-        title = Regexp.last_match[1]
-      else
-        title = @title
+      meta = {}
+      meta[:title] = %("#{@title}") if @title
+      meta[:source] = @url if @url
+      meta[:date] = Time.now.strftime("%Y-%m-%d %H:%M")
+      if @keywords
+        if @format == :gfm
+          meta[:tags] = %([#{@keywords.join(", ")}])
+        else
+          meta[:tags] = @keywords.join(", ")
+        end
       end
 
+      if @format == :gfm
+        @metadata = <<~METADATA
+          ---
+          #{meta.map { |k, v| "#{k}: #{v}" }.join("\n")}
+          ---
+        METADATA
+      elsif @format == :markdown_mmd
+        @metadata = <<~METADATA
+          #{meta.map { |k, v| "#{k}: #{v}" }.join("\n")}
+        METADATA
+      end
+
+      if output =~ /^# (.*)$/
+        output.sub!(/^# (.*)$/, "")
+        @title = Regexp.last_match[1]
+      end
+
+      source = @url.nil? ? "" : "\n[source](#{@url})"
+      title = @title.nil? ? "" : "\n# #{@title.gsub(%r{/}, ":").strip}\n"
+
       <<~RESULT
-        [source](#{@url})
-
-        # #{@title}
-
+        #{@metadata}
+        #{source}
+        #{title}
         #{output.strip}
       RESULT
     end
@@ -406,9 +439,9 @@ module Marky
       when :html, :complete
         puts @output.to_html(@format)
       when :url
-        puts to_link
+        @cgi.out("text/plain") { to_link }
       else
-        puts @output
+        @cgi.out("text/plain") { @output }
       end
     end
 

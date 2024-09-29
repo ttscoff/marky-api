@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'pandoc'
+require_relative "pandoc"
 
 class Convert
-  def initialize(input, pandoc: 'lib/pandoc', options: {})
+  def initialize(input, pandoc: "lib/pandoc", options: {})
     @input = input
     @options = options
     @pandoc = File.expand_path(pandoc)
@@ -14,7 +14,7 @@ class Convert
   end
 
   def html(format = :gfm)
-    pandoc = PandocRuby.new(@input, from: format, to: :html, wrap: 'none')
+    pandoc = PandocRuby.new(@input, from: format, to: :html, wrap: "none")
     pandoc.pandoc_path = @pandoc
     pandoc.convert
   end
@@ -23,10 +23,11 @@ class Convert
     opts = {
       from: :html,
       to: "#{format}#{extensions.join}",
-      wrap: 'none'
+      wrap: "none",
     }
     opts.merge!(@options)
     opts.merge!(options)
+    pp opts
     pandoc = PandocRuby.new(@input, opts)
     pandoc.pandoc_path = @pandoc
     pandoc.convert

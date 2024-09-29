@@ -157,6 +157,8 @@ class Curl
 
       break if response["location"].nil?
 
+      break if response["location"] == url
+
       Marky.log.debug "Following redirect to #{response["location"]}"
 
       url = response["location"]

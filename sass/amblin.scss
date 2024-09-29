@@ -516,3 +516,32 @@ table {
         background-color: rgba(180, 237, 95, 0.5);
     }
 }
+
+@media screen {
+    code::selection {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #eee;
+    }
+}
+
+@media screen {
+    ::selection {
+        background: rgba(157, 193, 200, 0.5);
+        background-color: rgba(157, 193, 200, 0.5);
+    }
+}
+
+element {}
+
+code {
+    background: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0px 0 1px;
+    display: inline-block;
+    line-height: 1;
+    overflow: scroll;
+    padding: 3px;
+    position: relative;
+    top: 0.35em;
+    word-break: break-all;
+}

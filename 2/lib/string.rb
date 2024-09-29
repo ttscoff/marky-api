@@ -26,7 +26,7 @@ module Marky
       when /^(markdown|md|mmd)$/
         :markdown_mmd
       else
-        if Marky::VALID_FORMATS.include?(self)
+        if MarkyCGI::VALID_FORMATS.include?(self)
           to_sym
         else
           :gfm

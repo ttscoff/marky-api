@@ -40,20 +40,22 @@ Example:
     curl 'https://heckyesmarkdown.com/api/2/?u=https://brettterpstra.com&read=0`
 
 
-| Parameter     |  Default   | Description                                     |
-| :------------ | :--------: | :---------------------------------------------- |
-| `url`         | *required* | Target url to markdownify                       |
-| `complete`    |   false    | Output complete HTML page with head/body tags   |
-| `format`      |   'gfm'    | See [Valid formats](#markup-formats).           |
-| `inline`      |    true    | Use inline link format                          |
-| `import_css`  |   false    | Embed CSS from linked stylesheets               |
-| `json`        |   false    | Output JSON { output, html, url, title }        |
-| `link`        |   false    | App-specific url. [Link Formats](#link-formats) |
-| `open`        |   false    | Open link automatically.                        |
-| `output`      | 'markdown' | [Output format](#output-formats)                |
-| `readability` |   false    | Use Readability to remove cruft                 |
-| `showframe`   |   false    | Output the Marky results page                   |
-| `style`       |    none    | [CSS style](#styles) (HTML output)              |
+| Parameter     |    Default     | Description                                     |
+| :------------ | :------------: | :---------------------------------------------- |
+| `url`         |   *required*   | Target url to markdownify                       |
+| `complete`    |     false      | Output complete HTML page with head/body tags   |
+| `format`      | 'markdown_mmd' | See [Valid formats](#markup-formats).           |
+| `inline`      |      true      | Use inline link format                          |
+| `import_css`  |     false      | Embed CSS from linked stylesheets               |
+| `json`        |     false      | Output JSON { output, html, url, title }        |
+| `link`        |     false      | App-specific url. [Link Formats](#link-formats) |
+| `open`        |     false      | Open link automatically.                        |
+| `output`      |   'markdown'   | [Output format](#output-formats)                |
+| `readability` |     false      | Use Readability to remove cruft                 |
+| `showframe`   |     false      | Output the Marky results page                   |
+| `style`       |      none      | [CSS style](#styles) (HTML output)              |
+| `html`        |      none      | If provided, [process HTML](#processing-html)   |
+| `title`       |      none      | If provided, use instead of extracting          |
 
 ### Output Formats
 
@@ -69,6 +71,17 @@ will be delivered.
 | `url`      | URL encoded version of `format`         |
 
 If `json=1` is specified, this key will be overridden.
+
+### Processing HTML
+
+If the `html` parameter is provided with raw HTML (url encoded), either by
+GET or POST, it will use that HTML rather than running
+Readability on the `url`. If the `url` paramater is used in
+conjunction with `html`, it will be used as the base URL for
+any link conversions and as the `source:` keyword for the
+document. If a `title` is provided, it will be used as the
+title for the document. `url` and `title` are both optional
+when processing HTML.
 
 ### Readability and conversion
 
@@ -97,7 +110,7 @@ language is applied after the opening fence.
 Pandoc is used for the initial conversion, which is then cleaned by Marky.
 Pandoc allows many output formats, so you're not limited to just Markdown. You
 can, for example, output `asciidoc` or a specific flavor of Markdown, such as
-`commonmark`, `markdown_mmd`, or `markdown_phpextra`. The default is `gfm`
+`commonmark`, `markdown_mmd`, or `markdown_phpextra`. The default is `markdown_mmd`
 (GitHub Flavored Markdown).
 
 Accepted output formats:
