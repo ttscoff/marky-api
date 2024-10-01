@@ -49,10 +49,10 @@ end
 module Marky
   class MarkyCGI
     # Markdown formats supported by the API (Pandoc options)
-    VALID_FORMATS = %w[json asciidoc asciidoctor beamer biblatex bibtex chunkedhtml commonmark commonmark_x context csljson
-                       docbook docbook4 docbook5 dokuwiki fb2 gfm haddock html html5 html4 icml ipynb jats_archiving jats_articleauthoring
+    VALID_FORMATS = %w[json asciidoc asciidoctor beamer commonmark commonmark_x context
+                       docbook docbook4 docbook5 dokuwiki fb2 gfm haddock html html5 html4 icml jats_archiving jats_articleauthoring
                        jats_publishing jats jira latex man markdown markdown_mmd markdown_phpextra markdown_strict markua mediawiki
-                       ms muse native opml opendocument org pdf plain pptx rst rtf texinfo textile slideous slidy dzslides revealjs s5
+                       ms muse native opendocument org plain rst rtf texinfo textile slideous slidy dzslides revealjs s5
                        tei xwiki zimwiki].freeze
 
     # Parameters accepted by the API
@@ -159,7 +159,10 @@ module Marky
 
         return false unless curled
 
-        @keywords = curled[:meta]["keywords"]&.split(/[, ]/).map(&:downcase).sort.uniq.delete_if(&:empty?) || []
+        @keywords = curled[:meta]["keywords"]&.split(/[, ]/) || []
+        unless @keywords.empty?
+          @keywords = @keywords.map(&:downcase).sort.uniq.delete_if(&:empty?)
+        end
 
         output = curled[:body]
         @url = curled[:url]

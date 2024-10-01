@@ -1,427 +1,398 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Marky the Markdownifier</title>
   <style>
-    code {
-      white-space: pre-wrap;
-    }
-
-    span.smallcaps {
-      font-variant: small-caps;
-    }
-
-    div.columns {
-      display: flex;
-      gap: min(4vw, 1.5em);
-    }
-
-    div.column {
-      flex: auto;
-      overflow-x: auto;
-    }
-
-    div.hanging-indent {
-      margin-left: 1.5em;
-      text-indent: -1.5em;
-    }
-
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     /* The extra [class] is a hack that increases specificity enough to
        override a similar rule in reveal.js */
-    ul.task-list[class] {
-      list-style: none;
-    }
-
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
       font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-
-    .display.math {
-      display: block;
-      text-align: center;
-      margin: 0.5rem auto;
-    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="styles/amblin.css" />
 </head>
-
 <body>
-  <script>0</script>
-  <header id="title-block-header">
-    <h1 class="title">Marky the Markdownifier</h1>
-  </header>
-  <h2 id="api-v2">API v2</h2>
-  <ul>
-    <li><a href="#api-v2">API v2</a></li>
-    <li><a href="#endpoint">Endpoint</a></li>
-    <li><a href="#parameters">Parameters</a>
-      <ul>
-        <li><a href="#output-formats">Output Formats</a></li>
-        <li><a href="#readability-and-conversion">Readability and conversion</a>
-          <ul>
-            <li><a href="#custom-readability">Custom Readability</a></li>
-            <li><a href="#table-formatting">Table formatting</a></li>
-            <li><a href="#code-block-formatting">Code block formatting</a></li>
-          </ul>
-        </li>
-        <li><a href="#markup-formats">Markup Formats</a></li>
-        <li><a href="#link-formats">Link Formats</a></li>
-        <li><a href="#styles">Styles</a></li>
-      </ul>
-    </li>
-    <li><a href="#special-handling">Special handling</a></li>
-    <li><a href="#bookmarklets">Bookmarklets</a></li>
-  </ul>
-  <h2 id="endpoint">Endpoint</h2>
-  <pre><code>https://heckyesmarkdown.com/api/2/?[query string]</code></pre>
-  <p><em>(<code>heckyesmarkdown.com</code> and
-      <code>fuckyeahmarkdown.com</code> are mirrors, you can use either
-      endpoint.)</em></p>
-  <h2 id="parameters">Parameters</h2>
-  <p>Parameters are passed as a query string to the API.</p>
-  <p>Parameter keys can be shortened to just the first letter (or letters
-    required to be unique). Use 1 for true and 0 for false (also accepts
-    'true' and 'false').</p>
-  <p><em>The <code>url</code> parameter is required, all other parameters
-      are optional (see default values).</em></p>
-  <p>Example:</p>
-  <pre><code>curl &#39;https://heckyesmarkdown.com/api/2/?u=https://brettterpstra.com&amp;read=0`</code></pre>
-  <table>
-    <colgroup>
-      <col style="width: 18%" />
-      <col style="width: 14%" />
-      <col style="width: 67%" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th style="text-align: left;">Parameter</th>
-        <th style="text-align: center;">Default</th>
-        <th style="text-align: left;">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: left;"><code>url</code></td>
-        <td style="text-align: center;"><em>required</em></td>
-        <td style="text-align: left;">Target url to markdownify</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>complete</code></td>
-        <td style="text-align: center;">false</td>
-        <td style="text-align: left;">Output complete HTML page with head/body
-          tags</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>format</code></td>
-        <td style="text-align: center;">'gfm'</td>
-        <td style="text-align: left;">See <a href="#markup-formats">Valid
-            formats</a>.</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>inline</code></td>
-        <td style="text-align: center;">true</td>
-        <td style="text-align: left;">Use inline link format</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>import_css</code></td>
-        <td style="text-align: center;">false</td>
-        <td style="text-align: left;">Embed CSS from linked stylesheets</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>json</code></td>
-        <td style="text-align: center;">false</td>
-        <td style="text-align: left;">Output JSON { output, html, url, title
-          }</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>link</code></td>
-        <td style="text-align: center;">false</td>
-        <td style="text-align: left;">App-specific url. <a href="#link-formats">Link Formats</a></td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>open</code></td>
-        <td style="text-align: center;">false</td>
-        <td style="text-align: left;">Open link automatically.</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>output</code></td>
-        <td style="text-align: center;">'markdown'</td>
-        <td style="text-align: left;"><a href="#output-formats">Output
-            format</a></td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>readability</code></td>
-        <td style="text-align: center;">false</td>
-        <td style="text-align: left;">Use Readability to remove cruft</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>showframe</code></td>
-        <td style="text-align: center;">false</td>
-        <td style="text-align: left;">Output the Marky results page</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>style</code></td>
-        <td style="text-align: center;">none</td>
-        <td style="text-align: left;"><a href="#styles">CSS style</a> (HTML
-          output)</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="output-formats">Output Formats</h3>
-  <p>The <code>output</code> key differs from the <code>format</code> key.
-    While <code>format</code> determines to what markup the HTML is
-    converted, the <code>output</code> key determines how the results will
-    be delivered.</p>
-  <table>
-    <thead>
-      <tr>
-        <th style="text-align: left;">Value</th>
-        <th style="text-align: left;">Result</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: left;"><code>complete</code></td>
-        <td style="text-align: left;">Complete HTML document</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>html</code></td>
-        <td style="text-align: left;">An HTML snippet</td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>markdown</code></td>
-        <td style="text-align: left;">Raw converted results based on
-          <code>format</code>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align: left;"><code>url</code></td>
-        <td style="text-align: left;">URL encoded version of
-          <code>format</code>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <p>If <code>json=1</code> is specified, this key will be overridden.</p>
-  <h3 id="readability-and-conversion">Readability and conversion</h3>
-  <h4 id="custom-readability">Custom Readability</h4>
-  <p>Marky uses a custom version of Arc90's Readability. It's a little
-    more lax and picks up things like author blocks and occasionally share
-    blocks, but is more likely to include <em>all</em> the pertinent content
-    on the page. Arc90 gets confused when the page markup splits the article
-    content into multiple divs and picks just one. Marky attempts to prevent
-    that. Enable Marky's Readability by including <code>readability=1</code>
-    in the url.</p>
-  <h4 id="table-formatting">Table formatting</h4>
-  <p>Tables are converted to Markdown and formatted nicely. Tables that
-    contain content that's not valid in Markdown tables (per PHP
-    Extra/MultiMarkdown spec) will be compressed (lists and line breaks
-    replaced).</p>
-  <h4 id="code-block-formatting">Code block formatting</h4>
-  <p>Code blocks are converted to backtick-fenced code. When possible, a
-    specified language is applied after the opening fence.</p>
-  <h3 id="markup-formats">Markup Formats</h3>
-  <p>Pandoc is used for the initial conversion, which is then cleaned by
-    Marky. Pandoc allows many output formats, so you're not limited to just
-    Markdown. You can, for example, output <code>asciidoc</code> or a
-    specific flavor of Markdown, such as <code>commonmark</code>,
-    <code>markdown_mmd</code>, or <code>markdown_phpextra</code>. The
-    default is <code>gfm</code> (GitHub Flavored Markdown).
-  </p>
-  <p>Accepted output formats:</p>
-  <ul>
-    <li>json</li>
-    <li>asciidoc</li>
-    <li>asciidoctor</li>
-    <li>beamer</li>
-    <li>biblatex</li>
-    <li>bibtex</li>
-    <li>chunkedhtml</li>
-    <li>commonmark</li>
-    <li>commonmark_x</li>
-    <li>context</li>
-    <li>csljson</li>
-    <li>docbook</li>
-    <li>docbook4</li>
-    <li>docbook5</li>
-    <li>dokuwiki</li>
-    <li>fb2</li>
-    <li>gfm</li>
-    <li>haddock</li>
-    <li>html</li>
-    <li>html5</li>
-    <li>html4</li>
-    <li>icml</li>
-    <li>ipynb</li>
-    <li>jats_archiving</li>
-    <li>jats_articleauthoring</li>
-    <li>jats_publishing</li>
-    <li>jats</li>
-    <li>jira</li>
-    <li>latex</li>
-    <li>man</li>
-    <li>markdown</li>
-    <li>markdown_mmd</li>
-    <li>markdown_phpextra</li>
-    <li>markdown_strict</li>
-    <li>markua</li>
-    <li>mediawiki</li>
-    <li>ms</li>
-    <li>muse</li>
-    <li>native</li>
-    <li>opml</li>
-    <li>opendocument</li>
-    <li>org</li>
-    <li>pdf</li>
-    <li>plain</li>
-    <li>pptx</li>
-    <li>rst</li>
-    <li>rtf</li>
-    <li>texinfo</li>
-    <li>textile</li>
-    <li>slideous</li>
-    <li>slidy</li>
-    <li>dzslides</li>
-    <li>revealjs</li>
-    <li>s5</li>
-    <li>tei</li>
-    <li>xwiki</li>
-    <li>zimwiki</li>
-  </ul>
-  <p>JSON output, either through the <code>format</code> parameter or with
-    <code>json=</code> in the URL, will output a blob containing
-    <code>url</code> (the original URL), <code>markup</code> (which is the
-    output of whatever format is specified), <code>html</code> (the rendered
-    HTML version of the output), and <code>title</code> (the extracted title
-    of the document). If a <code>link=X</code> parameter is provided, an
-    additional <code>link</code> field will be included with the encoded
-    link.
-  </p>
-  <h3 id="link-formats">Link Formats</h3>
-  <p>If the <code>link</code> parameter is given, output will be url
-    encoded and turned into a link that will operate (on Mac) on specific
-    apps.</p>
-  <table>
-    <colgroup>
-      <col style="width: 16%" />
-      <col style="width: 83%" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Value</th>
-        <th>Result</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>url</code></td>
-        <td>Raw encoded url, no protocol</td>
-      </tr>
-      <tr>
-        <td><code>obsidian</code></td>
-        <td><code>obsidian://create</code> link (<a href="https://www.osidian.ca/">Osidian</a>)</td>
-      </tr>
-      <tr>
-        <td><code>nv</code>/<code>nvalt</code></td>
-        <td><code>nv(alt)://make</code> url (Notational Velocity/nvALT)</td>
-      </tr>
-      <tr>
-        <td><code>nvultra</code></td>
-        <td><code>x-nvultra://make</code> url (<a href="https://nvultra.com">nvUltra</a>)</td>
-      </tr>
-      <tr>
-        <td><code>marked</code></td>
-        <td><code>x-marked://preview</code> link (<a href="https://marked2app.com">Marked 2</a>)</td>
-      </tr>
-    </tbody>
-  </table>
-  <p>If <code>open=1</code> is included in the URL, the generated link
-    will be opened automatically. This will have the effect of creating a
-    new note in the application of choice, or previewing the result (in the
-    case of <code>marked</code>). If the result is small, a redirect header
-    will be sent. If it's larger than 8k, it uses a Javascript redirect,
-    requiring a browser window.</p>
-  <h3 id="styles">Styles</h3>
-  <p><a href="https://marked2app.com">Marked</a> styles can be added by
-    name in the <code>style</code> parameter. Including a style
-    automatically forces <code>complete</code> output as HTML with head and
-    body tags. Marked styles include:</p>
-  <ul>
-    <li>amblin</li>
-    <li>fountain</li>
-    <li>github</li>
-    <li>grump</li>
-    <li>ink</li>
-    <li>lopash</li>
-    <li>manuscript</li>
-    <li>modern</li>
-    <li>swiss</li>
-    <li>upstandingcitizen</li>
-  </ul>
-  <p>Example:</p>
-  <pre><code>curl &#39;https://heckyesmarkdown.com/api/2/?u=https://brettterpstra.com&amp;read=1&amp;style=swiss</code></pre>
-  <p>If you specify a URL in the <code>style</code> parameter, the
-    <code>&lt;link re="stylesheet"&gt;</code> tags from the specified URL
-    will be added to the HTML output of the result. This can have odd
-    effects as most sites style tags and classes that won't exist in the
-    clean output from Marky, but sometimes offers decent styling.
-  </p>
-  <p>If the <code>import_css</code> option is true, then the linked
-    stylesheets will be pulled in and their contents embedded, as well as
-    any <code>&lt;style&gt;</code> tags in the target URL. This can be a
-    slow process and often takes multiple seconds to complete.</p>
-  <h2 id="special-handling">Special handling</h2>
-  <p>Marky has special handling for some sites:</p>
-  <table>
-    <colgroup>
-      <col style="width: 32%" />
-      <col style="width: 67%" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Site</th>
-        <th>Functionality</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>StackOverflow/Exchange</td>
-        <td>Qs, comments, and As, "accepted" highlighted</td>
-      </tr>
-      <tr>
-        <td>GitHub Repo</td>
-        <td>Outputs just the README contents for the repo</td>
-      </tr>
-      <tr>
-        <td>GitHub Gist</td>
-        <td>Formats code block with title</td>
-      </tr>
-      <tr>
-        <td>GitHub File</td>
-        <td>Formats file code with title</td>
-      </tr>
-    </tbody>
-  </table>
-  <p>More to come as needs arise.</p>
-  <h2 id="bookmarklets">Bookmarklets</h2>
-  <ul>
-    <li>Open current page in Marky:
-      <code>javascript:(function()%7Bwindow.location%3D'https%3A%2F%2Ffuckyeahmarkdown.com%2Fapi%2F2%2F%3Fu%3D'%2BencodeURIComponent(window.location.href)%2B'%26format%3Dgfm%26output%3Dcomplete'%3B%7D)()%3B</code>
-    </li>
-    <li>Add to nvUltra:
-      <code>javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fnvultra.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B</code>
-    </li>
-    <li>Add to Obsidian:
-      <code>javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fobsidian.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B</code>
-    </li>
-  </ul>
+<header id="title-block-header">
+<h1 class="title">Marky the Markdownifier</h1>
+</header>
+<script>0</script>
+<h2 id="api-v2">API v2</h2>
+<ul>
+<li><a href="#api-v2">API v2</a></li>
+<li><a href="#endpoint">Endpoint</a></li>
+<li><a href="#parameters">Parameters</a>
+<ul>
+<li><a href="#output-formats">Output Formats</a></li>
+<li><a href="#readability-and-conversion">Readability and conversion</a>
+<ul>
+<li><a href="#custom-readability">Custom Readability</a></li>
+<li><a href="#table-formatting">Table formatting</a></li>
+<li><a href="#code-block-formatting">Code block formatting</a></li>
+</ul></li>
+<li><a href="#markup-formats">Markup Formats</a></li>
+<li><a href="#link-formats">Link Formats</a></li>
+<li><a href="#styles">Styles</a></li>
+</ul></li>
+<li><a href="#special-handling">Special handling</a></li>
+<li><a href="#bookmarklets">Bookmarklets</a></li>
+</ul>
+<h2 id="endpoint">Endpoint</h2>
+<pre><code>https://heckyesmarkdown.com/api/2/?[query string]</code></pre>
+<p><em>(<code>heckyesmarkdown.com</code> and
+<code>fuckyeahmarkdown.com</code> are mirrors, you can use either
+endpoint.)</em></p>
+<h2 id="parameters">Parameters</h2>
+<p>Parameters are passed as a query string to the API.</p>
+<p>Parameter keys can be shortened to just the first letter (or letters
+required to be unique). Use 1 for true and 0 for false (also accepts
+'true' and 'false').</p>
+<p><em>The <code>url</code> parameter is required, all other parameters
+are optional (see default values).</em></p>
+<p>Example:</p>
+<pre><code>curl &#39;https://heckyesmarkdown.com/api/2/?u=https://brettterpstra.com&amp;read=0`</code></pre>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 18%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>url</code></td>
+<td style="text-align: center;"><em>required</em></td>
+<td style="text-align: left;">Target url to markdownify</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>complete</code></td>
+<td style="text-align: center;">false</td>
+<td style="text-align: left;">Output complete HTML page with head/body
+tags</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>format</code></td>
+<td style="text-align: center;">'markdown_mmd'</td>
+<td style="text-align: left;">See <a href="#markup-formats">Valid
+formats</a>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>inline</code></td>
+<td style="text-align: center;">true</td>
+<td style="text-align: left;">Use inline link format</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>import_css</code></td>
+<td style="text-align: center;">false</td>
+<td style="text-align: left;">Embed CSS from linked stylesheets</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>json</code></td>
+<td style="text-align: center;">false</td>
+<td style="text-align: left;">Output JSON { output, html, url, title
+}</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>link</code></td>
+<td style="text-align: center;">false</td>
+<td style="text-align: left;">App-specific url. <a
+href="#link-formats">Link Formats</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>open</code></td>
+<td style="text-align: center;">false</td>
+<td style="text-align: left;">Open link automatically.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>output</code></td>
+<td style="text-align: center;">'markdown'</td>
+<td style="text-align: left;"><a href="#output-formats">Output
+format</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>readability</code></td>
+<td style="text-align: center;">false</td>
+<td style="text-align: left;">Use Readability to remove cruft</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>showframe</code></td>
+<td style="text-align: center;">false</td>
+<td style="text-align: left;">Output the Marky results page</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>style</code></td>
+<td style="text-align: center;">none</td>
+<td style="text-align: left;"><a href="#styles">CSS style</a> (HTML
+output)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>html</code></td>
+<td style="text-align: center;">none</td>
+<td style="text-align: left;">If provided, <a
+href="#processing-html">process HTML</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>title</code></td>
+<td style="text-align: center;">none</td>
+<td style="text-align: left;">If provided, use instead of
+extracting</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output-formats">Output Formats</h3>
+<p>The <code>output</code> key differs from the <code>format</code> key.
+While <code>format</code> determines to what markup the HTML is
+converted, the <code>output</code> key determines how the results will
+be delivered.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Value</th>
+<th style="text-align: left;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>complete</code></td>
+<td style="text-align: left;">Complete HTML document</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>html</code></td>
+<td style="text-align: left;">An HTML snippet</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>markdown</code></td>
+<td style="text-align: left;">Raw converted results based on
+<code>format</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>url</code></td>
+<td style="text-align: left;">URL encoded version of
+<code>format</code></td>
+</tr>
+</tbody>
+</table>
+<p>If <code>json=1</code> is specified, this key will be overridden.</p>
+<h3 id="processing-html">Processing HTML</h3>
+<p>If the <code>html</code> parameter is provided with raw HTML (url
+encoded), either by GET or POST, it will use that HTML rather than
+running Readability on the <code>url</code>. If the <code>url</code>
+paramater is used in conjunction with <code>html</code>, it will be used
+as the base URL for any link conversions and as the <code>source:</code>
+keyword for the document. If a <code>title</code> is provided, it will
+be used as the title for the document. <code>url</code> and
+<code>title</code> are both optional when processing HTML.</p>
+<h3 id="readability-and-conversion">Readability and conversion</h3>
+<h4 id="custom-readability">Custom Readability</h4>
+<p>Marky uses a custom version of Arc90's Readability. It's a little
+more lax and picks up things like author blocks and occasionally share
+blocks, but is more likely to include <em>all</em> the pertinent content
+on the page. Arc90 gets confused when the page markup splits the article
+content into multiple divs and picks just one. Marky attempts to prevent
+that. Enable Marky's Readability by including <code>readability=1</code>
+in the url.</p>
+<h4 id="table-formatting">Table formatting</h4>
+<p>Tables are converted to Markdown and formatted nicely. Tables that
+contain content that's not valid in Markdown tables (per PHP
+Extra/MultiMarkdown spec) will be compressed (lists and line breaks
+replaced).</p>
+<h4 id="code-block-formatting">Code block formatting</h4>
+<p>Code blocks are converted to backtick-fenced code. When possible, a
+specified language is applied after the opening fence.</p>
+<h3 id="markup-formats">Markup Formats</h3>
+<p>Pandoc is used for the initial conversion, which is then cleaned by
+Marky. Pandoc allows many output formats, so you're not limited to just
+Markdown. You can, for example, output <code>asciidoc</code> or a
+specific flavor of Markdown, such as <code>commonmark</code>,
+<code>markdown_mmd</code>, or <code>markdown_phpextra</code>. The
+default is <code>markdown_mmd</code> (GitHub Flavored Markdown).</p>
+<p>Accepted output formats:</p>
+<ul>
+<li>asciidoc</li>
+<li>asciidoctor</li>
+<li>beamer</li>
+<li>commonmark</li>
+<li>commonmark_x</li>
+<li>context</li>
+<li>docbook</li>
+<li>docbook4</li>
+<li>docbook5</li>
+<li>dokuwiki</li>
+<li>fb2</li>
+<li>gfm</li>
+<li>haddock</li>
+<li>html</li>
+<li>html5</li>
+<li>html4</li>
+<li>icml</li>
+<li>jats_archiving</li>
+<li>jats_articleauthoring</li>
+<li>jats_publishing</li>
+<li>jats</li>
+<li>jira</li>
+<li>latex</li>
+<li>man</li>
+<li>markdown</li>
+<li>markdown_mmd</li>
+<li>markdown_phpextra</li>
+<li>markdown_strict</li>
+<li>markua</li>
+<li>mediawiki</li>
+<li>ms</li>
+<li>muse</li>
+<li>native</li>
+<li>opendocument</li>
+<li>org</li>
+<li>plain</li>
+<li>rst</li>
+<li>rtf</li>
+<li>texinfo</li>
+<li>textile</li>
+<li>slideous</li>
+<li>slidy</li>
+<li>dzslides</li>
+<li>revealjs</li>
+<li>s5</li>
+<li>tei</li>
+<li>xwiki</li>
+<li>zimwiki</li>
+</ul>
+<p>JSON output, either through the <code>format</code> parameter or with
+<code>json=</code> in the URL, will output a blob containing
+<code>url</code> (the original URL), <code>markup</code> (which is the
+output of whatever format is specified), <code>html</code> (the rendered
+HTML version of the output), and <code>title</code> (the extracted title
+of the document). If a <code>link=X</code> parameter is provided, an
+additional <code>link</code> field will be included with the encoded
+link.</p>
+<h3 id="link-formats">Link Formats</h3>
+<p>If the <code>link</code> parameter is given, output will be url
+encoded and turned into a link that will operate (on Mac) on specific
+apps.</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr>
+<th>Value</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td>Raw encoded url, no protocol</td>
+</tr>
+<tr>
+<td><code>obsidian</code></td>
+<td><code>obsidian://create</code> link (<a
+href="https://www.osidian.ca/">Osidian</a>)</td>
+</tr>
+<tr>
+<td><code>nv</code>/<code>nvalt</code></td>
+<td><code>nv(alt)://make</code> url (Notational Velocity/nvALT)</td>
+</tr>
+<tr>
+<td><code>nvultra</code></td>
+<td><code>x-nvultra://make</code> url (<a
+href="https://nvultra.com">nvUltra</a>)</td>
+</tr>
+<tr>
+<td><code>marked</code></td>
+<td><code>x-marked://preview</code> link (<a
+href="https://marked2app.com">Marked 2</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>If <code>open=1</code> is included in the URL, the generated link
+will be opened automatically. This will have the effect of creating a
+new note in the application of choice, or previewing the result (in the
+case of <code>marked</code>). If the result is small, a redirect header
+will be sent. If it's larger than 8k, it uses a Javascript redirect,
+requiring a browser window.</p>
+<h3 id="styles">Styles</h3>
+<p><a href="https://marked2app.com">Marked</a> styles can be added by
+name in the <code>style</code> parameter. Including a style
+automatically forces <code>complete</code> output as HTML with head and
+body tags. Marked styles include:</p>
+<ul>
+<li>amblin</li>
+<li>fountain</li>
+<li>github</li>
+<li>grump</li>
+<li>ink</li>
+<li>lopash</li>
+<li>manuscript</li>
+<li>modern</li>
+<li>swiss</li>
+<li>upstandingcitizen</li>
+</ul>
+<p>Example:</p>
+<pre><code>curl &#39;https://heckyesmarkdown.com/api/2/?u=https://brettterpstra.com&amp;read=1&amp;style=swiss</code></pre>
+<p>If you specify a URL in the <code>style</code> parameter, the
+<code>&lt;link re="stylesheet"&gt;</code> tags from the specified URL
+will be added to the HTML output of the result. This can have odd
+effects as most sites style tags and classes that won't exist in the
+clean output from Marky, but sometimes offers decent styling.</p>
+<p>If the <code>import_css</code> option is true, then the linked
+stylesheets will be pulled in and their contents embedded, as well as
+any <code>&lt;style&gt;</code> tags in the target URL. This can be a
+slow process and often takes multiple seconds to complete.</p>
+<h2 id="special-handling">Special handling</h2>
+<p>Marky has special handling for some sites:</p>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr>
+<th>Site</th>
+<th>Functionality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>StackOverflow/Exchange</td>
+<td>Qs, comments, and As, "accepted" highlighted</td>
+</tr>
+<tr>
+<td>GitHub Repo</td>
+<td>Outputs just the README contents for the repo</td>
+</tr>
+<tr>
+<td>GitHub Gist</td>
+<td>Formats code block with title</td>
+</tr>
+<tr>
+<td>GitHub File</td>
+<td>Formats file code with title</td>
+</tr>
+</tbody>
+</table>
+<p>More to come as needs arise.</p>
+<h2 id="bookmarklet">Bookmarklet</h2>
+<p>Open current page in Marky:</p>
+<pre><code>javascript:(function(){var nvwin = window.open(&quot;&quot;,&quot;nvwin&quot;,&quot;status=no,toolbar=no,width=400,height=250,location=no,menubar=no,resizable,scrollbars&quot;);nvwin.document.title = &quot;Saving&quot;;nvwin.window.location = `https://heckyesmarkdown.com/api/2/?link=nvultra&amp;open=1&amp;read=1&amp;u=${encodeURIComponent(document.location.href)}`;})();</code></pre>
 </body>
-
 </html>

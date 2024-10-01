@@ -27,7 +27,6 @@ class Convert
     }
     opts.merge!(@options)
     opts.merge!(options)
-    pp opts
     pandoc = PandocRuby.new(@input, opts)
     pandoc.pandoc_path = @pandoc
     pandoc.convert

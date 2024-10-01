@@ -115,17 +115,12 @@ can, for example, output `asciidoc` or a specific flavor of Markdown, such as
 
 Accepted output formats:
 
-- json
 - asciidoc
 - asciidoctor
 - beamer
-- biblatex
-- bibtex
-- chunkedhtml
 - commonmark
 - commonmark_x
 - context
-- csljson
 - docbook
 - docbook4
 - docbook5
@@ -137,7 +132,6 @@ Accepted output formats:
 - html5
 - html4
 - icml
-- ipynb
 - jats_archiving
 - jats_articleauthoring
 - jats_publishing
@@ -154,12 +148,9 @@ Accepted output formats:
 - ms
 - muse
 - native
-- opml
 - opendocument
 - org
-- pdf
 - plain
-- pptx
 - rst
 - rtf
 - texinfo
@@ -242,7 +233,10 @@ Marky has special handling for some sites:
 
 More to come as needs arise.
 
-## Bookmarklets
-- Open current page in Marky: `javascript:(function()%7Bwindow.location%3D'https%3A%2F%2Ffuckyeahmarkdown.com%2Fapi%2F2%2F%3Fu%3D'%2BencodeURIComponent(window.location.href)%2B'%26format%3Dgfm%26output%3Dcomplete'%3B%7D)()%3B`
-- Add to nvUltra: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fnvultra.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B`
-- Add to Obsidian: `javascript:(function()%7Bvar%20t%3Ddocument.createElement(%22script%22)%3Bt.setAttribute(%22src%22%2C%22%2F%2Ffuckyeahmarkdown.com%2Fbookmarklets%2Fobsidian.%22%2BMath.floor(Math.random()%20*%201000000)%2B%22.js%22)%3Bdocument.body.appendChild(t)%3B%7D)()%3B`
+## Bookmarklet
+
+Open current page in Marky:
+
+```
+javascript:(function(){var nvwin = window.open("","nvwin","status=no,toolbar=no,width=400,height=250,location=no,menubar=no,resizable,scrollbars");nvwin.document.title = "Saving";nvwin.window.location = `https://heckyesmarkdown.com/api/2/?link=nvultra&open=1&read=1&u=${encodeURIComponent(document.location.href)}`;})();
+```
