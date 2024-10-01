@@ -494,7 +494,7 @@ module Marky
       output.to_json
     end
 
-    def h3(content)
+    def h1(content)
       puts "<h1>#{content}</h1>"
     end
 
