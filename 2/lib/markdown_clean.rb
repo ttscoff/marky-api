@@ -63,7 +63,7 @@ class TableCleanup
       end
     end
 
-    @string = ''
+    @string = ""
 
     first_row = table.shift
     render_row first_row
@@ -112,6 +112,7 @@ class TableCleanup
       if width.zero?
         @string << "|"
       else
+        width += 1
         content = @alignment ? align(@alignment[idx], cell, width) : cell.ljust(width, " ")
         @string << " #{content} |"
       end

@@ -27,7 +27,7 @@ module Readability
       unlikelyCandidatesRe: /share|rate|rating|combx|comment|community|disqus|extra|foot|header|menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|pager|popup/i,
       okMaybeItsACandidateRe: /and|article|body|column|main|shadow/i,
       positiveRe: /article|body|content|entry|hentry|main|page|pagination|post|text|blog|story/i,
-      negativeRe: /anchor|combx|comment|com-|contact|fairness|foot|footer|footnote|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|sidebar|social|fb|facebook|email|flipboard|whatsapp|twitter|linkedin|reddit|sponsor|share|rate|rating|shopping|tags|tool|widget/i,
+      negativeRe: /anchor|combx|comment|com-|contact|fairness|foot|footer|footnote|masthead|media|outbrain|promo|related|scroll|shoutbox|sidebar|social|fb|facebook|email|flipboard|whatsapp|twitter|linkedin|reddit|sponsor|share|rate|rating|shopping|tags|tool|widget/i,
       divToPElementsRe: /<(a|blockquote|dl|div|img|ol|p|pre|table|ul)/i,
       replaceBrsRe: /(<br[^>]*>[ \n\r\t]*){2,}/i,
       replaceFontsRe: %r{<(/?)font[^>]*>}i,

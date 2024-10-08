@@ -54,6 +54,7 @@ class MarkdownCleaner
 
   def clean
     input = @input
+
     # remove script and style tags
 
     input.remove_tag!("script", false)
@@ -64,6 +65,9 @@ class MarkdownCleaner
     # Remove non-breaking spaces
     input.gsub!(/&nbsp;/, " ")
     input.gsub!(/\u00A0/, " ")
+
+    # Fix broken headers
+    input.gsub!(/^(#+)\s*\n+(\S)/, "\\1 \\2")
 
     # # Fix line breaks
     input.gsub!(/<br[^>]*>/, "  \n")
@@ -96,6 +100,9 @@ class MarkdownCleaner
 
       "![#{alt}](#{src}#{title})"
     end
+
+    # List item cleanup
+    input.gsub!(/^([ \t]*)([-*+]) +/, '\1\2 ')
 
     # code block cleanup
     # input.gsub!(/<pre(.*?)><code(.*?)>(.+?)<\/code><\/pre>/m) do

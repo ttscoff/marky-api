@@ -6,6 +6,7 @@
 - [Endpoint](#endpoint)
 - [Parameters](#parameters)
   - [Output Formats](#output-formats)
+  - [Processing HTML](#processing-html)
   - [Readability and conversion](#readability-and-conversion)
     - [Custom Readability](#custom-readability)
     - [Table formatting](#table-formatting)
@@ -14,7 +15,7 @@
   - [Link Formats](#link-formats)
   - [Styles](#styles)
 - [Special handling](#special-handling)
-- [Bookmarklets](#bookmarklets)
+- [Bookmarklet](#bookmarklet)
 
 ## Endpoint
 
