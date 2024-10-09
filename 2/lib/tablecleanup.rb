@@ -43,6 +43,7 @@ class TableCleanup
 
     @widths = [0] * table.first.size
 
+    # FIXME: Widths are still off, progressively by one character each cell
     table.each do |row|
       row.each_with_index do |cell, col|
         if @widths[col]
