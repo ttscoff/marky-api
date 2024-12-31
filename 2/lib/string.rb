@@ -75,6 +75,7 @@ module Marky
         .gsub(/&#8220;|&#8221;/, '"').gsub(/&#8216;|&#8217;/, "'")
         .gsub(/&ldquo;|&rdquo;/, '"').gsub(/&lsquo;|&rsquo;/, "'")
         .gsub(/&quot;/, '"').gsub(/&apos;/, "'")
+        .gsub(/…/, "...").gsub(/&hellip;/, "...").gsub(/&#8230;/, "...")
         .gsub(/(#{codes.join("|")})/).with_index { |_m, i| ascii[i] }
     end
 

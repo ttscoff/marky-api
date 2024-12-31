@@ -148,7 +148,6 @@ module Marky
     # @return [Boolean] true if successful, false otherwise
     def start
       puts @cgi.header unless @json_output || @link_type || @output_format == :markdown
-
       if @params[:html]
         output = @params[:html]
         @title = @params[:title]
@@ -183,6 +182,7 @@ module Marky
           output, @title = GitHub.processFile(output)
         elsif @readability
           Marky.log.info("No special urls, running Readability")
+
           output = Readability::Document.new(output, {
             debug: @params[:debug],
             remove_empty_nodes: true,
@@ -190,7 +190,6 @@ module Marky
             clean_conditionally: true,
           }).content
         end
-
         @title ||= curled[:head]&.extract_title&.straighten_quotes
       end
 

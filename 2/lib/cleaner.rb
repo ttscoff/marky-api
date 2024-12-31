@@ -188,6 +188,7 @@ class MarkdownCleaner
 
     # # Replace temp br tags
     # input.gsub!(/__BR__/, "  \n")
+
     input.strip
   end
 end

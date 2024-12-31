@@ -12,7 +12,7 @@ class Curl
   def fetch(headers_only: false)
     @result = fetch_html(compressed: false, headers_only: headers_only)
   rescue StandardError => e
-    puts e
+    warn e
   end
 
   def stylesheets
@@ -209,6 +209,8 @@ class Curl
       { url: url, code: res[:code], meta: meta, links: links, head: head[1], body: @body,
         source: @source.strip }
     end
+  rescue StandardError => e
+    warn e
   end
 
   (Net::HTTP::SSL_IVNAMES << :@ssl_options).uniq!
@@ -257,6 +259,8 @@ class Curl
     res = http.request(req)
 
     { code: res.code, source: reencode(res.body) }
+  rescue StandardError => e
+    warn e.message
   end
 
   ##

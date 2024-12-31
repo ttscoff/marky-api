@@ -16,11 +16,10 @@ module Readability
       ignore_image_format: [],
       blacklist: nil,
       whitelist: nil,
-      elements_to_score: %w[p td pre],
       likely_siblings: ["p", "div"],
       ignore_redundant_nesting: true,
       attributes: %w[src href],
-      elements_to_score: %w[p div article],
+      elements_to_score: %w[p td pre div article],
     }
 
     REGEXES = {
@@ -480,7 +479,7 @@ module Readability
       if @options[:remove_empty_nodes]
         # remove <p> tags that have no text content - this will also remove p tags that contain only images.
         node.css("p").each do |elem|
-          elem.remove if elem.content.strip.empty?
+          elem.remove if elem.content.strip.empty? && elem.css("img").empty?
         end
       end
 
