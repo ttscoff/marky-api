@@ -163,6 +163,8 @@ module Marky
           @keywords = @keywords.map(&:downcase).sort.uniq.delete_if(&:empty?)
         end
 
+        @description = curled[:meta]["description"]
+
         output = curled[:body]
         @url = curled[:url]
 
@@ -221,7 +223,9 @@ module Marky
       if @format == :gfm
         extensions << "+alerts"
         extensions << "+autolink_bare_uris"
+        extensions << "+definition_lists"
         extensions << "+emoji"
+        extensions << "+footnotes"
         extensions << "+gfm_auto_identifiers"
         extensions << "+pipe_tables"
         extensions << "+raw_html"
@@ -230,24 +234,34 @@ module Marky
         extensions << "+tex_math_dollars"
         extensions << "+tex_math_gfm"
         extensions << "+yaml_metadata_block"
-        extensions << "+definition_lists"
-        extensions << "+footnotes"
       elsif @format == :markdown_mmd || @format == :markdown
+        extensions << "+backtick_code_blocks"
+        extensions << "+blank_before_blockquote"
+        extensions << "+blank_before_header"
         extensions << "+definition_lists"
         extensions << "+footnotes"
-        extensions << "+table_captions"
         extensions << "+markdown_in_html_blocks"
-        extensions << "+mmd_title_block"
-        extensions << "+mmd_link_attributes"
         extensions << "+mmd_header_identifiers"
-        extensions << "+superscript"
+        extensions << "+mmd_link_attributes"
+        extensions << "+mmd_title_block"
+        extensions << "+raw_html"
         extensions << "+subscript"
-        extensions << "+backtick_code_blocks"
+        extensions << "+superscript"
+        extensions << "+table_captions"
+      end
+
+      iframes = output.to_enum(:scan, %r{<iframe[^>]*src="([^"]*)"[^>]*>.*?</iframe>}m).map { Regexp.last_match }
+      iframes.each_with_index do |iframe, idx|
+        output.sub!(/#{Regexp.escape(iframe[0])}/, "%%iframe-#{idx}%%")
       end
 
       fmt = VALID_FORMATS.include?(@format.to_s) ? @format : :markdown_mmd
-
       output = Convert.new(output).format(fmt, extensions: extensions, options: parameters)
+
+      iframes.each_with_index do |iframe, idx|
+        output.sub!("%%iframe-#{idx}%%", iframe[0])
+      end
+
       # Clean up conversion output
       output = MarkdownCleaner.new(output).clean
 
@@ -294,6 +308,10 @@ module Marky
         else
           meta[:tags] = @keywords.join(", ")
         end
+      end
+
+      if @description
+        meta[:description] = @description
       end
 
       if @format == :gfm

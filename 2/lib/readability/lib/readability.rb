@@ -20,6 +20,7 @@ module Readability
       ignore_redundant_nesting: true,
       attributes: %w[src href],
       elements_to_score: %w[p td pre div article],
+      protected_elements: %w[iframe img object],
     }
 
     REGEXES = {
@@ -425,6 +426,14 @@ module Readability
       end
     end
 
+    def has_protected_elements?(elem)
+      return false if elem.nil?
+
+      @options[:protected_elements].each do |tag|
+        return true if elem.css(tag).length > 0
+      end
+    end
+
     def transform_misused_divs_into_paragraphs!
       @html.css("*").each do |elem|
         if elem.name.downcase == "div"
@@ -472,14 +481,14 @@ module Readability
         elem.remove if class_weight(elem) < 0
       end
 
-      node.css("form, object, iframe, embed").each do |elem|
+      node.css("form, object, embed").each do |elem|
         elem.remove
       end
 
       if @options[:remove_empty_nodes]
         # remove <p> tags that have no text content - this will also remove p tags that contain only images.
         node.css("p").each do |elem|
-          elem.remove if elem.content.strip.empty? && elem.css("img").empty?
+          elem.remove if elem.content.strip.empty? && !has_protected_elements?(elem)
         end
       end
 

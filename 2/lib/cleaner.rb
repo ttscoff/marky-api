@@ -134,6 +134,9 @@ class MarkdownCleaner
       " `#{m[2]}` "
     end
 
+    # ensure newline before code block
+    input.gsub!(/(\S)\s*\n```(.*?)```/m, "\\1\n\n```\\2```")
+
     # paragraph cleanup
     input.gsub!(/<p>(.*?)<\/p>/m, "\n\\1\n")
 
