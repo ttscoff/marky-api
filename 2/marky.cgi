@@ -72,7 +72,7 @@ module Marky
     VALID_PARAMS = %w[url format output readability json link open style complete import_css inline showframe closewindow debug html title].freeze
 
     # Valid link types
-    VALID_LINKS = %w[url obsidian nvultra nvalt nv marked].freeze
+    VALID_LINKS = %w[url obsidian nvultra nvu nvalt nv marked devonthink dt].freeze
 
     # Initialize the class
     def initialize
@@ -498,10 +498,12 @@ module Marky
         "nv://make?title=#{title}&txt=#{out_url}"
       when :nvalt
         "nvalt://make?title=#{title}&txt=#{out_url}"
-      when :nvultra
+      when :nvu, :nvultra
         "x-nvultra://make?title=#{title}&txt=#{out_url}"
       when :marked
         "x-marked://preview?text=#{out_url}"
+      when :dt, :devonthink
+        "x-devonthink://createMarkdown?title=#{title}&text=#{out_url}"
       end
     end
 

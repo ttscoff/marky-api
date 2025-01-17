@@ -190,13 +190,14 @@ Response:
 If the `link` parameter is given, output will be url encoded and turned into a
 link that will operate (on Mac) on specific apps.
 
-| Value        | Result                                                         |
-| ------------ | -------------------------------------------------------------- |
-| `url`        | Raw encoded url, no protocol                                   |
-| `obsidian`   | `obsidian://create` link ([Osidian](https://www.osidian.ca/))  |
-| `nv`/`nvalt` | `nv(alt)://make` url (Notational Velocity/nvALT)               |
-| `nvultra`    | `x-nvultra://make` url ([nvUltra](https://nvultra.com))        |
-| `marked`     | `x-marked://preview` link ([Marked 2](https://marked2app.com)) |
+| Value              | Result                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| `url`              | Raw encoded url, no protocol                                                          |
+| `obsidian`         | `obsidian://create` link ([Osidian](https://www.osidian.ca/))                         |
+| `nv`/`nvalt`       | `nv(alt)://make` url (Notational Velocity/nvALT)                                      |
+| `nvultra`, `nvu`   | `x-nvultra://make` url ([nvUltra](https://nvultra.com))                               |
+| `marked`           | `x-marked://preview` link ([Marked 2](https://marked2app.com))                        |
+| `devonthink`, `dt` | `x-devonthink://createMarkdown` link [DEVONthink](https://www.devontechnologies.com/) |
 
 If `open=1` is included in the URL, the generated link will be opened
 automatically. This will have the effect of creating a new note in the
