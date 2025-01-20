@@ -47,7 +47,14 @@ module Marky
         res << %(<h5>Answer by <a href="#{href}">#{author.content}</a> <em>[Vote count: #{vote_count}]</em></h5>)
         res << answer.css('.post-text, .js-post-body').inner_html
         answer.css('.comment-body').each do |comment|
-          res << "<blockquote>#{comment.inner_html}</blockquote>"
+          copy = comment.css('.comment-copy').first
+          author_div = comment.css('.comment-user').first
+          if author_div
+            author = %(<cite><a href="#{author_div.attributes['href'].value}">#{author_div.inner_html}</a></cite>)
+          else
+            author = ''
+          end
+          res << "<blockquote>#{copy.inner_html}#{author}</blockquote>"
         end
 
         if answer['class'] =~ /accepted-answer/

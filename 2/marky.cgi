@@ -148,6 +148,7 @@ module Marky
     # @return [Boolean] true if successful, false otherwise
     def start
       puts @cgi.header unless @json_output || @link_type || @output_format == :markdown
+
       if @params[:html]
         output = @params[:html]
         @title = @params[:title]
@@ -182,17 +183,20 @@ module Marky
         elsif @url =~ %r{github\.com/.*?/\w+\.\w+$}
           Marky.log.info("GitHub file")
           output, @title = GitHub.processFile(output)
-        elsif @readability
-          Marky.log.info("No special urls, running Readability")
-
-          output = Readability::Document.new(output, {
-            debug: @params[:debug],
-            remove_empty_nodes: true,
-            remove_unlikely_candidates: false,
-            clean_conditionally: true,
-          }).content
         end
+
         @title ||= curled[:head]&.extract_title&.straighten_quotes
+      end
+
+      if @readability
+        Marky.log.info("No special urls, running Readability")
+
+        output = Readability::Document.new(output, {
+          debug: @params[:debug],
+          remove_empty_nodes: true,
+          remove_unlikely_candidates: false,
+          clean_conditionally: true,
+        }).content
       end
 
       # Random cleanup
@@ -250,14 +254,17 @@ module Marky
         extensions << "+table_captions"
       end
 
+      # Remove iframes and replace with placeholders
       iframes = output.to_enum(:scan, %r{<iframe[^>]*src="([^"]*)"[^>]*>.*?</iframe>}m).map { Regexp.last_match }
       iframes.each_with_index do |iframe, idx|
         output.sub!(/#{Regexp.escape(iframe[0])}/, "%%iframe-#{idx}%%")
       end
 
+      # Convert to Markdown
       fmt = VALID_FORMATS.include?(@format.to_s) ? @format : :markdown_mmd
       output = Convert.new(output).format(fmt, extensions: extensions, options: parameters)
 
+      # restore iframes
       iframes.each_with_index do |iframe, idx|
         output.sub!("%%iframe-#{idx}%%", iframe[0])
       end
@@ -286,6 +293,7 @@ module Marky
         return false
       end
 
+      # Add title to Markdown output and sanitize
       @output = @format.markdown? ? add_title(output.sanitize) : output.sanitize
 
       true
@@ -295,6 +303,8 @@ module Marky
     end
 
     # Add source link and title to Markdown output
+    # @param [String] output the output to add the title to
+    # @return [String] the output with the title added
     def add_title(output)
       return output unless @params[:readability]
 

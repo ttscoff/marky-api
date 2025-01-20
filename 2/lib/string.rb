@@ -112,7 +112,7 @@ module Marky
 
       gsub(/(?<=src=['"])(?!http)(.*?)(?=["'])/) do
         m = Regexp.last_match
-        m[1].url? ? URI.join(base, m[1]).to_s : m[1]
+        m[1].url? ? m[1] : URI.join(base, m[1]).to_s
       end
     rescue StandardError => e
       puts e.backtrace
