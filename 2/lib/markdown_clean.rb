@@ -359,6 +359,9 @@ module Marky
       input.gsub!(/([\*\-\+] .*?)\n+(?=[\*\-\+] )/, "\\1\n")
       input.gsub!(/\n{2,}/m, "\n\n")
 
+      # clean up emphasis that starts on one line and has a line break before closing
+      # input.gsub!(/([*_]{1,3})([^*_]+?) *\n([*_]{1,3})/m, "\\1\\2\\3\n")
+
       # # Replace temp br tags
       # input.gsub!(/__BR__/, "  \n")
 

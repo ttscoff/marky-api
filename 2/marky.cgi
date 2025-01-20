@@ -320,7 +320,7 @@ module Marky
       return output unless @params[:readability]
 
       meta = {}
-      meta[:title] = %("#{@title}") if @title
+      meta[:title] = %("#{@title.gsub(/"/, "\\\"")}") if @title
       meta[:source] = @url if @url
       meta[:date] = Time.now.strftime("%Y-%m-%d %H:%M")
       if @keywords
@@ -332,7 +332,7 @@ module Marky
       end
 
       if @description
-        meta[:description] = @description
+        meta[:description] = @format == :gfm ? ">\n  #{@description}" : @description
       end
 
       if @format == :gfm
