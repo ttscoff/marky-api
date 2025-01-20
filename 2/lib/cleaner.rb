@@ -54,7 +54,6 @@ class MarkdownCleaner
 
   def clean
     input = @input
-
     # remove script and style tags
 
     input.remove_tag!("script", false)
@@ -151,10 +150,6 @@ class MarkdownCleaner
 
     # Table cleanup
     input = input.fix_tables
-    # input.gsub!(/^.*?(\|.*?)+\n([|: \-]+)+\n((\s*\|?.*?\|)+.*?\n)+/) do |match|
-    #   table = `echo #{Shellwords.escape(match)}|lib/clean_tables.pl`
-    #   "\n#{table}\n"
-    # end
 
     tc = TableCleanup.new(input)
     tc.max_cell_width = 80

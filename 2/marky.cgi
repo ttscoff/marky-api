@@ -274,16 +274,27 @@ module Marky
 
       # Flip reference links to inline links
       unless @params[:inline]
-        links = output.to_enum(:scan, /^  \[(?!\d+\])(?<title>.*?)\]: (?=\S)/).map { Regexp.last_match }
+        links = output.to_enum(:scan, /^  \[(?!\])(?<title>.*?)\]: (?=\S)/).map { Regexp.last_match }
 
-        counter = output.scan(/^ *\[(\d+)\]: (?=\S)/).max_by { |m| m[1].to_i }&.first.to_i + 1 || 1
-
+        # counter = output.scan(/^ *\[(\d+)\]: (?=\S)/).flatten.map(&:to_i).max + 1 || 1
+        counter = 1
         links.each do |link|
-          output.sub!(/^( *)\[#{Regexp.escape(link["title"])}\]: (?=\S)/, "\\1[#{counter}]: ")
-          output.gsub!(/\[#{Regexp.escape(link["title"])}\](?=[^\[(:])/, "[#{link["title"]}][#{counter}]")
+          output.sub!(/^( *)\[#{Regexp.escape(link["title"])}\]: (?=\S)/, "\\1[%%#{counter}]: ")
+
+          output.gsub!(/\]\[#{Regexp.escape(link["title"])}\]/, "][%%#{counter}]")
+          output.gsub!(/\[#{Regexp.escape(link["title"])}\](?=[^\[(:])/) do
+            m = Regexp.last_match
+
+            if m[0] =~ /\[\d+\]/
+              "[%%#{counter}]"
+            else
+              "[#{link["title"]}][%%#{counter}]"
+            end
+          end
           counter += 1
         end
         Marky.log.debug("Flipped #{counter} links")
+        output.gsub!(/\[%%(\d+)\]/, '[\1]')
       end
 
       if output.length.positive?
