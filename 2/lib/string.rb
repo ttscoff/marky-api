@@ -67,16 +67,27 @@ module Marky
     end
 
     def straighten_quotes
-      codes = ["\xe2\x80\x98", "\xe2\x80\x99", "\xe2\x80\x9c", "\xe2\x80\x9d", "\xe2\x80\x93", "\xe2\x80\x94",
-               "\xe2\x80\xa6"]
-      ascii = ["'", "--", '"', '"', "-", "--", "..."]
+      codes = ["\xe2\x80\x98",
+      "\xe2\x80\x99",
+      "\xe2\x80\x9c",
+      "\xe2\x80\x9d",
+      "\xe2\x80\x92",
+      "\xe2\x80\x93",
+      "\xe2\x80\x94",
+      "\xe2\x80\xa6"]
+      ascii = ["'", "'", '"', '"', "-", "--", "--", "..."]
 
-      gsub(/“|”/, '"').gsub(/‘|’/, "'")
+      res = gsub(/“|”/, '"').gsub(/‘|’/, "'")
         .gsub(/&#8220;|&#8221;/, '"').gsub(/&#8216;|&#8217;/, "'")
         .gsub(/&ldquo;|&rdquo;/, '"').gsub(/&lsquo;|&rsquo;/, "'")
         .gsub(/&quot;/, '"').gsub(/&apos;/, "'")
         .gsub(/…/, "...").gsub(/&hellip;/, "...").gsub(/&#8230;/, "...")
-        .gsub(/(#{codes.join("|")})/).with_index { |_m, i| ascii[i] }
+
+      codes.each_with_index do |code, i|
+        res.gsub!(/#{code}/, ascii[i])
+      end
+
+      res
     end
 
     def absolute_urls(base_url)
