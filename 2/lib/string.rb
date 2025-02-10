@@ -66,8 +66,12 @@ module Marky
       gsub(/^Advertisement *\n/i, "")
     end
 
+    def compress_newlines
+      gsub(/\n{2,}/, "\n\n")
+    end
+
     def sanitize
-      HTMLEntities.new.decode(self).straighten_quotes.remove_empty_links.remove_ads
+      HTMLEntities.new.decode(self).straighten_quotes.remove_empty_links.remove_ads.compress_newlines
     end
 
     def straighten_quotes
