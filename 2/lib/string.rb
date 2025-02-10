@@ -62,8 +62,12 @@ module Marky
       gsub(/\[([^\]]+)\]\(\s*\)/, "\1").gsub(/(?<!!)\[\s*\]\[[^\]]+\]/, "").gsub(/(?<!!)\[\s*\]\([^\)]+\)/, "")
     end
 
+    def remove_ads
+      gsub(/^Advertisement *\n/i, "")
+    end
+
     def sanitize
-      HTMLEntities.new.decode(self).straighten_quotes.remove_empty_links
+      HTMLEntities.new.decode(self).straighten_quotes.remove_empty_links.remove_ads
     end
 
     def straighten_quotes
