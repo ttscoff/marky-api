@@ -165,7 +165,7 @@ module Marky
             @keywords = @keywords.map(&:downcase).sort.uniq.delete_if(&:empty?)
           end
 
-          @description = curled[:meta]["description"]
+          @description = curled[:meta]["description"].sanitize
         end
 
         output = curled[:body]

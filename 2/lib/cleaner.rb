@@ -181,6 +181,9 @@ class MarkdownCleaner
     # Remove empty headers
     input.gsub!(/^#+ *\n/, "")
 
+    # Remove empty bullet items
+    input.gsub!(/^[-*+] *\n/, "")
+
     # Clean multiple newlines
     input.gsub!(/(^\s*\n){3,}/, "\n\n")
 
