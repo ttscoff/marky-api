@@ -159,12 +159,14 @@ module Marky
 
         return false unless curled
 
-        @keywords = curled[:meta]["keywords"]&.split(/[, ]/) || []
-        unless @keywords.empty?
-          @keywords = @keywords.map(&:downcase).sort.uniq.delete_if(&:empty?)
-        end
+        unless curled[:meta].nil?
+          @keywords = curled[:meta]["keywords"]&.split(/[, ]/) || []
+          unless @keywords.empty?
+            @keywords = @keywords.map(&:downcase).sort.uniq.delete_if(&:empty?)
+          end
 
-        @description = curled[:meta]["description"]
+          @description = curled[:meta]["description"]
+        end
 
         output = curled[:body]
         @url = curled[:url]
@@ -200,6 +202,17 @@ module Marky
       end
 
       # Random cleanup
+      # Finds <div><pre> blocks without nested <code> tags and transforms them
+      # 1. Matches <div> with any attributes containing <pre> with any attributes
+      # 2. Ensures there's no <code> tag immediately following the <pre>
+      # 3. Captures content between <pre> and </pre> tags
+      # 4. Strips any <span> tags from the content
+      # 5. Escapes HTML special characters in the content
+      # 6. Wraps the result in <pre><code> tags
+      #
+      # Example transformation:
+      # Input:  <div class="highlight"><pre>some code</pre></div>
+      # Output: <pre><code>some code</code></pre>
       output.gsub!(%r{<div[^>]*><pre[^>]*>[ \n]*(?!<code)(.*?)</pre>[ \n]*</div>}m) do
         m = Regexp.last_match
         "<pre><code>#{CGI.escapeHTML(m[1].gsub(%r{</?span.*?>}, ""))}</code></pre>"
@@ -222,6 +235,7 @@ module Marky
       }
 
       # Convert HTML to Markdown
+
       extensions = []
 
       if @format == :gfm
@@ -314,6 +328,7 @@ module Marky
     end
 
     # Add source link and title to Markdown output
+    #
     # @param [String] output the output to add the title to
     # @return [String] the output with the title added
     def add_title(output)
