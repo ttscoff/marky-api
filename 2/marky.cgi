@@ -321,6 +321,9 @@ module Marky
       # Add title to Markdown output and sanitize
       @output = @format.markdown? ? add_title(output.sanitize) : output.sanitize
 
+      # Remove typographically-correct m-dash if not multimarkdown
+      @output = @output.gsub(/\b *--- *\b/, '--') if @format != :markdown_mmd
+
       true
     rescue StandardError => e
       Marky.log.error("Error processing URL: #{@url}, #{e} #{e.backtrace}")
