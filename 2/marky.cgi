@@ -160,12 +160,17 @@ module Marky
         return false unless curled
 
         unless curled[:meta].nil?
-          @keywords = curled[:meta]["keywords"]&.split(/[, ]/) || []
-          unless @keywords.empty?
-            @keywords = @keywords.map(&:downcase).sort.uniq.delete_if(&:empty?)
-          end
+          begin
+            @keywords = curled[:meta]["keywords"]&.split(/[, ]/) || []
+            unless @keywords.empty?
+              @keywords = @keywords.map(&:downcase).sort.uniq.delete_if(&:empty?)
+            end
 
-          @description = curled[:meta]["description"].sanitize
+            @description = curled[:meta]["description"]&.sanitize || ''
+          rescue
+            @keywords = []
+            @description = ''
+          end
         end
 
         output = curled[:body]
