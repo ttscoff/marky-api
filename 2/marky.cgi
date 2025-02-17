@@ -342,8 +342,6 @@ module Marky
     def add_title(output)
       return output unless @params[:readability]
 
-      @title = dumb_typography(title)
-
       meta = {}
       meta[:title] = %("#{@title.gsub(/"/, "\\\"")}") if @title
       meta[:source] = @url if @url
@@ -531,14 +529,11 @@ module Marky
       ENDSCRIPT
     end
 
-    def dumb_typography(text)
-      CGI.unescape(text).gsub(/“|”/, '"').gsub(/‘|’/, "'").gsub(/[—–]/, "-").gsub(/…/, "...")
-    end
-
     def sanitized_title
       return nil unless @title
 
-      sane_title = dumb_typography(@title)
+      sane_title = @title
+      sane_title = sane_title.gsub(/[’”]/, "'").gsub(/[“”]/, '"').gsub(/[—–]/, "-").gsub(/…/, "...")
       sane_title.gsub!(%r{[/:]}, " - ")
       sane_title.gsub!(%r{[^\w\s\-]}, " ")
       sane_title.gsub!(/\s+/, " ")
@@ -554,7 +549,7 @@ module Marky
       when :url
         out_url
       when :obsidian
-        "obsidian://new?name=#{title}&content=#{out_url}"
+        "obsidian://new?name=#{title.gsub(/:/, '%20-%20')}&content=#{out_url}"
       when :nv
         "nv://make?title=#{title}&txt=#{out_url}"
       when :nvalt
@@ -569,7 +564,7 @@ module Marky
     end
 
     def jsonify
-      output = { "title" => dumb_typography(@title), "url" => @url, "markup" => @output, "html" => Convert.new(@output).html(@format) }
+      output = { "title" => @title, "url" => @url, "markup" => @output, "html" => Convert.new(@output).html(@format) }
       output["link"] = to_link if @link_type
       output.to_json
     end
