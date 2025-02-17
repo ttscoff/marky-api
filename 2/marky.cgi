@@ -529,9 +529,20 @@ module Marky
       ENDSCRIPT
     end
 
+    def sanitized_title
+      return nil unless @title
+
+      sane_title = @title
+      sane_title.gsub!(%r{[/:]}, " - ")
+      sane_title.gsub!(%r{[^\w\s\-]}, " ")
+      sane_title.gsub!(/\s+/, " ")
+
+      sane_title.strip
+    end
+
     def to_link
       out_url = ERB::Util.url_encode(@output)
-      title = @title.nil? ? "Unknown" : ERB::Util.url_encode(@title.gsub(%r{/}, ":").strip)
+      title = @title.nil? ? "Unknown" : ERB::Util.url_encode(sanitized_title)
 
       case @link_type
       when :url
