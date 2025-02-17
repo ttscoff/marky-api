@@ -537,7 +537,7 @@ module Marky
       when :url
         out_url
       when :obsidian
-        "obsidian://new?name=#{title}&content=#{out_url}"
+        "obsidian://new?name=#{title.gsub(/:/, '%20-%20')}&content=#{out_url}"
       when :nv
         "nv://make?title=#{title}&txt=#{out_url}"
       when :nvalt
